@@ -99,8 +99,7 @@ const App = () => {
             <CustomButton
               title="Get Started"
               handlePress={() => router.push("/sign-in")}
-              containerStyle="w-full"
-              actionPerformed="bg-[#32D74B]"
+              containerStyle="w-full bg-[#32D74B]"
               textStyle={"text-[#FCFCFC]"}
             />
           </View>
@@ -109,16 +108,14 @@ const App = () => {
             <CustomButton
               title="Skip"
               handlePress={skipSlides}
-              containerStyle="w-[48%]"
-              actionPerformed="bg-[#EEE5FF]"
+              containerStyle="w-[48%] bg-[#EEE5FF]"
               textStyle={"text-[#05603A]"}
             />
             <View className="w-1" />
             <CustomButton
               title="Next"
               handlePress={goNextSlide}
-              containerStyle="w-[48%]"
-              actionPerformed="bg-[#32D74B]"
+              containerStyle="w-[48%] bg-[#32D74B]"
               textStyle={"text-[#FCFCFC]"}
             />
           </View>

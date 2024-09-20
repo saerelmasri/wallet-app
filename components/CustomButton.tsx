@@ -6,27 +6,25 @@ type CustomButtonTypes = {
   title: string;
   handlePress: () => void;
   containerStyle: string;
-  actionPerformed: string
   textStyle?: any;
-  loading?: boolean;
+  isLoading?: boolean;
 };
 
 const CustomButton = ({
   title,
   handlePress,
   containerStyle,
-  actionPerformed,
   textStyle,
-  loading,
+  isLoading,
 }: CustomButtonTypes) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={handlePress}
-      className={`w-[170] h-[70px] rounded-[16px] justify-center items-center ${actionPerformed} ${containerStyle} ${
-        loading ? "opacity-50" : ""
+      className={`w-[170] h-[70px] rounded-[16px] justify-center items-center ${containerStyle} ${
+        isLoading ? "opacity-50" : ""
       }`}
-      disabled={loading}
+      disabled={isLoading}
     >
       <Text className={`font-psemibold text-lg ${textStyle}`}>{title}</Text>
     </TouchableOpacity>

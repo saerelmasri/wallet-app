@@ -1,14 +1,19 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
 
 function AuthLayout() {
   return (
-    <View>
-        <Text>
-            AuthLayout
-        </Text>
-    </View>
-  )
+    <>
+      <Stack>
+        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
+        <Stack.Screen name="sign-up" options={{ headerShown: false }} />
+        <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
+        <Stack.Screen name="newPassword" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="dark" />
+    </>
+  );
 }
 
-export default AuthLayout
+export default AuthLayout;
