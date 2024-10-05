@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { Text } from "react-native";
+import { getApps, initializeApp } from "firebase/app";
+import {
+  getAuth,
+  getReactNativePersistence,
+  initializeAuth,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { firebaseConfig } from "@/constants/test";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const [isFirstLaunched, setIsFirstLaunched] = useState<boolean | null>(null);
+  // const [isFirstLaunched, setIsFirstLaunched] = useState<boolean | null>(null);
+  const [user, setUser] = useState<any | null>(null);
 
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -20,35 +30,42 @@ const RootLayout = () => {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
-  // Only fetch launch data once
-  useEffect(() => {
-    const checkFirstLaunch = async () => {
-      try {
-        const hasLaunched = await AsyncStorage.getItem("hasLaunched");
-        if (hasLaunched === null) {
-          await AsyncStorage.setItem("hasLaunched", "true");
-          setIsFirstLaunched(true);
-        } else {
-          setIsFirstLaunched(false);
-        }
-      } catch (error) {
-        console.error("Error checking launch status:", error);
-      }
-    };
+  const app =
+    getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-    checkFirstLaunch();
-  }, []);
+  // Initialize Firebase Auth if not already initialized
+  let auth;
+  try {
+    auth = getAuth(app); // Get the existing Auth instance if it exists
+  } catch (error) {
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+    });
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (authenticatedUser) => {
+      if (authenticatedUser) {
+        setUser(authenticatedUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [auth]);
 
   // Hide SplashScreen once everything is loaded
   useEffect(() => {
-    if (fontsLoaded && isFirstLaunched !== null) {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isFirstLaunched]);
+  }, [fontsLoaded]);
 
   // Return null while fonts and first launch data are being loaded
-  if (!fontsLoaded || isFirstLaunched === null) {
-    return null;
+  if (!fontsLoaded) {
+    return <Text className="text-2xl text-black-100">Loading...</Text>;
   }
 
   return (
@@ -56,7 +73,6 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="search/[query]" options={{ headerShown: false }} />
     </Stack>
   );
 };

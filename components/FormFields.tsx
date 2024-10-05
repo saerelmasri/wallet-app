@@ -7,7 +7,7 @@ type FormFieldsTypes = {
   handleTextChange: any;
   placeHolder?: string;
   otherStyles: string;
-  keyboardType?: string;
+  type: string;
 };
 
 import icons from "../constants/icons";
@@ -18,9 +18,10 @@ const FormFields = ({
   placeHolder,
   handleTextChange,
   otherStyles,
-  keyboardType,
+  type,
 }: FormFieldsTypes) => {
   const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = type === "Password" || type === "confirmPassword";
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
@@ -30,14 +31,16 @@ const FormFields = ({
           className="flex-1 text-black font-psemibold text-base"
           value={value}
           placeholder={placeHolder}
-          placeholderTextColor="#7b78b"
+          placeholderTextColor="#696969"
           onChangeText={handleTextChange}
-          secureTextEntry={title === "Password" && !showPassword}
+          secureTextEntry={isPasswordField && !showPassword}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
-        {title === "Password" && (
+        {isPasswordField && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
-              source={{uri: !showPassword ? icons.eye : icons.eyeHide}}
+              source={{ uri: !showPassword ? icons.eye : icons.eyeHide }}
               resizeMode="contain"
               className={"w-[30px] h-[30px]"}
             />

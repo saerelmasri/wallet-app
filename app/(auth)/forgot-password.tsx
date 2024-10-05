@@ -6,16 +6,29 @@ import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
-    password: "",
   });
 
   const submit = () => {
-    router.push("/newPassword" as any)
+    sendPasswordResetEmail(getAuth(), form.email)
+      .then(() => {
+        router.push({
+          pathname: "/splashScreenState",
+          params: {
+            imageType: "email",
+            title: "Reset Email Sent",
+            subTitle: "Please check your main inbox or spam for the reset link",
+          },
+        });
+      })
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
   };
 
   return (
@@ -39,11 +52,11 @@ const ForgotPassword = () => {
               value={form.email}
               handleTextChange={(e: any) => setForm({ ...form, email: e })}
               otherStyles="mt-7"
-              keyboardType="email-address"
+              type=""
             />
           </View>
           <CustomButton
-            title="Send Email"
+            title="Next"
             handlePress={submit}
             containerStyle="mt-7 w-full bg-[#32D74B]"
             textStyle={"text-[#FCFCFC]"}

@@ -10,6 +10,10 @@ function AuthLayout() {
         <Stack.Screen name="sign-up" options={{ headerShown: false }} />
         <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
         <Stack.Screen name="newPassword" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="splashScreenState"
+          options={{ headerShown: false }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>
