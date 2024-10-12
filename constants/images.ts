@@ -4,6 +4,7 @@ import pig from "../assets/images/pig.png";
 import apple from "../assets/images/apple-icon.png";
 import google from "../assets/images/google-icon.png";
 import email from "../assets/images/email.png";
+import effect from "../assets/images/rectanguleEffect.png";
 
 const images = {
   wallet,
@@ -12,6 +13,7 @@ const images = {
   apple,
   google,
   email,
+  effect,
 };
 
 export default images;

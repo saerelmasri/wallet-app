@@ -56,7 +56,7 @@ const SignUp = () => {
       .then((user) => {
         console.log("User:", user);
         if (user) {
-          router.replace("/(tabs)/home");
+          router.replace("/showNotifications");
         }
       })
       .catch((error) => {

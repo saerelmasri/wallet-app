@@ -26,11 +26,15 @@ const SignIn = () => {
   });
 
   const submit = async () => {
+    if (!form.email || !form.password) {
+      return Alert.alert("Fields cannot be empty");
+    }
+
     signInWithEmailAndPassword(getAuth(), form.email, form.password)
       .then((userCredential) => {
         const user = userCredential.user;
         if (user) {
-          console.log("User info:", user.uid);
+          console.log("User info:", user);
           router.replace("/(tabs)/home");
         }
       })
@@ -86,7 +90,7 @@ const SignIn = () => {
             </View>
             <CustomButton
               title="Sign In"
-              handlePress={submit}
+              handlePress={() => router.replace("/(tabs)/home")}
               containerStyle="mt-7 w-full bg-[#32D74B]"
               textStyle={"text-[#FCFCFC]"}
               isLoading={isSubmitting}
