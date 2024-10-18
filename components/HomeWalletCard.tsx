@@ -1,22 +1,35 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
-
-const { width, height } = Dimensions.get("window");
+import { Ionicons } from "@expo/vector-icons";
 
 type WalletsType = {
   title: string;
-  amount: number;
+  amount: number | undefined; // Ensure amount is a number or undefined
   colorCard: string;
 };
 
 const HomeWalletCard = ({ title, amount, colorCard }: WalletsType) => {
-  const CARD_WIDTH = width / 2.3;
+  // Format the amount with commas and two decimal places
+  const displayAmount =
+    typeof amount === "number"
+      ? amount.toLocaleString("en-US", { minimumFractionDigits: 2 })
+      : "0.00";
+
   return (
     <View
-      className={`bg-[${colorCard}] w-[${CARD_WIDTH}px] h-[100px] rounded-xl p-5 m-3 justify-center items-center`}
+      style={{ backgroundColor: colorCard }}
+      className="w-[150px] h-[120px] rounded-2xl p-4 m-2 justify-between shadow-lg"
     >
-      <Text className="font-psemibold text-white text-lg mb-1">{title}</Text>
-      <Text className="font-psemibold text-white text-2xl">$ {amount}</Text>
+      {/* Wallet Icon at the top */}
+      <View className="flex-row justify-between items-center">
+        <Ionicons name="wallet-outline" size={20} color="white" />
+      </View>
+
+      {/* Wallet Information */}
+      <View>
+        <Text className="font-medium text-white text-sm mb-1">{title}</Text>
+        <Text className="font-bold text-white text-lg">$ {displayAmount}</Text>
+      </View>
     </View>
   );
 };
