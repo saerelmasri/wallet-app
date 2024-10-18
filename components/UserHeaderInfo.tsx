@@ -1,14 +1,14 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const UserHeaderInfo = () => {
   return (
     <View className="w-full flex-row p-1">
       <View className="w-[20%] flex justify-center items-center">
         <View className=" w-[50px] h-[50px] rounded-full border-[2px] border-[#32D74B] flex justify-center items-center bg-white">
-          <AntDesign name="user" size={40} color="black" />
+          <MaterialCommunityIcons name="account" size={30} color="black" />
         </View>
       </View>
       <View className="w-[80%] flex justify-center">

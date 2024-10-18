@@ -2,15 +2,15 @@ import { View, Text } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import GoalProgressCard from "./GoalProgressCard";
+import { router } from "expo-router";
 
 const GoalsWidget = () => {
   return (
     <View className="rounded-xl w-[90%] mt-3 p-4 bg-[#363636]">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="font-psemibold text-lg text-white">Goals</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/goals")}>
           <Text className="font-pregular text-sm text-white">See All</Text>
         </TouchableOpacity>
       </View>

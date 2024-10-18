@@ -1,8 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import TransactionCard from "./TransactionCard";
-
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+import { router } from "expo-router";
 
 const TransactionHistoryWidget = () => {
   return (
@@ -11,7 +10,7 @@ const TransactionHistoryWidget = () => {
         <Text className="font-psemibold text-lg text-white">
           Transactions history
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push("/transactions")}>
           <Text className="font-pregular text-sm text-white">See All</Text>
         </TouchableOpacity>
       </View>

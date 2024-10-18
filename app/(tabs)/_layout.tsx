@@ -1,27 +1,39 @@
 import { View, Text, Image } from "react-native";
 import { Tabs } from "expo-router";
-import icons from "../../constants/icons";
+
 import {
   GestureHandlerRootView,
   TouchableOpacity,
 } from "react-native-gesture-handler";
 
+import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 type TabIconTypes = {
-  icon: any;
-  color: string;
+  icon: "Home" | "Planning" | "Add" | "Report" | "Profile";
   name: string;
   focused: boolean;
   circular?: boolean;
 };
 
-const TabIcon = ({ icon, color, name, focused, circular }: TabIconTypes) => {
+const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
+  const iconMap = {
+    "Home": <Feather name="home" size={24} color="white" />,
+    "Planning": <Feather name="home" size={24} color="white" />,
+    "Add": <Ionicons name="add-outline" size={58} color="white"/>,
+    "Report": <Feather name="pie-chart" size={24} color="white" />,
+    "Profile": <MaterialCommunityIcons name="account" size={24} color="white" />
+  }
+
+
   return (
     <View
-      className={`items-center justify-center gap-2 ${
-        circular ? "rounded-full bg-[#32D74B] p-3" : ""
+      className={`items-center justify-center ${
+        circular ? "rounded-full bg-[#32D74B]" : ""
       }`}
     >
-      <Image source={icon} resizeMode="contain" className="w-6 h-6" />
+      {iconMap[icon]}
       {!circular && (
         <Text
           className={`${
@@ -62,8 +74,7 @@ const TabLayout = () => {
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon={icons.home}
-                  color={color}
+                  icon="Home"
                   focused={focused}
                   name="Home"
                 />
@@ -71,16 +82,15 @@ const TabLayout = () => {
             }}
           />
           <Tabs.Screen
-            name="transaction"
+            name="planning"
             options={{
-              title: "Transactions",
+              title: "Planning",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon={icons.transaction}
-                  color={color}
+                  icon="Planning"
                   focused={focused}
-                  name="Transactions"
+                  name="Planning"
                 />
               ),
             }}
@@ -117,8 +127,7 @@ const TabLayout = () => {
                   }}
                 >
                   <TabIcon
-                    icon={icons.action}
-                    color="#FFF" // White color for the icon on the button
+                    icon="Add"
                     focused={focused}
                     name="Action"
                     circular
@@ -135,8 +144,7 @@ const TabLayout = () => {
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon={icons.report}
-                  color={color}
+                  icon="Report"
                   focused={focused}
                   name="Report"
                 />
@@ -150,8 +158,7 @@ const TabLayout = () => {
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon
-                  icon={icons.profile}
-                  color={color}
+                  icon="Profile"
                   focused={focused}
                   name="Profile"
                 />

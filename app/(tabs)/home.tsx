@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   Image,
-  TouchableOpacity,
   ScrollView,
   StatusBar,
 } from "react-native";
@@ -11,13 +10,12 @@ import React from "react";
 import images from "@/constants/images";
 import { Link } from "expo-router";
 import WalletSlider from "@/components/WalletSlide";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import AllTransactionCard from "@/components/AllTransactionCard";
-import LoanCard from "@/components/LoanCard";
 import Chip from "@/components/Chip";
 import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
 import GoalsWidget from "@/components/GoalsWidget";
 import UserHeaderInfo from "@/components/UserHeaderInfo";
+import LoanCard from "@/components/LoanCard";
+import AllTransactionCard from "@/components/AllTransactionCard";
 
 const Home = () => {
   return (
@@ -57,7 +55,7 @@ const Home = () => {
               <Text className="font-pregular text-sm text-white">
                 Total Balance
               </Text>
-              <Link href={"/home"} className="font-pregular text-sm text-white">
+              <Link href={"/wallets"} className="font-pregular text-sm text-white">
                 View All
               </Link>
             </View>
@@ -70,6 +68,11 @@ const Home = () => {
 
           {/* Wallet Slider */}
           <WalletSlider />
+
+          <View className="w-full flex-row justify-around p-3">
+            <AllTransactionCard />
+            <LoanCard />
+          </View>
 
           {/* Chip Section */}
           <View className="w-full flex-row justify-around p-3">
