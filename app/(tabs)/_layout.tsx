@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 
-import Feather from '@expo/vector-icons/Feather';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type TabIconTypes = {
   icon: "Home" | "Planning" | "Add" | "Report" | "Profile";
@@ -19,13 +19,34 @@ type TabIconTypes = {
 
 const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   const iconMap = {
-    "Home": <Feather name="home" size={24} color="white" />,
-    "Planning": <Feather name="home" size={24} color="white" />,
-    "Add": <Ionicons name="add-outline" size={58} color="white"/>,
-    "Report": <Feather name="pie-chart" size={24} color="white" />,
-    "Profile": <MaterialCommunityIcons name="account" size={24} color="white" />
-  }
-
+    Home: (
+      <Feather name="home" size={24} color={focused ? "#32D74B" : "white"} />
+    ),
+    Planning: (
+      <Feather name="home" size={24} color={focused ? "#32D74B" : "white"} />
+    ),
+    Add: (
+      <Ionicons
+        name="add-outline"
+        size={58}
+        color={focused ? "#32D74B" : "white"}
+      />
+    ),
+    Report: (
+      <Feather
+        name="pie-chart"
+        size={24}
+        color={focused ? "#32D74B" : "white"}
+      />
+    ),
+    Profile: (
+      <MaterialCommunityIcons
+        name="account"
+        size={24}
+        color={focused ? "#32D74B" : "white"}
+      />
+    ),
+  };
 
   return (
     <View
@@ -61,7 +82,7 @@ const TabLayout = () => {
             tabBarStyle: {
               backgroundColor: "#2C2C2C",
               borderTopWidth: 1,
-              borderTopColor: "#232533",
+              borderTopColor: "#2C2C2C",
               height: 84,
               paddingTop: 10,
             },
@@ -73,11 +94,7 @@ const TabLayout = () => {
               title: "Home",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
-                <TabIcon
-                  icon="Home"
-                  focused={focused}
-                  name="Home"
-                />
+                <TabIcon icon="Home" focused={focused} name="Home" />
               ),
             }}
           />
@@ -87,17 +104,13 @@ const TabLayout = () => {
               title: "Planning",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
-                <TabIcon
-                  icon="Planning"
-                  focused={focused}
-                  name="Planning"
-                />
+                <TabIcon icon="Planning" focused={focused} name="Planning" />
               ),
             }}
           />
 
           {/* Action Tab with Circular Button */}
-          <Tabs.Screen
+          {/* <Tabs.Screen
             name="action"
             options={{
               title: "Action",
@@ -135,7 +148,7 @@ const TabLayout = () => {
                 </TouchableOpacity>
               ),
             }}
-          />
+          /> */}
 
           <Tabs.Screen
             name="report"
@@ -143,11 +156,7 @@ const TabLayout = () => {
               title: "Report",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
-                <TabIcon
-                  icon="Report"
-                  focused={focused}
-                  name="Report"
-                />
+                <TabIcon icon="Report" focused={focused} name="Report" />
               ),
             }}
           />
@@ -157,11 +166,7 @@ const TabLayout = () => {
               title: "Profile",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
-                <TabIcon
-                  icon="Profile"
-                  focused={focused}
-                  name="Profile"
-                />
+                <TabIcon icon="Profile" focused={focused} name="Profile" />
               ),
             }}
           />

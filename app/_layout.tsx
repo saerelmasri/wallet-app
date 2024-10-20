@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { SplashScreen, Stack } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { getApps, initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -11,6 +11,8 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { firebaseConfig } from "@/constants/test";
+
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -75,7 +77,47 @@ const RootLayout = () => {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="transactions" options={{ headerShown: false }} />
       <Stack.Screen name="goals" options={{ headerShown: false }} />
-      <Stack.Screen name="wallets" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="wallet"
+        options={{
+          headerShown: true,
+          headerLeft: () => (
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="white"
+              onPress={() => router.back()}
+            />
+          ),
+          headerTitle: "",
+          headerStyle: {
+            backgroundColor: "#2C2C2C",
+          },
+          headerTintColor: "#fff",
+          headerShadowVisible: false,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => router.push("/addWallet")}
+              style={{ marginRight: 10 }}
+            >
+              <Text className="text-white font-pmedium text-base">Edit</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="addWallet"
+        options={{
+          headerShown: true,
+          title: "New Wallet",
+          headerBackTitle: "Back",
+          headerStyle: {
+            backgroundColor: "rgba(5, 96, 58, 0.98)",
+          },
+          headerTintColor: "#fff",
+          headerShadowVisible: false,
+        }}
+      />
     </Stack>
   );
 };

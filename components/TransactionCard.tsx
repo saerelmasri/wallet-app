@@ -6,8 +6,8 @@ type TransactionCardType = {
   transactionCategory: string;
   usedWallet: string;
   transactionAmount: string;
-  transactionDate: string;
   transactionType: "Income" | "Expense";
+  transactionDate?: string;
 };
 
 const TransactionCard = ({
@@ -47,9 +47,11 @@ const TransactionCard = ({
           </Text>
         )}
         <Text></Text>
-        <Text className="font-pregular text-xs text-white text-right">
-          {transactionDate}
-        </Text>
+        {transactionDate && (
+          <Text className="font-pregular text-xs text-white text-right">
+            {transactionDate}
+          </Text>
+        )}
       </View>
     </View>
   );

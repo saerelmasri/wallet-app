@@ -55,9 +55,6 @@ const Home = () => {
               <Text className="font-pregular text-sm text-white">
                 Total Balance
               </Text>
-              <Link href={"/wallets"} className="font-pregular text-sm text-white">
-                View All
-              </Link>
             </View>
             <View className="w-full justify-end items-start">
               <Text className="font-psemibold text-4xl text-white pl-2">
