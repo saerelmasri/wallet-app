@@ -9,6 +9,7 @@ import {
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type TabIconTypes = {
   icon: "Home" | "Planning" | "Add" | "Report" | "Profile";
@@ -20,7 +21,7 @@ type TabIconTypes = {
 const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   const iconMap = {
     Home: (
-      <Feather name="home" size={24} color={focused ? "#32D74B" : "white"} />
+      <MaterialIcons name="space-dashboard" size={24} color={focused ? "#32D74B" : "white"} />
     ),
     Planning: (
       <Feather name="home" size={24} color={focused ? "#32D74B" : "white"} />
@@ -91,7 +92,7 @@ const TabLayout = () => {
           <Tabs.Screen
             name="home"
             options={{
-              title: "Home",
+              title: "Overview",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
                 <TabIcon icon="Home" focused={focused} name="Home" />

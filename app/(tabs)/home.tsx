@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React from "react";
 import images from "@/constants/images";
-import { Link } from "expo-router";
 import WalletSlider from "@/components/WalletSlide";
 import Chip from "@/components/Chip";
 import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
