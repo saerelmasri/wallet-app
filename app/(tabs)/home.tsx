@@ -56,11 +56,11 @@ const Home = () => {
           </View>
 
           {/* Chip Section */}
-          <View className="w-full flex-row justify-around p-3">
+          {/* <View className="w-full flex-row justify-around p-3">
             <Chip title="Overview" />
             <Chip title="Report" />
             <Chip title="Investment" />
-          </View>
+          </View> */}
 
           {/* Transaction History Widgets */}
           <TransactionHistoryWidget />

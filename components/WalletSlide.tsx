@@ -60,6 +60,7 @@ const WalletSlider = () => {
           balance={item.balance}
           colorCard={item.colorCard}
           currency={item.currency}
+          cardStyle="h-[120px]"
         />
       );
     }

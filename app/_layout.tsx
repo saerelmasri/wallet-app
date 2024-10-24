@@ -75,23 +75,26 @@ const RootLayout = () => {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="transactions" options={{
+      <Stack.Screen
+        name="transactions"
+        options={{
           headerShown: true,
           headerLeft: () => (
             <Ionicons
               name="arrow-back-sharp"
               size={24}
-              color="white"
+              color="black"
               onPress={() => router.back()}
             />
           ),
           headerTitle: "",
           headerStyle: {
-            backgroundColor: "#2C2C2C",
+            backgroundColor: "white",
           },
           headerTintColor: "#fff",
           headerShadowVisible: false,
-        }} />
+        }}
+      />
       <Stack.Screen name="goals" options={{ headerShown: false }} />
       <Stack.Screen
         name="wallet"

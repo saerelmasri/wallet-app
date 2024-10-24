@@ -23,7 +23,7 @@ const TransactionCard = ({
   return (
     <View className="flex-row w-full h-[9vh]">
       <View className="w-[60%] flex-row items-center space-x-3">
-        <View className="w-[60px] h-[60px] rounded-full bg-white justify-center items-center">
+        <View className="w-[60px] h-[60px] rounded-full bg-[#F0F0F0] justify-center items-center">
           <Text>Logo</Text>
         </View>
         <View>

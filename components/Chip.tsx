@@ -3,11 +3,14 @@ import React from "react";
 
 type ChipTypes = {
   title: string;
+  containerStyle?: string;
 };
 
-const Chip = ({ title }: ChipTypes) => {
+const Chip = ({ title, containerStyle }: ChipTypes) => {
   return (
-    <TouchableOpacity className="w-28 h-[30px] bg-[#D3D3D3] rounded-xl flex justify-center items-center">
+    <TouchableOpacity
+      className={`p-3 h-[43px] border-black border-[2px] bg-white rounded-md flex justify-center items-center ${containerStyle}`}
+    >
       <Text className="font-psemibold text-xs">{title}</Text>
     </TouchableOpacity>
   );

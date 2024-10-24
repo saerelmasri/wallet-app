@@ -6,9 +6,10 @@ import { currencySigns, displayAmount } from "@/helpers/common-helper";
 
 type WalletsType = {
   accountName: string;
-  balance: number;
   colorCard: string;
   currency: "dolar" | "euro";
+  balance?: number;
+  cardStyle?: string
 };
 
 const HomeWalletCard = ({
@@ -16,6 +17,7 @@ const HomeWalletCard = ({
   balance,
   colorCard,
   currency,
+  cardStyle
 }: WalletsType) => {
   return (
     <TouchableOpacity
@@ -31,7 +33,7 @@ const HomeWalletCard = ({
         })
       }
       style={{ backgroundColor: colorCard }}
-      className="w-[150px] h-[120px] rounded-2xl p-4 m-2 justify-between shadow-lg"
+      className={`w-[150px] rounded-2xl p-4 m-2 justify-between ${cardStyle}`}
     >
       {/* Wallet Icon at the top */}
       <View className="flex-row justify-between items-center">
@@ -51,13 +53,15 @@ const HomeWalletCard = ({
         >
           {accountName}
         </Text>
-        <Text
-          className={`font-bold text-${
-            colorCard === "#D3D3D3" ? "black" : "white"
-          } text-lg`}
-        >
-          {currencySigns[currency]} {displayAmount(balance)}
-        </Text>
+        {balance && (
+          <Text
+            className={`font-bold text-${
+              colorCard === "#D3D3D3" ? "black" : "white"
+            } text-lg`}
+          >
+            {currencySigns[currency]} {displayAmount(balance)}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
