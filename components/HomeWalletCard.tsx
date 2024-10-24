@@ -38,7 +38,7 @@ const HomeWalletCard = ({
         <Ionicons
           name="wallet-outline"
           size={20}
-          color={colorCard === "#FFFFFF" ? "black" : "white"}
+          color={colorCard === "#D3D3D3" ? "black" : "white"}
         />
       </View>
 
@@ -46,14 +46,14 @@ const HomeWalletCard = ({
       <View>
         <Text
           className={`font-medium text-${
-            colorCard === "#FFFFFF" ? "black" : "white"
+            colorCard === "#D3D3D3" ? "black" : "white"
           } text-sm mb-1`}
         >
           {accountName}
         </Text>
         <Text
           className={`font-bold text-${
-            colorCard === "#FFFFFF" ? "black" : "white"
+            colorCard === "#D3D3D3" ? "black" : "white"
           } text-lg`}
         >
           {currencySigns[currency]} {displayAmount(balance)}

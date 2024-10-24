@@ -11,7 +11,7 @@ type WalletDesignType = {
   accountName: string;
   balance: number;
   currency: "dolar" | "euro";
-  cardColor: "#2F7E79" | "#32D74B" | "#05603A" | "#000000" | "#FFFFFF";
+  cardColor: "#2F7E79" | "#32D74B" | "#05603A" | "#000000" | "#D3D3D3";
   income?: number;
   expense?: number;
 };
@@ -34,8 +34,8 @@ const WalletDesign = ({
         return "bg-[#05603A]";
       case "#000000":
         return "bg-black";
-      case "#FFFFFF":
-        return "bg-white";
+      case "#D3D3D3":
+        return "bg-[#D3D3D3]";
       default:
         return "bg-transparent"; // Fallback if color not found
     }
@@ -49,28 +49,28 @@ const WalletDesign = ({
       >
         <Text
           className={`font-plight text-${
-            cardColor === "#FFFFFF" ? "black" : "white"
+            cardColor === "#D3D3D3" ? "black" : "white"
           } text-base uppercase`}
         >
           Account Name
         </Text>
         <Text
           className={`font-pregular text-${
-            cardColor === "#FFFFFF" ? "black" : "white"
+            cardColor === "#D3D3D3" ? "black" : "white"
           } text-xl mb-2`}
         >
           {accountName}
         </Text>
         <Text
           className={`font-plight text-${
-            cardColor === "#FFFFFF" ? "black" : "white"
+            cardColor === "#D3D3D3" ? "black" : "white"
           } text-base uppercase`}
         >
           Balance
         </Text>
         <Text
           className={`font-pregular text-${
-            cardColor === "#FFFFFF" ? "black" : "white"
+            cardColor === "#D3D3D3" ? "black" : "white"
           } text-xl`}
         >
           {currencySigns[currency]} {displayAmount(balance)}
@@ -82,7 +82,7 @@ const WalletDesign = ({
                 className="w-[30px] h-[30px] rounded-full justify-center items-center"
                 style={{
                   backgroundColor: ` ${
-                    cardColor === "#FFFFFF"
+                    cardColor === "#D3D3D3"
                       ? "rgba(0, 0, 0, 0.4)"
                       : "rgba(255, 255, 255, 0.4)"
                   }`,
@@ -97,7 +97,7 @@ const WalletDesign = ({
               </View>
               <Text
                 className={`font-pregular text-${
-                  cardColor === "#FFFFFF" ? "black" : "white"
+                  cardColor === "#D3D3D3" ? "black" : "white"
                 }`}
               >
                 Income
@@ -108,7 +108,7 @@ const WalletDesign = ({
                 className="w-[30px] h-[30px] rounded-full justify-center items-center"
                 style={{
                   backgroundColor: ` ${
-                    cardColor === "#FFFFFF"
+                    cardColor === "#D3D3D3"
                       ? "rgba(0, 0, 0, 0.4)"
                       : "rgba(255, 255, 255, 0.4)"
                   }`,
@@ -123,7 +123,7 @@ const WalletDesign = ({
               </View>
               <Text
                 className={`font-pregular text-${
-                  cardColor === "#FFFFFF" ? "black" : "white"
+                  cardColor === "#D3D3D3" ? "black" : "white"
                 }`}
               >
                 Expenses
@@ -133,14 +133,14 @@ const WalletDesign = ({
           <View className="h-[50%] flex-row justify-between items-center">
             <Text
               className={`font-pmedium text-${
-                cardColor === "#FFFFFF" ? "black" : "white"
+                cardColor === "#D3D3D3" ? "black" : "white"
               } text-lg`}
             >
               $ 1,840.00
             </Text>
             <Text
               className={`font-pmedium text-${
-                cardColor === "#FFFFFF" ? "black" : "white"
+                cardColor === "#D3D3D3" ? "black" : "white"
               } text-lg`}
             >
               $ 1,840.00

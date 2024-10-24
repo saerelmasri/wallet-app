@@ -27,18 +27,18 @@ const TransactionCard = ({
           <Text>Logo</Text>
         </View>
         <View>
-          <Text className="font-pmedium text-base text-white">
+          <Text className="font-pmedium text-base text-black">
             {transactionTitle}
           </Text>
           <View className="flex-row items-center space-x-2 p-1">
-            <AntDesign name="shoppingcart" size={18} color="white" />
-            <Text className="font-pregular text-xs text-white opacity-70">
+            <AntDesign name="shoppingcart" size={18} color="black" />
+            <Text className="font-pregular text-xs text-black opacity-70">
               {transactionCategory}
             </Text>
           </View>
           <View className="flex-row items-center space-x-2 p-1">
-            <Ionicons name="wallet-outline" size={18} color={"white"} />
-            <Text className="font-pregular text-xs text-white opacity-70">
+            <Ionicons name="wallet-outline" size={18} color={"black"} />
+            <Text className="font-pregular text-xs text-black opacity-70">
               {usedWallet}
             </Text>
           </View>
@@ -56,7 +56,7 @@ const TransactionCard = ({
         )}
         <Text></Text>
         {transactionDate && (
-          <Text className="font-pregular text-xs text-white text-right">
+          <Text className="font-pregular text-xs text-black text-right">
             {transactionDate}
           </Text>
         )}

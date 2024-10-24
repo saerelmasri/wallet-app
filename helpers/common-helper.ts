@@ -9,7 +9,7 @@ export const cardDesign = {
   "#2F7E79": images.cardColor1,
   "#32D74B": images.cardColor3,
   "#05603A": images.cardColor2,
-  "#FFFFFF": images.cardColor5,
+  "#D3D3D3": images.cardColor5,
   "#000000": images.cardColor4,
 };
 

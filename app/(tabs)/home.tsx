@@ -7,7 +7,6 @@ import {
   StatusBar,
 } from "react-native";
 import React from "react";
-import images from "@/constants/images";
 import WalletSlider from "@/components/WalletSlide";
 import Chip from "@/components/Chip";
 import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
@@ -18,26 +17,12 @@ import AllTransactionCard from "@/components/AllTransactionCard";
 
 const Home = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#2C2C2C" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* Set the status bar style */}
       <StatusBar
         barStyle="light-content"
         translucent
         backgroundColor="transparent"
-      />
-
-      {/* Background Image */}
-      <Image
-        source={images.effect}
-        resizeMode="cover"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-        }}
       />
 
       {/* SafeAreaView only for the content */}
@@ -51,12 +36,12 @@ const Home = () => {
           {/* Balance and Wallet Slider Section */}
           <View className="w-full flex-col p-3">
             <View className="w-full flex-row justify-between items-center p-2">
-              <Text className="font-pregular text-sm text-white">
+              <Text className="font-pregular text-sm text-black">
                 Total Balance
               </Text>
             </View>
             <View className="w-full justify-end items-start">
-              <Text className="font-psemibold text-4xl text-white pl-2">
+              <Text className="font-psemibold text-4xl text-black pl-2">
                 $950,400
               </Text>
             </View>

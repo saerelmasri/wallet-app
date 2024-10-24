@@ -36,7 +36,7 @@ const data: any = [
     id: "5",
     accountName: "Example Wallet",
     balance: 852710,
-    colorCard: "#FFFFFF",
+    colorCard: "#D3D3D3",
     currency: "euro",
   },
 ];

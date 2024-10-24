@@ -7,7 +7,7 @@ type ChipTypes = {
 
 const Chip = ({ title }: ChipTypes) => {
   return (
-    <TouchableOpacity className="border border-white w-28 h-[30px] bg-white rounded-xl flex justify-center items-center">
+    <TouchableOpacity className="w-28 h-[30px] bg-[#D3D3D3] rounded-xl flex justify-center items-center">
       <Text className="font-psemibold text-xs">{title}</Text>
     </TouchableOpacity>
   );

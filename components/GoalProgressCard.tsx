@@ -15,7 +15,7 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
           <Text>Logo</Text>
         </View>
         <View className=" w-[80%] p-2 justify-around">
-          <Text className="font-pmedium text-base text-white mb-2">
+          <Text className="font-pmedium text-base text-black mb-2">
             {goalTitle}
           </Text>
           <Progress.Bar
@@ -30,7 +30,7 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
             <Text className="font-pmedium text-xs text-[#04EE7E]">
               Saved $2,200 / 80%
             </Text>
-            <Text className="font-pregular text-xs text-white">
+            <Text className="font-pregular text-xs text-black">
               left $1,000 / 20%
             </Text>
           </View>
@@ -38,7 +38,7 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
       </View>
       {/* <View className="w-[40%] flex justify-center">
         <Text></Text>
-        <Text className="font-pregular text-xs text-white text-right">r</Text>
+        <Text className="font-pregular text-xs text-black text-right">r</Text>
       </View> */}
     </View>
   );

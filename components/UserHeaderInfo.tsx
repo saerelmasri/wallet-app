@@ -12,8 +12,8 @@ const UserHeaderInfo = () => {
         </View>
       </View>
       <View className="w-[80%] flex justify-center">
-        <Text className="font-pmedium text-base text-white">Hello</Text>
-        <Text className="font-pmedium text-lg text-white">Saer El Masri</Text>
+        <Text className="font-pmedium text-base text-black">Hello</Text>
+        <Text className="font-pmedium text-lg text-black">Saer El Masri</Text>
       </View>
     </View>
   );
