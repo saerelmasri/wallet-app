@@ -48,11 +48,7 @@ const Transactions = () => {
       <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-          <View className="bg-black-100 w-full h-[35vh]">
-            <Text className="text-white">Some data visualization here</Text>
-          </View>
-
-          <View className="bg-white w-full h-[90%] rounded-tl-3xl rounded-tr-3xl z-20 relative -mt-[10vh] flex">
+          <View className="bg-white w-full h-[100%] rounded-tl-3xl rounded-tr-3xl relative flex">
             {/* Filter Section */}
             <View className="w-full flex-row space-x-2 p-3">
               <View className="w-[85%] flex-row items-center space-x-2 mt-3 bg-[#F0F0F0] rounded-2xl px-4 py-1">
@@ -73,6 +69,12 @@ const Transactions = () => {
 
             {/* Transactions List */}
             <View className="w-full p-3">
+              <View className="w-full flex-row justify-between">
+                <Text className="text-sm font-pregular text-black">Today</Text>
+                <Text className="text-sm font-pregular text-black hidden">
+                  - $1,200.00
+                </Text>
+              </View>
               <TransactionCard
                 transactionTitle="AirPods Pro 2"
                 transactionAmount="200.00"
@@ -81,7 +83,14 @@ const Transactions = () => {
                 transactionType="Expense"
                 usedWallet="Master Card"
               />
-              {/* Add more TransactionCard components as needed */}
+              <TransactionCard
+                transactionTitle="AirPods Pro 2"
+                transactionAmount="200.00"
+                transactionCategory="Shopping"
+                transactionDate="12 October 2024"
+                transactionType="Expense"
+                usedWallet="Master Card"
+              />
             </View>
           </View>
         </ScrollView>
