@@ -3,15 +3,22 @@ import React from "react";
 
 type ChipTypes = {
   title: string;
+  selected: boolean;
+  onPress: () => void;
   containerStyle?: string;
 };
 
-const Chip = ({ title, containerStyle }: ChipTypes) => {
+const Chip = ({ title, containerStyle, selected, onPress }: ChipTypes) => {
   return (
     <TouchableOpacity
-      className={`p-3 h-[43px] border-black border-[2px] bg-white rounded-md flex justify-center items-center ${containerStyle}`}
+      onPress={onPress} 
+      className={`p-3 h-[43px] border-[2px] ${
+        selected ? "border-[#2F7E79] bg-[#2F7E79]" : "border-black bg-white"
+      } rounded-md flex justify-center items-center ${containerStyle}`}
     >
-      <Text className="font-psemibold text-xs">{title}</Text>
+      <Text className={`font-psemibold text-xs ${selected ? "text-white" : "text-black"}`}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
