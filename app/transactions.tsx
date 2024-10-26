@@ -23,7 +23,10 @@ const Transactions = () => {
   // Updated filterOptions as an object for wallet, category, and date
   const [filterOptions, setFilterOptions] = useState({
     transactionType: "",
-    wallet: "",
+    wallet: {
+      id: "",
+      accountName: "",
+    },
     category: "",
     transactionDate: "",
   });
@@ -40,8 +43,6 @@ const Transactions = () => {
     }));
   };
 
-  console.log("Filters:", filterOptions);
-
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
@@ -54,7 +55,7 @@ const Transactions = () => {
           <View className="bg-white w-full h-[90%] rounded-tl-3xl rounded-tr-3xl z-20 relative -mt-[10vh] flex">
             {/* Filter Section */}
             <View className="w-full flex-row space-x-2 p-3">
-              <View className="w-[85%] flex-row items-center space-x-2 bg-[#F0F0F0] rounded-2xl px-4 py-1">
+              <View className="w-[85%] flex-row items-center space-x-2 mt-3 bg-[#F0F0F0] rounded-2xl px-4 py-1">
                 <Fontisto name="search" size={24} color="black" />
                 <TextInput
                   className="w-full h-10 text-black font-pregular text-sm"
@@ -64,14 +65,14 @@ const Transactions = () => {
               </View>
               <TouchableOpacity
                 onPress={() => setModalVisible(true)}
-                className="bg-[#F0F0F0] w-[12%] h-[50px] rounded-xl flex justify-center items-center"
+                className="bg-[#F0F0F0] w-[12%] h-[50px] rounded-xl mt-3 flex justify-center items-center"
               >
                 <Ionicons name="options-sharp" size={26} color="black" />
               </TouchableOpacity>
             </View>
 
             {/* Transactions List */}
-            <View className="w-full p-3 mt-3">
+            <View className="w-full p-3">
               <TransactionCard
                 transactionTitle="AirPods Pro 2"
                 transactionAmount="200.00"
@@ -101,7 +102,7 @@ const Transactions = () => {
               <>
                 {/* Header */}
                 <View className="border-b w-full flex-row justify-between p-1">
-                  <Text className="text-black text-lg">Search Filters</Text>
+                  <Text className="text-black text-lg">Filters</Text>
                   <TouchableOpacity onPress={() => setModalVisible(false)}>
                     <Text className="text-red-600">Close</Text>
                   </TouchableOpacity>
@@ -111,20 +112,22 @@ const Transactions = () => {
                 <Text className="mt-4 text-lg font-pmedium">
                   From your wallets
                 </Text>
-                <WalletSelector />
+                <WalletSelector updateFilterOptions={setFilterOptions} />
 
                 {/* Chip Filter Section for Transaction Types */}
                 <Text className="mt-4 text-lg font-pmedium">
-                  From your wallets
+                  Transaction Type
                 </Text>
-                <View className="w-full flex-row space-x-10 pl-3 pr-3">
+                <View className="w-full mt-3 flex-row flex-wrap space-x-2 space-y-2">
                   {["Expenses", "Incomes", "Transfers"].map((type) => (
                     <Chip
                       key={type}
                       title={type}
-                      selected={filterOptions.category === type}
-                      onPress={() => toggleFilterOption("category", type)}
-                      containerStyle="m-[5px]"
+                      selected={filterOptions.transactionType === type}
+                      onPress={() =>
+                        toggleFilterOption("transactionType", type)
+                      }
+                      containerStyle="mr-[5px]"
                     />
                   ))}
                 </View>
@@ -181,9 +184,13 @@ const Transactions = () => {
                     className="bg-red-600 w-[48%] h-[50px] justify-center items-center rounded-lg"
                     onPress={() =>
                       setFilterOptions({
-                        wallet: "",
+                        wallet: {
+                          id: "",
+                          accountName: "",
+                        },
                         category: "",
                         transactionDate: "",
+                        transactionType: "",
                       })
                     }
                   >

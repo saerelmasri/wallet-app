@@ -5,34 +5,54 @@ import { router } from "expo-router";
 import { currencySigns, displayAmount } from "@/helpers/common-helper";
 
 type WalletsType = {
+  id: string;
   accountName: string;
   colorCard: string;
   currency: "dolar" | "euro";
   balance?: number;
-  cardStyle?: string
+  cardStyle?: string;
+  onSelect?: (walletInfo: { id: string; accountName: string }) => void;
+  selected?: boolean;
 };
 
 const HomeWalletCard = ({
+  id,
   accountName,
   balance,
   colorCard,
   currency,
-  cardStyle
+  cardStyle,
+  onSelect,
+  selected,
 }: WalletsType) => {
+  const handlePress = () => {
+    if (onSelect) {
+      // Use the onSelect callback to send wallet info for filtering
+      onSelect({
+        id,
+        accountName,
+      });
+    } else {
+      // Default to navigating to the wallet details screen
+      router.push({
+        pathname: "/wallet",
+        params: {
+          accountName: accountName,
+          balance: balance,
+          currency: currency,
+          cardColor: colorCard,
+        },
+      });
+    }
+  };
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: "/wallet",
-          params: {
-            accountName: accountName,
-            balance: balance,
-            currency: currency,
-            cardColor: colorCard,
-          },
-        })
-      }
-      style={{ backgroundColor: colorCard }}
+      onPress={handlePress}
+      style={{
+        backgroundColor: colorCard,
+        borderWidth: selected ? 2 : 0, // Show border if selected
+        borderColor: selected ? "#FFD700" : "transparent", // Gold color for selection
+      }}
       className={`w-[150px] rounded-2xl p-4 m-2 justify-between ${cardStyle}`}
     >
       {/* Wallet Icon at the top */}
