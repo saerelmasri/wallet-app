@@ -95,7 +95,59 @@ const RootLayout = () => {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen name="goals" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="goals"
+        options={{
+          headerShown: true,
+          headerLeft: () => (
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="black"
+              onPress={() => router.back()}
+            />
+          ),
+          headerTitle: "Goals",
+          headerTitleStyle: {
+            color: "black",
+          },
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          headerTintColor: "#fff",
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="addGoal"
+        options={{
+          headerShown: true,
+          headerTitle: "Set your new goal",
+          headerLeft: () => (
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="black"
+              onPress={() => router.back()}
+            />
+          ),
+          headerTitleStyle: {
+            color: "black",
+          },
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          headerTintColor: "#fff",
+          headerShadowVisible: false,
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Text className="text-red-600 font-pmedium text-base">
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <Stack.Screen
         name="wallet"
         options={{

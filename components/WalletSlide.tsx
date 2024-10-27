@@ -56,6 +56,7 @@ const WalletSlider = () => {
     } else {
       return (
         <HomeWalletCard
+          id={item.id}
           accountName={item.accountName}
           balance={item.balance}
           colorCard={item.colorCard}

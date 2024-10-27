@@ -11,7 +11,7 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
   return (
     <View className="flex-row w-full h-[9vh]">
       <View className="w-[100%] flex-row space-x-3 items-center">
-        <View className="w-[60px] h-[60px] rounded-full bg-white justify-center items-center">
+        <View className="w-[60px] h-[60px] rounded-full bg-slate-600 justify-center items-center">
           <Text>Logo</Text>
         </View>
         <View className=" w-[80%] p-2 justify-around">
@@ -22,7 +22,7 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
             progress={goalProgress}
             width={270}
             color="#04EE7E"
-            unfilledColor="white"
+            unfilledColor="#D3D3D3"
             animated
             borderColor="transparent"
           />

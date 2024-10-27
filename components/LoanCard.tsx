@@ -5,9 +5,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const LoanCard = () => {
   return (
-    <View className="w-[190px] h-[180px] bg-[#D3D3D3] rounded-xl flex">
+    <View className="w-[190px] h-[180px] bg-white border border-black rounded-xl flex">
       <View className="h-[70%] w-full flex justify-center p-3">
-        <View className="w-[50px] h-[50px] rounded-xl bg-white flex justify-center items-center mt-3">
+        <View className="w-[50px] h-[50px] rounded-xl bg-[#D3D3D3] flex justify-center items-center mt-3">
           <Ionicons name="wallet" size={32} color="black" />
         </View>
         <Text className="font-pregular text-lg uppercase text-black">

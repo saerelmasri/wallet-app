@@ -18,7 +18,7 @@ const FormFieldApp = ({
 }: FormFieldsTypes) => {
   return (
     <View
-      className={`w-[95%] border border-white bg-white opacity-50 rounded-2xl px-4 py-2 ${otherStyles}`}
+      className={`border border-white bg-white rounded-2xl px-4 py-2 ${otherStyles}`}
     >
       {/* Title above the form field */}
       <Text className="text-base text-black font-pmedium mb-1">{title}</Text>
@@ -28,7 +28,7 @@ const FormFieldApp = ({
         className="w-full h-10 text-black font-psemibold text-base"
         value={value}
         placeholder={placeHolder}
-        placeholderTextColor="#696969"
+        placeholderTextColor="#A9A9A9"
         onChangeText={handleTextChange}
         autoCapitalize="none"
         autoCorrect={false}

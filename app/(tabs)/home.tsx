@@ -8,12 +8,11 @@ import {
 } from "react-native";
 import React from "react";
 import WalletSlider from "@/components/WalletSlide";
-import Chip from "@/components/Chip";
 import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
-import GoalsWidget from "@/components/GoalsWidget";
 import UserHeaderInfo from "@/components/UserHeaderInfo";
 import LoanCard from "@/components/LoanCard";
 import AllTransactionCard from "@/components/AllTransactionCard";
+import GoalProgressCircle from "@/components/GoalProgressCircle";
 
 const Home = () => {
   return (
@@ -51,7 +50,8 @@ const Home = () => {
           <WalletSlider />
 
           <View className="w-full flex-row justify-around p-3">
-            <AllTransactionCard />
+            {/* <AllTransactionCard /> */}
+            <GoalProgressCircle />
             <LoanCard />
           </View>
 
@@ -64,9 +64,6 @@ const Home = () => {
 
           {/* Transaction History Widgets */}
           <TransactionHistoryWidget />
-
-          {/* Goals Widget */}
-          <GoalsWidget />
         </ScrollView>
       </SafeAreaView>
     </View>

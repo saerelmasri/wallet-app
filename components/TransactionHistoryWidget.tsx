@@ -5,7 +5,7 @@ import { router } from "expo-router";
 
 const TransactionHistoryWidget = () => {
   return (
-    <View className="rounded-lg w-[90%] mt-3 p-4 bg-[#EFEFEF]">
+    <View className="rounded-lg w-[90%] mt-3 p-4 bg-white border border-black">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="font-psemibold text-lg text-black">
           Transactions history
