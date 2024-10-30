@@ -7,7 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 const Wallet = () => {
   const { accountName, balance, currency, cardColor } = useLocalSearchParams();
   return (
-    <View style={{ flex: 1, backgroundColor: "#2C2C2C" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* Set the status bar style */}
       <StatusBar
         barStyle="light-content"
@@ -33,13 +33,6 @@ const Wallet = () => {
             expense={0}
             income={0}
           />
-
-          {/* Graph displaying some info for this wallets such as expenses/incomes */}
-          <View className="w-full items-center pt-3 pb-3">
-            <View className="border border-black-100 w-[92%] h-[180px] justify-center items-center rounded-2xl">
-              <Text>Graph Goes here!</Text>
-            </View>
-          </View>
 
           {/* Records */}
           <View className="w-[95%]">

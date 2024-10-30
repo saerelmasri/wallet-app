@@ -21,30 +21,30 @@ type TabIconTypes = {
 const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   const iconMap = {
     Home: (
-      <MaterialIcons name="space-dashboard" size={24} color={focused ? "#32D74B" : "white"} />
+      <MaterialIcons name="space-dashboard" size={24} color={focused ? "#32D74B" : "black"} />
     ),
     Planning: (
-      <Feather name="home" size={24} color={focused ? "#32D74B" : "white"} />
+      <Feather name="home" size={24} color={focused ? "#32D74B" : "black"} />
     ),
     Add: (
       <Ionicons
         name="add-outline"
         size={58}
-        color={focused ? "#32D74B" : "white"}
+        color={focused ? "#32D74B" : "black"}
       />
     ),
     Report: (
       <Feather
         name="pie-chart"
         size={24}
-        color={focused ? "#32D74B" : "white"}
+        color={focused ? "#32D74B" : "black"}
       />
     ),
     Profile: (
       <MaterialCommunityIcons
         name="account"
         size={24}
-        color={focused ? "#32D74B" : "white"}
+        color={focused ? "#32D74B" : "black"}
       />
     ),
   };
@@ -61,7 +61,7 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
           className={`${
             focused
               ? "font-psemibold text-[#32D74B]"
-              : "font-pregular text-white"
+              : "font-pregular text-black"
           } text-xs`}
         >
           {name}
@@ -81,9 +81,9 @@ const TabLayout = () => {
             tabBarActiveTintColor: "#32D74B",
             tabBarInactiveTintColor: "#CDCDE0",
             tabBarStyle: {
-              backgroundColor: "#2C2C2C",
+              backgroundColor: "white",
               borderTopWidth: 1,
-              borderTopColor: "#2C2C2C",
+              borderTopColor: "white",
               height: 84,
               paddingTop: 10,
             },

@@ -104,7 +104,7 @@ const Transactions = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View className="flex-1 justify-end bg-transparent bg-opacity-50">
-          <View className="h-[80%] bg-white rounded-tl-3xl rounded-tr-3xl p-4">
+          <View className="h-[80%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border border-black">
             {isLoading ? (
               <ActivityIndicator size="large" color="#ff0000" />
             ) : (

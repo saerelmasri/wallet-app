@@ -1,21 +1,32 @@
 import {
   View,
   SafeAreaView,
-  Image,
-  ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
 } from "react-native";
 import React from "react";
-import images from "@/constants/images";
-import FormFieldApp from "@/components/FormFieldApp";
 import CustomButton from "@/components/CustomButton";
-import { router } from "expo-router";
+import FormInputText from "@/components/FormInputText";
+import FormInputDropdown from "@/components/FormInputDropdown";
+
+const colorData = [
+  { label: "Green 1", value: "1", color: "#32CD32" },
+  { label: "Green 2", value: "2", color: "#228B22" },
+  { label: "Green 3", value: "3", color: "#006400" },
+  { label: "Black", value: "4", color: "#000000" },
+  { label: "White", value: "5", color: "#FFFFFF" },
+  { label: "Grey", value: "6", color: "#808080" },
+];
+
+const currencyData = [
+  { label: "$ USD", value: "dollar"},
+  { label: "€ EUR", value: "euro" },
+  { label: "£ LBP", value: "lebanese pounds" },
+];
 
 const AddWallet = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#2C2C2C" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* Set the status bar style */}
       <StatusBar
         barStyle="light-content"
@@ -24,48 +35,39 @@ const AddWallet = () => {
       />
       {/* SafeAreaView only for the content */}
       <SafeAreaView className="flex-1 h-full items-center">
-        <View className="w-full p-5 items-center">
-          <Image
-            source={images.wallet}
-            resizeMode="contain"
-            className="w-[100px] h-[100px]"
-          />
+        <View className="w-full items-center">
           <Text className="font-pmedium text-2xl text-white text-center">
             Create a New Wallet
           </Text>
-          <FormFieldApp
+          <View className="border-[0.5px] border-black w-full" />
+          <FormInputText
             title="Wallet Name"
             value={""}
             placeHolder="Personal Savings"
             handleTextChange={""}
-            otherStyles="mt-5"
           />
-          <FormFieldApp
+          <View className="border-[0.5px] border-black w-full" />
+          <FormInputText
             title="Initial Balance"
             value={""}
             placeHolder="0.00"
             handleTextChange={""}
-            otherStyles="mt-5"
           />
-          <FormFieldApp
+          <View className="border-[0.5px] border-black w-full" />
+          <FormInputDropdown
             title="Currency"
-            value={""}
-            placeHolder="USD"
-            handleTextChange={""}
-            otherStyles="mt-5"
+            placeholder="USD"
+            values={currencyData}
+            icon="Currency"
           />
-        </View>
-        <View className="w-full pl-10">
-          <Text className="font-pregular text-base text-white mt-2 text-left">
-            Choose your color
-          </Text>
-        </View>
-        <View className="w-full p-10 flex-row justify-center items-center space-x-5">
-          <TouchableOpacity className="w-[50px] h-[50px] rounded-full bg-[#32D74B]" />
-          <TouchableOpacity className="w-[50px] h-[50px] rounded-full bg-[#2F7E79]" />
-          <TouchableOpacity className="w-[50px] h-[50px] rounded-full bg-[#05603A]" />
-          <TouchableOpacity className="w-[50px] h-[50px] rounded-full bg-black" />
-          <TouchableOpacity className="w-[50px] h-[50px] rounded-full bg-white" />
+          <View className="border-[0.5px] border-black w-full" />
+          <FormInputDropdown
+            title="Wallet Design"
+            placeholder="Select Design"
+            values={colorData}
+            icon="Wallet"
+          />
+          <View className="border-[0.5px] border-black w-full" />
         </View>
         <CustomButton
           title="Create"

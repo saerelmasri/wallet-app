@@ -9,7 +9,7 @@ type RecordTypes = {
 const Records = ({ recordDate }: RecordTypes) => {
   return (
     <View className="w-full  p-3">
-      <Text className="font-pmedium text-white text-base">{recordDate}</Text>
+      <Text className="font-pmedium text-black text-base">{recordDate}</Text>
       <TransactionCard
         transactionTitle="AirPods Pro 2"
         transactionAmount="200.00"

@@ -15,9 +15,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
-import FormFieldApp from "@/components/FormFieldApp";
+import FormInputText from "@/components/FormInputText";
 import CustomButton from "@/components/CustomButton";
+import FormInputDropdown from "@/components/FormInputDropdown";
 
+const optionData = [
+  { label: "Yes", value: "yes" },
+  { label: "No", value: "no" },
+];
 const AddGoal = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedEmoji, setSelectedEmoji] = useState({
@@ -39,49 +44,42 @@ const AddGoal = () => {
       <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-          <View className="w-full p-3justify-center items-center p-3 flex">
+          <View className="w-full p-3justify-center items-center flex">
             <TouchableOpacity
               onPress={() => setIsModalOpen(true)}
               className="border w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
             >
               <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
             </TouchableOpacity>
-            <Text className="text-black text-sm font-pregular mt-1">
+            <Text className="text-black text-sm font-pregular m-5">
               Select an emoji to describe your goal
             </Text>
-
-            <FormFieldApp
+            <View className="border-[0.5px] border-black w-full" />
+            <FormInputText
               handleTextChange={() => {}}
               title="Goal Name"
               value=""
               placeHolder="Madrid Trip"
               otherStyles="border-black m-2 w-full mt-5"
             />
-            <FormFieldApp
+            <View className="border-[0.5px] border-black w-full" />
+            <FormInputText
               handleTextChange={() => {}}
               title="Goal Amount"
               value=""
               placeHolder="$1,300.00"
               otherStyles="border-black m-2 w-full"
             />
-            <FormFieldApp
-              handleTextChange={() => {}}
-              title="Goal Amount"
-              value=""
-              placeHolder="$1,300.00"
-              otherStyles="border-black m-2 w-full"
-            />
-
-            <FormFieldApp
-              handleTextChange={() => {}}
+            <View className="border-[0.5px] border-black w-full" />
+            <FormInputDropdown
+              icon="Wallet"
+              placeholder="Yes"
               title="Repeat"
-              value=""
-              placeHolder="Yes"
-              otherStyles="border-black m-2 w-full"
+              values={optionData}
             />
-
-            <View className="w-full h-[25vh] justify-end flex">
-              <View className="border"></View>
+            <View className="border-[0.5px] border-black w-full" />
+            <View className="w-full h-[25vh] justify-end flex p-3">
+              <View className="border hidden"></View>
               <CustomButton
                 title="Save Goal"
                 handlePress={() => {}}
