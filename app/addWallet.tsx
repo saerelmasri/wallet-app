@@ -1,9 +1,4 @@
-import {
-  View,
-  SafeAreaView,
-  StatusBar,
-  Text,
-} from "react-native";
+import { View, SafeAreaView, StatusBar, Text } from "react-native";
 import React from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
@@ -19,7 +14,7 @@ const colorData = [
 ];
 
 const currencyData = [
-  { label: "$ USD", value: "dollar"},
+  { label: "$ USD", value: "dollar" },
   { label: "€ EUR", value: "euro" },
   { label: "£ LBP", value: "lebanese pounds" },
 ];
@@ -69,12 +64,15 @@ const AddWallet = () => {
           />
           <View className="border-[0.5px] border-black w-full" />
         </View>
-        <CustomButton
-          title="Create"
-          handlePress={() => {}}
-          containerStyle="mt-7 w-[90%] bg-[#05603A]"
-          textStyle={"text-[#FCFCFC]"}
-        />
+        <View className="w-full h-[25vh] justify-end flex items-center">
+          <View className="border hidden"></View>
+          <CustomButton
+            title="Create"
+            handlePress={() => {}}
+            containerStyle="mt-7 w-[90%] bg-[#05603A]"
+            textStyle={"text-[#FCFCFC]"}
+          />
+        </View>
       </SafeAreaView>
     </View>
   );

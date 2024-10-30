@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  StatusBar,
-} from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import React from "react";
 import WalletSlider from "@/components/WalletSlide";
 import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
@@ -13,6 +6,8 @@ import UserHeaderInfo from "@/components/UserHeaderInfo";
 import LoanCard from "@/components/LoanCard";
 import AllTransactionCard from "@/components/AllTransactionCard";
 import GoalProgressCircle from "@/components/GoalProgressCircle";
+import BudgetCardV1 from "@/components/BudgetCardv1";
+import BudgetCardV2 from "@/components/BudgetCardv2";
 
 const Home = () => {
   return (
@@ -30,7 +25,7 @@ const Home = () => {
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
         >
           {/* Profile */}
-          <UserHeaderInfo />
+          {/* <UserHeaderInfo /> */}
 
           {/* Balance and Wallet Slider Section */}
           <View className="w-full flex-col p-3">
@@ -52,7 +47,9 @@ const Home = () => {
           <View className="w-full flex-row justify-around p-3">
             {/* <AllTransactionCard /> */}
             <GoalProgressCircle />
-            <LoanCard />
+            {/* <BudgetCardV1 /> */}
+            <BudgetCardV2 />
+            {/* <LoanCard /> */}
           </View>
 
           {/* Chip Section */}
