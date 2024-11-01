@@ -8,13 +8,6 @@ const Wallet = () => {
   const { accountName, balance, currency, cardColor } = useLocalSearchParams();
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      {/* Set the status bar style */}
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
-      />
-
       {/* SafeAreaView only for the content */}
       <SafeAreaView className="flex-1 h-full">
         <ScrollView

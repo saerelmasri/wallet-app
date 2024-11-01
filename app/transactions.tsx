@@ -14,7 +14,6 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Chip from "@/components/Chip";
 import TransactionCard from "@/components/TransactionCard";
-import WalletSelector from "@/components/WalletSelector";
 
 const Transactions = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,7 +44,6 @@ const Transactions = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
           <View className="bg-white w-full h-[100%] rounded-tl-3xl rounded-tr-3xl relative flex">
@@ -81,7 +79,6 @@ const Transactions = () => {
                 transactionCategory="Shopping"
                 transactionDate="12 October 2024"
                 transactionType="Expense"
-                usedWallet="Master Card"
               />
               <TransactionCard
                 transactionTitle="AirPods Pro 2"
@@ -89,7 +86,6 @@ const Transactions = () => {
                 transactionCategory="Shopping"
                 transactionDate="12 October 2024"
                 transactionType="Expense"
-                usedWallet="Master Card"
               />
             </View>
           </View>
@@ -116,12 +112,6 @@ const Transactions = () => {
                     <Text className="text-red-600">Close</Text>
                   </TouchableOpacity>
                 </View>
-
-                {/* Wallet Filter */}
-                <Text className="mt-4 text-lg font-pmedium">
-                  From your wallets
-                </Text>
-                <WalletSelector updateFilterOptions={setFilterOptions} />
 
                 {/* Chip Filter Section for Transaction Types */}
                 <Text className="mt-4 text-lg font-pmedium">

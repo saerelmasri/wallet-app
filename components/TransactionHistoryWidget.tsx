@@ -21,7 +21,7 @@ const TransactionHistoryWidget = () => {
         transactionCategory="Shopping"
         transactionDate="12 October 2024"
         transactionType="Expense"
-        usedWallet="Savings"
+        swipeEnabled={false}
       />
       <TransactionCard
         transactionTitle="Blanco Cafe"
@@ -29,7 +29,7 @@ const TransactionHistoryWidget = () => {
         transactionCategory="Bar & Cafe"
         transactionDate="10 October 2024"
         transactionType="Expense"
-        usedWallet="Wallet"
+        swipeEnabled={false}
       />
       <TransactionCard
         transactionTitle="Blanco Cafe"
@@ -37,7 +37,7 @@ const TransactionHistoryWidget = () => {
         transactionCategory="Bar & Cafe"
         transactionDate="10 October 2024"
         transactionType="Expense"
-        usedWallet="Wallet"
+        swipeEnabled={false}
       />
       <TransactionCard
         transactionTitle="Monthly Salary"
@@ -45,7 +45,6 @@ const TransactionHistoryWidget = () => {
         transactionCategory="Income"
         transactionDate="09 October 2024"
         transactionType="Income"
-        usedWallet="Savings"
       />
     </View>
   );

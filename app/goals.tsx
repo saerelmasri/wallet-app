@@ -16,7 +16,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 const Goals = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
           <View className="w-full p-3 space-y-2">

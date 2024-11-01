@@ -19,7 +19,7 @@ const currencyData = [
   { label: "£ LBP", value: "lebanese pounds" },
 ];
 
-const AddWallet = () => {
+const AddTransaction = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* SafeAreaView only for the content */}
@@ -72,4 +72,4 @@ const AddWallet = () => {
   );
 };
 
-export default AddWallet;
+export default AddTransaction;

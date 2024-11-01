@@ -13,6 +13,7 @@ import {
 import { firebaseConfig } from "@/constants/test";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -71,145 +72,180 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="transactions"
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={24}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerTitle: "",
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerTintColor: "#fff",
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="goals"
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={24}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerTitle: "Goals",
-          headerTitleStyle: {
-            color: "black",
-          },
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerTintColor: "#fff",
-          headerShadowVisible: false,
-        }}
-      />
-      <Stack.Screen
-        name="addGoal"
-        options={{
-          headerShown: true,
-          headerTitle: "Set your new goal",
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={24}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerTitleStyle: {
-            color: "black",
-          },
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerTintColor: "#fff",
-          headerShadowVisible: false,
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <Text className="text-red-600 font-pmedium text-base">
-                Cancel
-              </Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="wallet"
-        options={{
-          headerShown: true,
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={24}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerTitle: "",
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerTintColor: "#fff",
-          headerShadowVisible: false,
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => router.push("/addWallet")}
-              style={{ marginRight: 10 }}
-            >
-              <Text className="text-black font-pmedium text-base">Edit</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="addWallet"
-        options={{
-          headerShown: true,
-          title: "New Wallet",
-          headerTitleStyle: {
-            color: "black",
-            fontSize: 22,
-            fontWeight: "bold"
-          },
-          headerBackTitle: "Back",
-          headerStyle: {
-            backgroundColor: "white",
-          },
-          headerTintColor: "#fff",
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={24}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <Text className="text-red-600 font-pmedium text-base">
-                Cancel
-              </Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-    </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="transactions"
+          options={{
+            headerShown: true,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitle: "",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="goals"
+          options={{
+            headerShown: true,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitle: "Goals",
+            headerTitleStyle: {
+              color: "black",
+            },
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="addGoal"
+          options={{
+            headerShown: true,
+            headerTitle: "Set your new goal",
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitleStyle: {
+              color: "black",
+            },
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerRight: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text className="text-red-600 font-pmedium text-base">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="wallet"
+          options={{
+            headerShown: true,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitle: "",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => router.push("/addWallet")}
+                style={{ marginRight: 10 }}
+              >
+                <Text className="text-black font-pmedium text-base">Edit</Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="addWallet"
+          options={{
+            headerShown: true,
+            title: "New Wallet",
+            headerTitleStyle: {
+              color: "black",
+              fontSize: 22,
+              fontWeight: "bold",
+            },
+            headerBackTitle: "Back",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerRight: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text className="text-red-600 font-pmedium text-base">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="addTransaction"
+          options={{
+            headerShown: true,
+            title: "New Transaction",
+            headerTitleStyle: {
+              color: "black",
+              fontSize: 22,
+              fontWeight: "bold",
+            },
+            headerBackTitle: "Back",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerRight: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text className="text-red-600 font-pmedium text-base">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </Stack>
+    </GestureHandlerRootView>
   );
 };
 

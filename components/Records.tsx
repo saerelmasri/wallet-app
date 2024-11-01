@@ -15,14 +15,12 @@ const Records = ({ recordDate }: RecordTypes) => {
         transactionAmount="200.00"
         transactionCategory="Shopping"
         transactionType="Expense"
-        usedWallet="Savings"
       />
       <TransactionCard
         transactionTitle="Groceries Happy"
         transactionAmount="50.00"
         transactionCategory="Food"
         transactionType="Expense"
-        usedWallet="Savings"
       />
     </View>
   );

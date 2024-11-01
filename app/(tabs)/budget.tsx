@@ -10,27 +10,14 @@ import images from "@/constants/images";
 
 const Planning = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#2C2C2C" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* Set the status bar style */}
       <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
+        barStyle="dark-content"
       />
+      <View className="border w-full h-[12vh]">
 
-      {/* Background Image */}
-      <Image
-        source={images.effect}
-        resizeMode="cover"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-        }}
-      />
+      </View>
 
       {/* SafeAreaView only for the content */}
       <SafeAreaView className="flex-1 h-full">

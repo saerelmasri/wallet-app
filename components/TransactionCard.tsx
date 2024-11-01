@@ -1,68 +1,197 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Ionicons } from "@expo/vector-icons";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  interpolateColor,
+} from "react-native-reanimated";
 
 type TransactionCardType = {
   transactionTitle: string;
   transactionCategory: string;
-  usedWallet: string;
   transactionAmount: string;
   transactionType: "Income" | "Expense";
   transactionDate?: string;
+  swipeEnabled?: boolean;
 };
 
 const TransactionCard = ({
   transactionTitle,
   transactionCategory,
-  usedWallet,
   transactionAmount,
-  transactionDate,
+  transactionDate, 
   transactionType,
+  swipeEnabled = true,
 }: TransactionCardType) => {
+  const translateX = useSharedValue(0);
+
+  const panGesture = Gesture.Pan()
+    .onUpdate((event) => {
+      if (swipeEnabled) {
+        // Set translation with a limit up to -120 (width of Delete button)
+        translateX.value = Math.max(event.translationX, -120);
+      }
+    })
+    .onEnd(() => {
+      // Snap open if swiped more than halfway, otherwise close to start position
+      if (swipeEnabled) {
+        translateX.value =
+          translateX.value < -60
+            ? withSpring(-120, { damping: 12, stiffness: 150 })
+            : withSpring(0, { damping: 12, stiffness: 150 });
+      }
+    });
+
+  // Animated style for card movement
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  // Animated style for delete button background color fade-in
+  const deleteButtonStyle = useAnimatedStyle(() => {
+    const backgroundColor = interpolateColor(
+      translateX.value,
+      [-120, 0],
+      ["red", "rgba(255,0,0,0)"]
+    );
+    return { backgroundColor };
+  });
+
   return (
-    <View className="flex-row w-full h-[9vh]">
-      <View className="w-[60%] flex-row items-center space-x-3">
-        <View className="w-[60px] h-[60px] rounded-full bg-[#F0F0F0] justify-center items-center">
-          <Text>Logo</Text>
-        </View>
-        <View>
-          <Text className="font-pmedium text-base text-black">
-            {transactionTitle}
-          </Text>
-          <View className="flex-row items-center space-x-2 p-1">
-            <AntDesign name="shoppingcart" size={18} color="black" />
-            <Text className="font-pregular text-xs text-black opacity-70">
-              {transactionCategory}
-            </Text>
+    <View style={styles.container}>
+      {/* Delete Button */}
+      <Animated.View style={[styles.deleteButton, deleteButtonStyle]}>
+        <Pressable onPress={() => console.log("Delete")}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </Pressable>
+      </Animated.View>
+
+      {/* Swipeable Card */}
+      <GestureDetector gesture={swipeEnabled ? panGesture : Gesture.Pan()}>
+        <Animated.View style={[styles.card, animatedStyle]}>
+          <View style={styles.cardContent}>
+            <View style={styles.iconContainer}>
+              <Text>Logo</Text>
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.transactionTitle}>{transactionTitle}</Text>
+              <View style={styles.row}>
+                <AntDesign name="shoppingcart" size={18} color="black" />
+                <Text style={styles.categoryText}>{transactionCategory}</Text>
+              </View>
+            </View>
           </View>
-          <View className="flex-row items-center space-x-2 p-1">
-            <Ionicons name="wallet-outline" size={18} color={"black"} />
-            <Text className="font-pregular text-xs text-black opacity-70">
-              {usedWallet}
+          <View style={styles.amountContainer}>
+            <Text
+              style={[
+                styles.amount,
+                transactionType === "Expense" ? styles.expense : styles.income,
+              ]}
+            >
+              {transactionType === "Expense"
+                ? `- $${transactionAmount}`
+                : `+ $${transactionAmount}`}
             </Text>
+            {transactionDate && (
+              <Text style={styles.date}>{transactionDate}</Text>
+            )}
           </View>
-        </View>
-      </View>
-      <View className="w-[40%] flex justify-center">
-        {transactionType === "Expense" ? (
-          <Text className="font-psemibold text-xl text-[#FF000F] text-right">
-            - ${transactionAmount}
-          </Text>
-        ) : (
-          <Text className="font-psemibold text-xl text-[#04EE7E] text-right">
-            + ${transactionAmount}
-          </Text>
-        )}
-        <Text></Text>
-        {transactionDate && (
-          <Text className="font-pregular text-xs text-black text-right">
-            {transactionDate}
-          </Text>
-        )}
-      </View>
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    width: "100%",
+    height: 80,
+    marginBottom: 10,
+  },
+  deleteButton: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 120,
+    height: 60,
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: -1,
+    borderRadius: 8,
+  },
+  deleteText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  card: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    overflow: "hidden",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  iconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#F0F0F0",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  details: {
+    marginLeft: 10,
+  },
+  transactionTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 2,
+  },
+  categoryText: {
+    fontSize: 12,
+    color: "black",
+    opacity: 0.7,
+    marginLeft: 4,
+  },
+  amountContainer: {
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingHorizontal: 10,
+  },
+  amount: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  expense: {
+    color: "#FF000F",
+  },
+  income: {
+    color: "#04EE7E",
+  },
+  date: {
+    fontSize: 12,
+    color: "black",
+    opacity: 0.7,
+  },
+});
 
 export default TransactionCard;

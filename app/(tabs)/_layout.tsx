@@ -1,18 +1,14 @@
-import { View, Text, Image } from "react-native";
-import { Tabs } from "expo-router";
-
-import {
-  GestureHandlerRootView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { View, Text, TouchableOpacity } from "react-native";
+import { Tabs, useNavigation, usePathname } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type TabIconTypes = {
-  icon: "Home" | "Planning" | "Add" | "Report" | "Profile";
+  icon: "Home" | "Budget" | "Profile";
   name: string;
   focused: boolean;
   circular?: boolean;
@@ -21,19 +17,13 @@ type TabIconTypes = {
 const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   const iconMap = {
     Home: (
-      <MaterialIcons name="space-dashboard" size={24} color={focused ? "#32D74B" : "black"} />
-    ),
-    Planning: (
-      <Feather name="home" size={24} color={focused ? "#32D74B" : "black"} />
-    ),
-    Add: (
-      <Ionicons
-        name="add-outline"
-        size={58}
+      <MaterialIcons
+        name="space-dashboard"
+        size={24}
         color={focused ? "#32D74B" : "black"}
       />
     ),
-    Report: (
+    Budget: (
       <Feather
         name="pie-chart"
         size={24}
@@ -51,18 +41,12 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
 
   return (
     <View
-      className={`items-center justify-center ${
-        circular ? "rounded-full bg-[#32D74B]" : ""
-      }`}
+      className={`items-center justify-center ${circular ? "rounded-full bg-[#32D74B]" : ""}`}
     >
       {iconMap[icon]}
       {!circular && (
         <Text
-          className={`${
-            focused
-              ? "font-psemibold text-[#32D74B]"
-              : "font-pregular text-black"
-          } text-xs`}
+          className={`${focused ? "font-psemibold text-[#32D74B]" : "font-pregular text-black"} text-xs`}
         >
           {name}
         </Text>
@@ -72,9 +56,16 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
 };
 
 const TabLayout = () => {
+  // Track the focused tab route name
+  const currentRouteName = usePathname();
+
+  console.log("Current:", currentRouteName);
+  
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <>
+        {/* Tabs without Add Button */}
         <Tabs
           screenOptions={{
             tabBarShowLabel: false,
@@ -100,64 +91,12 @@ const TabLayout = () => {
             }}
           />
           <Tabs.Screen
-            name="planning"
+            name="budget"
             options={{
-              title: "Planning",
+              title: "Budget",
               headerShown: false,
               tabBarIcon: ({ color, focused }) => (
-                <TabIcon icon="Planning" focused={focused} name="Planning" />
-              ),
-            }}
-          />
-
-          {/* Action Tab with Circular Button */}
-          {/* <Tabs.Screen
-            name="action"
-            options={{
-              title: "Action",
-              headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => console.log("Action button pressed!")}
-                  hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
-                  style={{
-                    position: "absolute",
-                    bottom: 1,
-                    left: "50%",
-                    transform: [{ translateX: -75 }],
-                    zIndex: 1,
-                    width: 70,
-                    height: 70,
-                    borderRadius: 40,
-                    backgroundColor: "#32D74B",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 5 },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <TabIcon
-                    icon="Add"
-                    focused={focused}
-                    name="Action"
-                    circular
-                  />
-                </TouchableOpacity>
-              ),
-            }}
-          /> */}
-
-          <Tabs.Screen
-            name="report"
-            options={{
-              title: "Report",
-              headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
-                <TabIcon icon="Report" focused={focused} name="Report" />
+                <TabIcon icon="Budget" focused={focused} name="Budget" />
               ),
             }}
           />
@@ -172,6 +111,34 @@ const TabLayout = () => {
             }}
           />
         </Tabs>
+
+        {/* Floating Add Transaction Button Only on Home */}
+        {currentRouteName === "/home" && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => console.log("Add Transaction button pressed!")}
+            hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
+            style={{
+              position: "absolute",
+              bottom: 100,
+              right: 40,
+              alignSelf: "center",
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              backgroundColor: "#32D74B",
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 5 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Ionicons name="add-outline" size={36} color="white" />
+          </TouchableOpacity>
+        )}
       </>
     </GestureHandlerRootView>
   );

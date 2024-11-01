@@ -41,13 +41,12 @@ const AddGoal = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="black" />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
           <View className="w-full p-3justify-center items-center flex">
             <TouchableOpacity
               onPress={() => setIsModalOpen(true)}
-              className="border w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
+              className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6 bg-[#05603A]"
             >
               <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
             </TouchableOpacity>
