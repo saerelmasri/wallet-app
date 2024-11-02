@@ -8,14 +8,12 @@ type FormInputDropDownTypes = {
   title: string;
   placeholder: string;
   values: any;
-  icon: "Wallet" | "Currency";
 };
 
 const FormInputDropdown = ({
   title,
   placeholder,
   values,
-  icon,
 }: FormInputDropDownTypes) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -46,21 +44,7 @@ const FormInputDropdown = ({
           setIsFocus(false);
         }}
         renderLeftIcon={() =>
-          icon === "Wallet" ? (
-            <Ionicons
-              style={styles.icon}
-              name="wallet"
-              size={20}
-              color={isFocus ? "#32D74B" : "#A9A9A9"}
-            />
-          ) : (
-            <MaterialCommunityIcons
-              style={styles.icon}
-              name="currency-usd"
-              size={20}
-              color={isFocus ? "#32D74B" : "#A9A9A9"}
-            />
-          )
+        (<MaterialCommunityIcons name="calendar-clock" size={24} color="black" />)
         }
         renderItem={(item: any) => (
             <View style={styles.optionContainer}>

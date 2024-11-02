@@ -214,34 +214,7 @@ const RootLayout = () => {
         <Stack.Screen
           name="addTransaction"
           options={{
-            headerShown: true,
-            title: "New Transaction",
-            headerTitleStyle: {
-              color: "black",
-              fontSize: 22,
-              fontWeight: "bold",
-            },
-            headerBackTitle: "Back",
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <Text className="text-red-600 font-pmedium text-base">
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            ),
+            headerShown: false,
           }}
         />
       </Stack>

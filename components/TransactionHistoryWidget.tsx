@@ -3,49 +3,53 @@ import React from "react";
 import TransactionCard from "./TransactionCard";
 import { router } from "expo-router";
 
+const BudgetTransaction = [
+  {
+    transactionTitle: "Tennis Session",
+    transactionAmount: "15.00",
+    transactionCategory: "Fitness & Sports",
+    transactionDate: "Nov 02, 2024",
+    transactionType: "Expense",
+    swipeEnabled: false,
+  },
+  {
+    transactionTitle: "Arguile",
+    transactionAmount: "7.00",
+    transactionCategory: "Bar & Cafe",
+    transactionDate: "Nov 01, 2024",
+    transactionType: "Expense",
+    swipeEnabled: false,
+  },
+  {
+    transactionTitle: "Bershka Shopping",
+    transactionAmount: "150.00",
+    transactionCategory: "Shopping",
+    transactionDate: "Oct 22, 2024",
+    transactionType: "Expense",
+    swipeEnabled: false,
+  },
+  {
+    transactionTitle: "Gas",
+    transactionAmount: "10.00",
+    transactionCategory: "Vehicule & Transportation",
+    transactionDate: "Oct 15, 2024",
+    transactionType: "Expense",
+    swipeEnabled: false,
+  },
+];
+
 const TransactionHistoryWidget = () => {
   return (
-    <View className="rounded-lg w-[90%] mt-3 p-4 bg-white border border-black">
-      <View className="flex-row items-center justify-between mb-3">
-        <Text className="font-psemibold text-lg text-black">
-          Transactions history
-        </Text>
-        <TouchableOpacity onPress={() => router.push("/transactions")}>
-          <Text className="font-pregular text-sm text-black">See All</Text>
-        </TouchableOpacity>
-      </View>
-      <View className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-      <TransactionCard
-        transactionTitle="AirPods Pro 2"
-        transactionAmount="200.00"
-        transactionCategory="Shopping"
-        transactionDate="12 October 2024"
-        transactionType="Expense"
-        swipeEnabled={false}
-      />
-      <TransactionCard
-        transactionTitle="Blanco Cafe"
-        transactionAmount="10.00"
-        transactionCategory="Bar & Cafe"
-        transactionDate="10 October 2024"
-        transactionType="Expense"
-        swipeEnabled={false}
-      />
-      <TransactionCard
-        transactionTitle="Blanco Cafe"
-        transactionAmount="10.00"
-        transactionCategory="Bar & Cafe"
-        transactionDate="10 October 2024"
-        transactionType="Expense"
-        swipeEnabled={false}
-      />
-      <TransactionCard
-        transactionTitle="Monthly Salary"
-        transactionAmount="1000.00"
-        transactionCategory="Income"
-        transactionDate="09 October 2024"
-        transactionType="Income"
-      />
+    <View className="rounded-lg mt-3 p-4 bg-white">
+      {BudgetTransaction.map((item) => (
+        <TransactionCard
+          transactionDate={item.transactionDate}
+          transactionType={item.transactionType}
+          transactionTitle={item.transactionTitle}
+          transactionAmount={item.transactionAmount}
+          transactionCategory={item.transactionCategory}
+        />
+      ))}
     </View>
   );
 };

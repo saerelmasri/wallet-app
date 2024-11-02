@@ -19,26 +19,20 @@ type TransactionCardType = {
   swipeEnabled?: boolean;
 };
 
-const TransactionCard = ({
-  transactionTitle,
-  transactionCategory,
-  transactionAmount,
-  transactionDate, 
-  transactionType,
-  swipeEnabled = true,
-}: TransactionCardType) => {
+const TransactionCard = (
+  props: TransactionCardType) => {
   const translateX = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
     .onUpdate((event) => {
-      if (swipeEnabled) {
+      if (props.swipeEnabled) {
         // Set translation with a limit up to -120 (width of Delete button)
         translateX.value = Math.max(event.translationX, -120);
       }
     })
     .onEnd(() => {
       // Snap open if swiped more than halfway, otherwise close to start position
-      if (swipeEnabled) {
+      if (props.swipeEnabled) {
         translateX.value =
           translateX.value < -60
             ? withSpring(-120, { damping: 12, stiffness: 150 })
@@ -71,17 +65,17 @@ const TransactionCard = ({
       </Animated.View>
 
       {/* Swipeable Card */}
-      <GestureDetector gesture={swipeEnabled ? panGesture : Gesture.Pan()}>
+      <GestureDetector gesture={props.swipeEnabled ? panGesture : Gesture.Pan()}>
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardContent}>
             <View style={styles.iconContainer}>
               <Text>Logo</Text>
             </View>
             <View style={styles.details}>
-              <Text style={styles.transactionTitle}>{transactionTitle}</Text>
+              <Text style={styles.transactionTitle}>{props.transactionTitle}</Text>
               <View style={styles.row}>
                 <AntDesign name="shoppingcart" size={18} color="black" />
-                <Text style={styles.categoryText}>{transactionCategory}</Text>
+                <Text style={styles.categoryText}>{props.transactionCategory}</Text>
               </View>
             </View>
           </View>
@@ -89,15 +83,16 @@ const TransactionCard = ({
             <Text
               style={[
                 styles.amount,
-                transactionType === "Expense" ? styles.expense : styles.income,
+                props.transactionType === "Expense" ? styles.expense : styles.income,
               ]}
             >
-              {transactionType === "Expense"
-                ? `- $${transactionAmount}`
-                : `+ $${transactionAmount}`}
+              {props.transactionType === "Expense"
+                ? `- $${props.transactionAmount}`
+                : `+ $${props.transactionAmount}`}
             </Text>
-            {transactionDate && (
-              <Text style={styles.date}>{transactionDate}</Text>
+            <Text style={styles.leftAmount}>left $200.00</Text>
+            {props.transactionDate && (
+              <Text style={styles.date}>{props.transactionDate}</Text>
             )}
           </View>
         </Animated.View>
@@ -188,9 +183,15 @@ const styles = StyleSheet.create({
     color: "#04EE7E",
   },
   date: {
-    fontSize: 12,
+    fontSize: 10,
     color: "black",
     opacity: 0.7,
+  },
+  leftAmount: {
+    fontSize: 13,
+    color: "black",
+    opacity: 1,
+    margin: 3
   },
 });
 

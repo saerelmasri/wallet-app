@@ -18,14 +18,14 @@ const FormInputText = ({
 }: FormFieldsTypes) => {
   return (
     <View
-      className={`bg-white p-4 flex-row justify-between items-center w-full`}
+      className={`bg-white p-3 flex-row justify-between items-center w-full`}
     >
       {/* Title above the form field */}
-      <Text className="text-sm text-black font-psemibold" style={{ width: 130 }}>{title}</Text>
+      <Text className="text-base text-black font-psemibold " style={{ width: 100, paddingLeft: 20 }}>{title}</Text>
 
       {/* TextInput Field */}
       <TextInput
-        className="w-full h-12 text-black font-pmedium text-sm"
+        className="w-full h-12 text-black font-pmedium text-base"
         value={value}
         placeholder={placeHolder}
         placeholderTextColor="#A9A9A9"

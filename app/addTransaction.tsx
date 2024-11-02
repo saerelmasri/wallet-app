@@ -3,6 +3,7 @@ import React from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
 import FormInputDropdown from "@/components/FormInputDropdown";
+import FormDatePicker from "@/components/FormDatePicker";
 
 const colorData = [
   { label: "Green 1", value: "1", color: "#32CD32" },
@@ -28,35 +29,30 @@ const AddTransaction = () => {
           <Text className="font-pmedium text-2xl text-white text-center">
             Create a New Wallet
           </Text>
-          <View className="border-[0.5px] border-black w-full" />
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
           <FormInputText
-            title="Wallet Name"
+            title="For"
             value={""}
-            placeHolder="Personal Savings"
+            placeHolder="Rent"
             handleTextChange={""}
           />
-          <View className="border-[0.5px] border-black w-full" />
-          <FormInputText
-            title="Initial Balance"
-            value={""}
-            placeHolder="0.00"
-            handleTextChange={""}
-          />
-          <View className="border-[0.5px] border-black w-full" />
-          <FormInputDropdown
-            title="Currency"
-            placeholder="USD"
-            values={currencyData}
-            icon="Currency"
-          />
-          <View className="border-[0.5px] border-black w-full" />
-          <FormInputDropdown
-            title="Wallet Design"
-            placeholder="Select Design"
-            values={colorData}
-            icon="Wallet"
-          />
-          <View className="border-[0.5px] border-black w-full" />
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+          <FormDatePicker />
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+          <View
+            className={`bg-white p-3 flex-row justify-between items-center w-full`}
+          >
+            {/* Title above the form field */}
+            <Text
+              className="text-base text-black font-psemibold "
+              style={{ width: 100, paddingLeft: 20 }}
+            >
+              Repeat
+            </Text>
+
+            {/* TextInput Field */}
+            
+          </View>
         </View>
         <View className="w-full h-[25vh] justify-end flex items-center">
           <View className="border hidden"></View>

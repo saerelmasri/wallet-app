@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { Tabs, useNavigation, usePathname } from "expo-router";
+import { router, Tabs, useNavigation, usePathname } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import Feather from "@expo/vector-icons/Feather";
@@ -59,9 +59,6 @@ const TabLayout = () => {
   // Track the focused tab route name
   const currentRouteName = usePathname();
 
-  console.log("Current:", currentRouteName);
-  
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <>
@@ -116,7 +113,7 @@ const TabLayout = () => {
         {currentRouteName === "/home" && (
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => console.log("Add Transaction button pressed!")}
+            onPress={() => router.push("/addTransaction")}
             hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
             style={{
               position: "absolute",
