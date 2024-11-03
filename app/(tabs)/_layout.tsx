@@ -41,12 +41,18 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
 
   return (
     <View
-      className={`items-center justify-center ${circular ? "rounded-full bg-[#32D74B]" : ""}`}
+      className={`items-center justify-center ${
+        circular ? "rounded-full bg-[#32D74B]" : ""
+      }`}
     >
       {iconMap[icon]}
       {!circular && (
         <Text
-          className={`${focused ? "font-psemibold text-[#32D74B]" : "font-pregular text-black"} text-xs`}
+          className={`${
+            focused
+              ? "font-psemibold text-[#32D74B]"
+              : "font-pregular text-black"
+          } text-xs`}
         >
           {name}
         </Text>
@@ -113,7 +119,7 @@ const TabLayout = () => {
         {currentRouteName === "/home" && (
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push("/addTransaction")}
+            onPress={() => router.push("/numPad")}
             hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
             style={{
               position: "absolute",

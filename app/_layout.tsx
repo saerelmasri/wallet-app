@@ -217,6 +217,27 @@ const RootLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="numPad"
+          options={{
+            headerShown: true,
+            title: "",
+            headerStyle: {
+              backgroundColor: "#32D74B",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerRight: () => (
+              <Ionicons
+                name="close-outline"
+                size={35}
+                color="white"
+                onPress={() => router.back()}
+              />
+            ),
+            headerLeft: () => <></>,
+          }}
+        />
       </Stack>
     </GestureHandlerRootView>
   );

@@ -5,42 +5,48 @@ import {
   Text,
   TouchableOpacity,
   Modal,
+  TextInput,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
 import FormDatePicker from "@/components/FormDatePicker";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import RadioButtonGroup from "@/components/RadioButtonGroup";
+
+const recurrentOption = [
+  "Never",
+  "Weekly",
+  "Every other week",
+  "Monthly",
+  "Every 2 months",
+  "Every 3 months",
+  "Every 6 months",
+  "Yearly",
+];
 
 const AddTransaction = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedRepeat, setSelectedRepeat] = useState("Never");
 
-  const [repeat, setRepeat] = useState({
-    repeat: "",
-  });
+  const handleRepeatChange = (option: string) => {
+    setSelectedRepeat(option);
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 200);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  const toggleFilterOption = (key: string, option: string) => {
-    setRepeat((prevOptions) => ({
-      ...prevOptions,
-      [key]: prevOptions[key] === option ? "" : option, // Toggle the selected option
-    }));
-  };
-
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* SafeAreaView only for the content */}
       <SafeAreaView className="flex-1 h-full items-center">
         <View className="w-full items-center">
-          <Text className="font-pmedium text-2xl text-white text-center">
-            Create a New Wallet
-          </Text>
-          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
           <FormInputText
             title="For"
             value={""}
@@ -53,7 +59,6 @@ const AddTransaction = () => {
           <View
             className={`bg-white p-3 flex-row justify-between items-center w-full`}
           >
-            {/* Title above the form field */}
             <Text
               className="text-base text-black font-psemibold "
               style={{ width: 100, paddingLeft: 20 }}
@@ -71,7 +76,7 @@ const AddTransaction = () => {
                 className="ml-3"
                 onPress={() => setModalVisible(true)}
               >
-                <Text className="text-[#A9A9A9]">Never Repeat</Text>
+                <Text className="text-[#A9A9A9]">{selectedRepeat}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -107,10 +112,15 @@ const AddTransaction = () => {
                 />
               </TouchableOpacity>
             </View>
-            <View className="border mt-5 flex">
-              <View>
-                <Text>Never</Text>
-              </View>
+            <View className="mt-5 flex items-center">
+              {recurrentOption.map((item) => (
+                <RadioButtonGroup
+                  key={item}
+                  label={item}
+                  onSelect={() => handleRepeatChange(item)}
+                  selected={selectedRepeat === item}
+                />
+              ))}
             </View>
           </View>
         </View>
