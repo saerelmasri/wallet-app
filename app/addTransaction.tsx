@@ -1,26 +1,37 @@
-import { View, SafeAreaView, StatusBar, Text } from "react-native";
-import React from "react";
+import {
+  View,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
-import FormInputDropdown from "@/components/FormInputDropdown";
 import FormDatePicker from "@/components/FormDatePicker";
-
-const colorData = [
-  { label: "Green 1", value: "1", color: "#32CD32" },
-  { label: "Green 2", value: "2", color: "#228B22" },
-  { label: "Green 3", value: "3", color: "#006400" },
-  { label: "Black", value: "4", color: "#000000" },
-  { label: "White", value: "5", color: "#FFFFFF" },
-  { label: "Grey", value: "6", color: "#808080" },
-];
-
-const currencyData = [
-  { label: "$ USD", value: "dollar" },
-  { label: "€ EUR", value: "euro" },
-  { label: "£ LBP", value: "lebanese pounds" },
-];
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const AddTransaction = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [repeat, setRepeat] = useState({
+    repeat: "",
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggleFilterOption = (key: string, option: string) => {
+    setRepeat((prevOptions) => ({
+      ...prevOptions,
+      [key]: prevOptions[key] === option ? "" : option, // Toggle the selected option
+    }));
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* SafeAreaView only for the content */}
@@ -50,9 +61,21 @@ const AddTransaction = () => {
               Repeat
             </Text>
 
-            {/* TextInput Field */}
-            
+            <View className="w-full h-12 flex-row items-center">
+              <MaterialCommunityIcons
+                name="calendar-clock"
+                size={24}
+                color="#A9A9A9"
+              />
+              <TouchableOpacity
+                className="ml-3"
+                onPress={() => setModalVisible(true)}
+              >
+                <Text className="text-[#A9A9A9]">Never Repeat</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
         </View>
         <View className="w-full h-[25vh] justify-end flex items-center">
           <View className="border hidden"></View>
@@ -64,6 +87,34 @@ const AddTransaction = () => {
           />
         </View>
       </SafeAreaView>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View className="flex-1 justify-end bg-[#A9A9A9] bg-opacity-10">
+          <View className="h-[90%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border-black">
+            <View className="w-full flex-row justify-between items-center">
+              <View />
+              <Text className="font-pmedium text-lg">Repeats</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <MaterialCommunityIcons
+                  name="window-close"
+                  size={28}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+            <View className="border mt-5 flex">
+              <View>
+                <Text>Never</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

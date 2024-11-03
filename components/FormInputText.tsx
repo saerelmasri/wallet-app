@@ -6,7 +6,6 @@ type FormFieldsTypes = {
   value: string;
   handleTextChange: any;
   placeHolder?: string;
-  otherStyles?: string;
 };
 
 const FormInputText = ({
@@ -14,7 +13,6 @@ const FormInputText = ({
   value,
   placeHolder,
   handleTextChange,
-  otherStyles,
 }: FormFieldsTypes) => {
   return (
     <View
