@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { View, FlatList, Animated } from "react-native";
-import HomeWalletCard from "./HomeWalletCard";
-import AddHomeWalletCard from "./AddHomeWalletCard";
+import HomeWalletCard from "./UnusedComponents/HomeWalletCard";
+import AddHomeWalletCard from "./UnusedComponents/AddHomeWalletCard";
 
 const data: any = [
   {

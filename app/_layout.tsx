@@ -73,7 +73,9 @@ const RootLayout = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack>
+      <Stack screenOptions={{
+        gestureEnabled: false
+      }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -212,9 +214,31 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
-          name="addTransaction"
+          name="newTransaction"
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: "",
+            headerStyle: {
+              backgroundColor: "#FFF",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerRight: () => (
+              <Ionicons
+                name="close-outline"
+                size={30}
+                color="black"
+                onPress={() => router.replace("/home")}
+              />
+            ),
           }}
         />
         <Stack.Screen
@@ -232,7 +256,7 @@ const RootLayout = () => {
                 name="close-outline"
                 size={35}
                 color="white"
-                onPress={() => router.back()}
+                onPress={() => router.replace("/home")}
               />
             ),
             headerLeft: () => <></>,

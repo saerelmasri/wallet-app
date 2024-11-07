@@ -1,14 +1,24 @@
 import { View, Text, SafeAreaView, ScrollView, StatusBar } from "react-native";
-import React from "react";
-import TransactionHistoryWidget from "@/components/TransactionHistoryWidget";
+import React, { useCallback } from "react";
 import GoalProgressCircle from "@/components/GoalProgressCircle";
-import UpcomingPayments from "@/components/UpcomingPayments";
+import UpcomingPayments from "@/components/nextPayments";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useFocusEffect, useRouter } from "expo-router";
+import { MockBudgetTransaction } from "@/constants/MockTransactions";
+import TransactionCard from "@/components/TransactionCard";
 
 const Home = () => {
+  // Clean up the stack by replacing it with only the home screen
+  const router = useRouter();
+  useFocusEffect(
+    useCallback(() => {
+      router.replace("/home");
+    }, [router])
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <StatusBar barStyle={"dark-content"}/>
+      <StatusBar barStyle={"dark-content"} />
       <SafeAreaView className="flex-1 h-full">
         <ScrollView
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
@@ -53,7 +63,17 @@ const Home = () => {
           </View>
 
           {/* Transaction History Widgets */}
-          <TransactionHistoryWidget />
+          <View className="rounded-lg mt-3 p-4 bg-white">
+            {MockBudgetTransaction.map((item) => (
+              <TransactionCard
+                transactionDate={item.transactionDate}
+                transactionType={item.transactionType}
+                transactionTitle={item.transactionTitle}
+                transactionAmount={item.transactionAmount}
+                transactionCategory={item.transactionCategory}
+              />
+            ))}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </View>

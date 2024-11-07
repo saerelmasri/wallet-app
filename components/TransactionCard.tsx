@@ -1,7 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Ionicons } from "@expo/vector-icons";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,

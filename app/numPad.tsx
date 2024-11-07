@@ -6,9 +6,11 @@ import {
   FlatList,
   TouchableOpacity,
   ListRenderItem,
+  Alert,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CustomButton from "@/components/CustomButton";
+import { router } from "expo-router";
 
 type NumpadItem = { label: any; action?: string };
 
@@ -56,6 +58,26 @@ const NumPad = () => {
     </TouchableOpacity>
   );
 
+  const formatNumber = (amount: string | number): string => {
+    const num = parseFloat(amount.toString());
+    return num.toLocaleString('en-us', {minimumFractionDigits: 2});
+  };
+
+  const checkCorrectAmount = (input: string) => {
+    if (input === "") {
+      return Alert.alert(
+        "Error",
+        "Please provide a right amount greater than 0 to save this record."
+      );
+    } else {
+      router.push({
+        pathname: "/newTransaction",
+        params: {
+          amountOfTransaction: formatNumber(input),
+        },
+      });
+    }
+  };
   return (
     <View style={{ flex: 1, backgroundColor: "#32D74B" }}>
       <SafeAreaView className="flex-1 h-full items-center">
@@ -84,7 +106,7 @@ const NumPad = () => {
           <View className="w-full h-[15%] p-3 justify-center items-center">
             <CustomButton
               title="Create"
-              handlePress={() => {}}
+              handlePress={() => checkCorrectAmount(input)}
               containerStyle="w-[90%] bg-white"
               textStyle={"text-black"}
             />

@@ -94,6 +94,16 @@ const TabLayout = () => {
             }}
           />
           <Tabs.Screen
+            name="transactions"
+            options={{
+              title: "Transactions",
+              headerShown: false,
+              tabBarIcon: ({ color, focused }) => (
+                <TabIcon icon="Home" focused={focused} name="Transactions" />
+              ),
+            }}
+          />
+          <Tabs.Screen
             name="budget"
             options={{
               title: "Budget",
@@ -119,7 +129,7 @@ const TabLayout = () => {
         {currentRouteName === "/home" && (
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => router.push("/numPad")}
+            onPress={() => router.replace("/numPad")}
             hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
             style={{
               position: "absolute",
