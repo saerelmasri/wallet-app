@@ -58,7 +58,122 @@ const AddTransaction = () => {
 
   return (
     <View >
-   
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} className="flex-1 h-full items-center">
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View className="w-full items-center">
+            {/* Amount of transaction */}
+            <View className="w-full justify-center items-center p-3">
+              <Text className="text-black font-psemibold text-3xl">
+                ${amountOfTransaction}
+              </Text>
+            </View>
+
+            {/* Type of transaction */}
+            <View
+              className={`bg-white p-3 flex-row justify-between items-center w-full`}
+            >
+              <Text
+                className="text-base text-black font-psemibold "
+                style={{ width: 100, paddingLeft: 20 }}
+              >
+                Type
+              </Text>
+              <View className="w-full h-12 flex-row items-center">
+                <TouchableOpacity
+                  className={`p-2 rounded-md ${
+                    selectedType === "Income" ? "bg-[#04EE7E]" : "bg-[#FF000F]"
+                  }`}
+                  onPress={() => setModalTypeVisible(true)}
+                >
+                  <Text className="text-white font-pmedium text-sm">
+                    {selectedType}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Category */}
+            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+            <FormInputText
+              title="For"
+              value={""}
+              placeHolder="Rent"
+              handleTextChange={""}
+            />
+            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
+            {/* Date Picker */}
+            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+            <FormDatePicker />
+            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
+            {/* Repeat */}
+            <View
+              className={`bg-white p-3 flex-row justify-between items-center w-full`}
+            >
+              <Text
+                className="text-base text-black font-psemibold "
+                style={{ width: 100, paddingLeft: 20 }}
+              >
+                Repeat
+              </Text>
+
+              <View className="w-full h-12 flex-row items-center">
+                <MaterialCommunityIcons
+                  name="calendar-clock"
+                  size={24}
+                  color="#A9A9A9"
+                />
+                <TouchableOpacity
+                  className="ml-3"
+                  onPress={() => setModalRepeatVisible(true)}
+                >
+                  <Text className="text-[#A9A9A9]">{selectedRepeat}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+          </View>
+          <View className="border m-3 w-full flex-col">
+            <Text className="text-black font-pregular text-xs p-5">
+              Based on your preference
+            </Text>
+            <FlatList
+              data={Categories}
+              renderItem={(items) => (
+                <CategoryButton
+                  color={items.item.color}
+                  emoji={items.item.emoji}
+                  name={items.item.name}
+                />
+              )}
+              keyExtractor={(items) => items.id.toString()}
+            />
+          </View>
+          <View className="w-full justify-end flex items-center">
+            <View className="border hidden"></View>
+            <CustomButton
+              title="Create"
+              handlePress={() => {}}
+              containerStyle="mt-7 w-[90%] bg-[#05603A]"
+              textStyle={"text-[#FCFCFC]"}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+
+      <ModalType
+        modalTypeVisible={modalTypeVisible}
+        setModalTypeVisible={setModalTypeVisible}
+        setSelectedType={handleTypeChange}
+      />
+
+      <ModalRepeat
+        modalRepeatVisible={modalRepeatVisible}
+        setModalRepeatVisible={setModalRepeatVisible}
+        handleRepeatChange={handleRepeatChange}
+        selectedRepeat={selectedRepeat}
+      />
     </View>
   );
 };
