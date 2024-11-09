@@ -12,7 +12,7 @@ type ModalTypes = {
 const ModalType = (props: ModalTypes) => {
   return (
     <Modal
-      animationType="fade"
+      animationType="none"
       transparent={true}
       visible={props.modalTypeVisible}
       onRequestClose={() => props.setModalTypeVisible(false)}

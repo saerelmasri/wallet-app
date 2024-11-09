@@ -24,12 +24,17 @@ type ModalRepeat = {
 const ModalRepeat = (props: ModalRepeat) => {
   return (
     <Modal
-      animationType="slide"
+      animationType="none"
       transparent={true}
       visible={props.modalRepeatVisible}
       onRequestClose={() => props.setModalRepeatVisible(false)}
     >
-      <View className="flex-1 justify-end bg-[#A9A9A9] bg-opacity-10">
+      <View
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
+        className="flex-1 justify-end"
+      >
         <View className="h-[90%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border-black">
           <View className="w-full flex-row justify-between items-center">
             <View />
