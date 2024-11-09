@@ -1,25 +1,45 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import * as Progress from "react-native-progress";
+import { displayAmount, getRandomColor } from "@/helpers/common-helper";
+import { router } from "expo-router";
 
 type GoalProgressType = {
   goalTitle: string;
   goalProgress: number;
+  goalEmoji: string;
+  goalAmount: number;
+  amountSaved: number;
 };
 
-const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
+const GoalProgressCard = (props: GoalProgressType) => {
   return (
-    <View className="flex-row w-full h-[9vh]">
+    <TouchableOpacity
+      className="flex-row w-full h-[9vh]"
+      onPress={() =>
+        router.push({
+          pathname: "/newGoal",
+          params: {
+            goalTitle: props.goalTitle,
+            goalEmoji: props.goalEmoji,
+            goalAmount: props.goalAmount,
+          },
+        })
+      }
+    >
       <View className="w-[100%] flex-row space-x-3 items-center">
-        <View className="w-[60px] h-[60px] rounded-full bg-slate-600 justify-center items-center">
-          <Text>Logo</Text>
+        <View
+          className="w-[60px] h-[60px] rounded-full justify-center items-center"
+          style={{ backgroundColor: getRandomColor() }}
+        >
+          <Text>{props.goalEmoji}</Text>
         </View>
         <View className=" w-[80%] p-2 justify-around">
           <Text className="font-pmedium text-base text-black mb-2">
-            {goalTitle}
+            {props.goalTitle}
           </Text>
           <Progress.Bar
-            progress={goalProgress}
+            progress={props.goalProgress}
             width={270}
             color="#04EE7E"
             unfilledColor="#D3D3D3"
@@ -28,19 +48,17 @@ const GoalProgressCard = ({ goalTitle, goalProgress }: GoalProgressType) => {
           />
           <View className="w-full flex-row justify-between mt-2">
             <Text className="font-pmedium text-xs text-[#04EE7E]">
-              Saved $2,200 / 80%
+              Saved ${displayAmount(props.amountSaved)} /{" "}
+              {props.goalProgress * 100}%
             </Text>
             <Text className="font-pregular text-xs text-black">
-              left $1,000 / 20%
+              left ${displayAmount(props.goalAmount - props.amountSaved)} /{" "}
+              {100 - props.goalProgress * 100}%
             </Text>
           </View>
         </View>
       </View>
-      {/* <View className="w-[40%] flex justify-center">
-        <Text></Text>
-        <Text className="font-pregular text-xs text-black text-right">r</Text>
-      </View> */}
-    </View>
+    </TouchableOpacity>
   );
 };
 

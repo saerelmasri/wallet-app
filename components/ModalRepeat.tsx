@@ -24,7 +24,7 @@ type ModalRepeat = {
 const ModalRepeat = (props: ModalRepeat) => {
   return (
     <Modal
-      animationType="none"
+      animationType="fade"
       transparent={true}
       visible={props.modalRepeatVisible}
       onRequestClose={() => props.setModalRepeatVisible(false)}

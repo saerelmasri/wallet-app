@@ -1,4 +1,10 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -8,6 +14,7 @@ import Animated, {
   withSpring,
   interpolateColor,
 } from "react-native-reanimated";
+import { router } from "expo-router";
 
 type TransactionCardType = {
   transactionTitle: string;
@@ -18,8 +25,7 @@ type TransactionCardType = {
   swipeEnabled?: boolean;
 };
 
-const TransactionCard = (
-  props: TransactionCardType) => {
+const TransactionCard = (props: TransactionCardType) => {
   const translateX = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
@@ -55,7 +61,21 @@ const TransactionCard = (
   });
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        router.push({
+          pathname: "/newTransaction",
+          params: {
+            transactionTitle: props.transactionTitle,
+            transactionCategory: props.transactionCategory,
+            transactionAmount: props.transactionAmount,
+            transactionType: props.transactionType,
+            transactionDate: props.transactionDate,
+          },
+        });
+      }}
+    >
       {/* Delete Button */}
       <Animated.View style={[styles.deleteButton, deleteButtonStyle]}>
         <Pressable onPress={() => console.log("Delete")}>
@@ -64,17 +84,23 @@ const TransactionCard = (
       </Animated.View>
 
       {/* Swipeable Card */}
-      <GestureDetector gesture={props.swipeEnabled ? panGesture : Gesture.Pan()}>
+      <GestureDetector
+        gesture={props.swipeEnabled ? panGesture : Gesture.Pan()}
+      >
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardContent}>
             <View style={styles.iconContainer}>
               <Text>Logo</Text>
             </View>
             <View style={styles.details}>
-              <Text style={styles.transactionTitle}>{props.transactionTitle}</Text>
+              <Text style={styles.transactionTitle}>
+                {props.transactionTitle}
+              </Text>
               <View style={styles.row}>
                 <AntDesign name="shoppingcart" size={18} color="black" />
-                <Text style={styles.categoryText}>{props.transactionCategory}</Text>
+                <Text style={styles.categoryText}>
+                  {props.transactionCategory}
+                </Text>
               </View>
             </View>
           </View>
@@ -82,7 +108,9 @@ const TransactionCard = (
             <Text
               style={[
                 styles.amount,
-                props.transactionType === "Expense" ? styles.expense : styles.income,
+                props.transactionType === "Expense"
+                  ? styles.expense
+                  : styles.income,
               ]}
             >
               {props.transactionType === "Expense"
@@ -96,7 +124,7 @@ const TransactionCard = (
           </View>
         </Animated.View>
       </GestureDetector>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -190,7 +218,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "black",
     opacity: 1,
-    margin: 3
+    margin: 3,
   },
 });
 

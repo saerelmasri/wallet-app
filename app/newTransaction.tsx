@@ -17,14 +17,27 @@ import ModalRepeat from "@/components/ModalRepeat";
 import { Categories } from "@/constants/Category";
 
 const AddTransaction = () => {
-  const { amountOfTransaction } = useLocalSearchParams();
+  //Information from other Routes: Numnpad or existing transaction
+  const {
+    amountOfTransaction,
+    transactionTitle,
+    transactionCategory,
+    transactionAmount,
+    transactionType,
+    transactionDate,
+    repeat = "what",
+  } = useLocalSearchParams();
 
+  // State variables
   const [modalRepeatVisible, setModalRepeatVisible] = useState(false);
   const [modalTypeVisible, setModalTypeVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   const [selectedRepeat, setSelectedRepeat] = useState("Never");
   const [selectedType, setSelectedType] = useState("Expenses");
+  const [category, setCategory] = useState({ id: 0, name: "" });
 
+  // Handle Functions
   const handleRepeatChange = (option: string) => {
     setSelectedRepeat(option);
     setTimeout(() => {
@@ -40,118 +53,164 @@ const AddTransaction = () => {
   };
 
   useEffect(() => {
+    const initialCategory = Categories.find(
+      (cat) => cat.name === transactionCategory
+    );
+    if (initialCategory) {
+      setCategory(initialCategory);
+    }
+
+    if (transactionType) {
+      setSelectedType(transactionType as string);
+    }
+
+    if (repeat) {
+      setSelectedRepeat(repeat as string);
+    }
+  }, [transactionCategory, transactionType]);
+
+  useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
+  console.log(selectedRepeat);
 
-  const CategoryButton = ({ emoji, name, color }: any) => (
-    <View className="w-full flex-row items-center p-4 space-x-3">
+  const CategoryButton = ({
+    id,
+    emoji,
+    name,
+    color,
+  }: {
+    id: number;
+    emoji: string;
+    name: string;
+    color: string;
+  }) => (
+    <TouchableOpacity
+      className={`w-full flex-row items-center p-4 space-x-3`}
+      style={{
+        borderColor: category.id === id ? "green" : "transparent",
+        borderWidth: category.id === id ? 2 : 1,
+        borderRadius: category.id === id ? 7 : 0,
+      }}
+      onPress={() => {
+        setCategory({ id: id, name: name });
+      }}
+    >
       <View
         style={{ backgroundColor: color }}
-        className={`w-[40px] h-[40px] rounded-full justify-center items-center`}
+        className={`w-[40px] h-[40px] rounded-full flex justify-center items-center`}
       >
-        <Text>{emoji}</Text>
+        <Text className="text-lg">{emoji}</Text>
       </View>
       <Text className="text-base font-pmedium">{name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
-    <View >
-      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} className="flex-1 h-full items-center">
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View className="w-full items-center">
-            {/* Amount of transaction */}
-            <View className="w-full justify-center items-center p-3">
-              <Text className="text-black font-psemibold text-3xl">
-                ${amountOfTransaction}
-              </Text>
-            </View>
-
-            {/* Type of transaction */}
-            <View
-              className={`bg-white p-3 flex-row justify-between items-center w-full`}
-            >
-              <Text
-                className="text-base text-black font-psemibold "
-                style={{ width: 100, paddingLeft: 20 }}
-              >
-                Type
-              </Text>
-              <View className="w-full h-12 flex-row items-center">
-                <TouchableOpacity
-                  className={`p-2 rounded-md ${
-                    selectedType === "Income" ? "bg-[#04EE7E]" : "bg-[#FF000F]"
-                  }`}
-                  onPress={() => setModalTypeVisible(true)}
-                >
-                  <Text className="text-white font-pmedium text-sm">
-                    {selectedType}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Category */}
-            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-            <FormInputText
-              title="For"
-              value={""}
-              placeHolder="Rent"
-              handleTextChange={""}
-            />
-            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-
-            {/* Date Picker */}
-            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-            <FormDatePicker />
-            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-
-            {/* Repeat */}
-            <View
-              className={`bg-white p-3 flex-row justify-between items-center w-full`}
-            >
-              <Text
-                className="text-base text-black font-psemibold "
-                style={{ width: 100, paddingLeft: 20 }}
-              >
-                Repeat
-              </Text>
-
-              <View className="w-full h-12 flex-row items-center">
-                <MaterialCommunityIcons
-                  name="calendar-clock"
-                  size={24}
-                  color="#A9A9A9"
-                />
-                <TouchableOpacity
-                  className="ml-3"
-                  onPress={() => setModalRepeatVisible(true)}
-                >
-                  <Text className="text-[#A9A9A9]">{selectedRepeat}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View className="w-full items-center">
+          {/* Amount of transaction */}
+          <View className="w-full justify-center items-center p-3">
+            <Text className="text-black font-psemibold text-3xl">
+              ${amountOfTransaction || transactionAmount}
+            </Text>
           </View>
-          <View className="border m-3 w-full flex-col">
+
+          {/* Type of transaction */}
+          <View
+            className={`bg-white p-3 flex-row justify-between items-center w-full`}
+          >
+            <Text
+              className="text-base text-black font-psemibold "
+              style={{ width: 100, paddingLeft: 20 }}
+            >
+              Type
+            </Text>
+            <View className="w-full h-12 flex-row items-center">
+              <TouchableOpacity
+                className={`p-2 rounded-md ${
+                  selectedType === "Income" ? "bg-[#04EE7E]" : "bg-[#FF000F]"
+                }`}
+                onPress={() => setModalTypeVisible(true)}
+              >
+                <Text className="text-white font-pmedium text-sm">
+                  {selectedType}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Category */}
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+          <FormInputText
+            title="For"
+            value={transactionTitle as string}
+            placeHolder="Rent"
+            handleTextChange={""}
+          />
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
+          {/* Date Picker */}
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+          <FormDatePicker />
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
+          {/* Repeat */}
+          <View
+            className={`bg-white p-3 flex-row justify-between items-center w-full`}
+          >
+            <Text
+              className="text-base text-black font-psemibold "
+              style={{ width: 100, paddingLeft: 20 }}
+            >
+              Repeat
+            </Text>
+
+            <View className="w-full h-12 flex-row items-center">
+              <MaterialCommunityIcons
+                name="calendar-clock"
+                size={24}
+                color="#A9A9A9"
+              />
+              <TouchableOpacity
+                className="ml-3"
+                onPress={() => setModalRepeatVisible(true)}
+              >
+                <Text
+                  className={`${
+                    selectedRepeat === "Never" ? "text-[#A9A9A9]" : "text-black"
+                  }`}
+                >
+                  {selectedRepeat || "Never"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
+          {/* Categories List */}
+          <View className="m-3 w-full flex-col">
             <Text className="text-black font-pregular text-xs p-5">
               Based on your preference
             </Text>
             <FlatList
               data={Categories}
-              renderItem={(items) => (
+              renderItem={({ item }) => (
                 <CategoryButton
-                  color={items.item.color}
-                  emoji={items.item.emoji}
-                  name={items.item.name}
+                  id={item.id}
+                  color={item.color}
+                  emoji={item.emoji}
+                  name={item.name}
                 />
               )}
-              keyExtractor={(items) => items.id.toString()}
+              keyExtractor={(item) => item.id.toString()}
             />
           </View>
+
+          {/* Create Button */}
           <View className="w-full justify-end flex items-center">
-            <View className="border hidden"></View>
             <CustomButton
               title="Create"
               handlePress={() => {}}
@@ -159,8 +218,8 @@ const AddTransaction = () => {
               textStyle={"text-[#FCFCFC]"}
             />
           </View>
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+      </ScrollView>
 
       <ModalType
         modalTypeVisible={modalTypeVisible}
@@ -174,7 +233,7 @@ const AddTransaction = () => {
         handleRepeatChange={handleRepeatChange}
         selectedRepeat={selectedRepeat}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

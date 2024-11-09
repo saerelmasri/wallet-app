@@ -13,6 +13,8 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Chip from "@/components/Chip";
 import TransactionCard from "@/components/TransactionCard";
+import { MockBudgetTransaction } from "@/constants/MockTransactions";
+import { Categories } from "@/constants/Category";
 
 const Transactions = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,10 +23,6 @@ const Transactions = () => {
   // Updated filterOptions as an object for wallet, category, and date
   const [filterOptions, setFilterOptions] = useState({
     transactionType: "",
-    wallet: {
-      id: "",
-      accountName: "",
-    },
     category: "",
     transactionDate: "",
   });
@@ -66,26 +64,18 @@ const Transactions = () => {
 
             {/* Transactions List */}
             <View className="w-full p-3">
-              <View className="w-full flex-row justify-between">
+              <View className="w-full flex-row justify-between pl-3">
                 <Text className="text-sm font-pregular text-black">Today</Text>
-                <Text className="text-sm font-pregular text-black hidden">
-                  - $1,200.00
-                </Text>
               </View>
-              <TransactionCard
-                transactionTitle="AirPods Pro 2"
-                transactionAmount="200.00"
-                transactionCategory="Shopping"
-                transactionDate="12 October 2024"
-                transactionType="Expense"
-              />
-              <TransactionCard
-                transactionTitle="AirPods Pro 2"
-                transactionAmount="200.00"
-                transactionCategory="Shopping"
-                transactionDate="12 October 2024"
-                transactionType="Expense"
-              />
+              {MockBudgetTransaction.map((item) => (
+                <TransactionCard
+                  transactionDate={item.transactionDate}
+                  transactionType={item.transactionType}
+                  transactionTitle={item.transactionTitle}
+                  transactionAmount={item.transactionAmount}
+                  transactionCategory={item.transactionCategory}
+                />
+              ))}
             </View>
           </View>
         </ScrollView>
@@ -117,7 +107,7 @@ const Transactions = () => {
                   Transaction Type
                 </Text>
                 <View className="w-full mt-3 flex-row flex-wrap space-x-2 space-y-2">
-                  {["Expenses", "Incomes", "Transfers"].map((type) => (
+                  {["Expenses", "Incomes"].map((type) => (
                     <Chip
                       key={type}
                       title={type}
@@ -133,21 +123,14 @@ const Transactions = () => {
                 {/* Category Filter */}
                 <Text className="mt-4 text-lg font-pmedium">Category</Text>
                 <View className="w-full mt-3 flex-row flex-wrap space-x-2 space-y-2">
-                  {[
-                    "Shopping",
-                    "Food & Drinks",
-                    "Housing",
-                    "Transportation",
-                    "Vehicle",
-                    "Life & Entertainment",
-                    "Financial Expenses",
-                    "Investments",
-                  ].map((category) => (
+                  {Categories.map((category) => (
                     <Chip
-                      key={category}
-                      title={category}
-                      selected={filterOptions.category === category}
-                      onPress={() => toggleFilterOption("category", category)}
+                      key={category.id}
+                      title={category.name}
+                      selected={filterOptions.category === category.name}
+                      onPress={() =>
+                        toggleFilterOption("category", category.name)
+                      }
                       containerStyle="m-[5px]"
                     />
                   ))}
@@ -182,10 +165,6 @@ const Transactions = () => {
                     className="bg-red-600 w-[48%] h-[50px] justify-center items-center rounded-lg"
                     onPress={() =>
                       setFilterOptions({
-                        wallet: {
-                          id: "",
-                          accountName: "",
-                        },
                         category: "",
                         transactionDate: "",
                         transactionType: "",

@@ -2,7 +2,6 @@ import { View, SafeAreaView, StatusBar, Text } from "react-native";
 import React from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
-import FormInputDropdown from "@/components/FormInputDropdown";
 
 const colorData = [
   { label: "Green 1", value: "1", color: "#32CD32" },
@@ -43,19 +42,9 @@ const AddWallet = () => {
             handleTextChange={""}
           />
           <View className="border-[0.5px] border-black w-full" />
-          <FormInputDropdown
-            title="Currency"
-            placeholder="USD"
-            values={currencyData}
-            icon="Currency"
-          />
+
           <View className="border-[0.5px] border-black w-full" />
-          <FormInputDropdown
-            title="Wallet Design"
-            placeholder="Select Design"
-            values={colorData}
-            icon="Wallet"
-          />
+
           <View className="border-[0.5px] border-black w-full" />
         </View>
         <View className="w-full h-[25vh] justify-end flex items-center">

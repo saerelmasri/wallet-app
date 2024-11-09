@@ -73,9 +73,11 @@ const RootLayout = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack screenOptions={{
-        gestureEnabled: false
-      }}>
+      <Stack
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -123,7 +125,7 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
-          name="addGoal"
+          name="newGoal"
           options={{
             headerShown: true,
             headerTitle: "Set your new goal",

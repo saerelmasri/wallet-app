@@ -12,8 +12,15 @@ import { router } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { MockGoals } from "@/constants/MockTransactions";
+import { displayAmount } from "@/helpers/common-helper";
 
 const Goals = () => {
+  const totalSaved = MockGoals.reduce(
+    (accum, goal) => accum + goal.amountSaved,
+    0
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <SafeAreaView className="flex-1 h-full">
@@ -42,19 +49,25 @@ const Goals = () => {
                 Total Savings
               </Text>
               <Text className="text-black text-2xl font-psemibold  mt-1">
-                $823.90
+                ${displayAmount(totalSaved)}
               </Text>
 
               <View className="w-full h-[1px] mt-4 mb-4 bg-black" />
 
-              <GoalProgressCard goalTitle="House repair" goalProgress={0.5} />
-              <GoalProgressCard goalTitle="House repair" goalProgress={0.5} />
-              <GoalProgressCard goalTitle="House repair" goalProgress={0.5} />
-              <GoalProgressCard goalTitle="House repair" goalProgress={0.5} />
+              {MockGoals.map((item, key) => (
+                <GoalProgressCard
+                  key={key}
+                  goalTitle={item.goalTitle}
+                  amountSaved={item.amountSaved}
+                  goalEmoji={item.goalEmoji}
+                  goalProgress={item.goalProgress}
+                  goalAmount={item.goalAmount}
+                />
+              ))}
 
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/addGoal");
+                  router.push("/newGoal");
                 }}
                 className="border mt-4 flex-row p-3 rounded-xl justify-between items-center"
               >
