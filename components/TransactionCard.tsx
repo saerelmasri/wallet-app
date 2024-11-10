@@ -1,19 +1,6 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  interpolateColor,
-} from "react-native-reanimated";
 import { router } from "expo-router";
 
 type TransactionCardType = {
@@ -22,145 +9,68 @@ type TransactionCardType = {
   transactionAmount: string;
   transactionType: "Income" | "Expense";
   transactionDate?: string;
-  swipeEnabled?: boolean;
 };
 
 const TransactionCard = (props: TransactionCardType) => {
-  const translateX = useSharedValue(0);
-
-  const panGesture = Gesture.Pan()
-    .onUpdate((event) => {
-      if (props.swipeEnabled) {
-        // Set translation with a limit up to -120 (width of Delete button)
-        translateX.value = Math.max(event.translationX, -120);
-      }
-    })
-    .onEnd(() => {
-      // Snap open if swiped more than halfway, otherwise close to start position
-      if (props.swipeEnabled) {
-        translateX.value =
-          translateX.value < -60
-            ? withSpring(-120, { damping: 12, stiffness: 150 })
-            : withSpring(0, { damping: 12, stiffness: 150 });
-      }
+  const handlePress = () => {
+    router.push({
+      pathname: "/newTransaction",
+      params: {
+        transactionTitle: props.transactionTitle,
+        transactionCategory: props.transactionCategory,
+        transactionAmount: props.transactionAmount,
+        transactionType: props.transactionType,
+        transactionDate: props.transactionDate,
+      },
     });
-
-  // Animated style for card movement
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  // Animated style for delete button background color fade-in
-  const deleteButtonStyle = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(
-      translateX.value,
-      [-120, 0],
-      ["red", "rgba(255,0,0,0)"]
-    );
-    return { backgroundColor };
-  });
+  };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        router.push({
-          pathname: "/newTransaction",
-          params: {
-            transactionTitle: props.transactionTitle,
-            transactionCategory: props.transactionCategory,
-            transactionAmount: props.transactionAmount,
-            transactionType: props.transactionType,
-            transactionDate: props.transactionDate,
-          },
-        });
-      }}
-    >
-      {/* Delete Button */}
-      <Animated.View style={[styles.deleteButton, deleteButtonStyle]}>
-        <Pressable onPress={() => console.log("Delete")}>
-          <Text style={styles.deleteText}>Delete</Text>
-        </Pressable>
-      </Animated.View>
-
-      {/* Swipeable Card */}
-      <GestureDetector
-        gesture={props.swipeEnabled ? panGesture : Gesture.Pan()}
-      >
-        <Animated.View style={[styles.card, animatedStyle]}>
-          <View style={styles.cardContent}>
-            <View style={styles.iconContainer}>
-              <Text>Logo</Text>
-            </View>
-            <View style={styles.details}>
-              <Text style={styles.transactionTitle}>
-                {props.transactionTitle}
-              </Text>
-              <View style={styles.row}>
-                <AntDesign name="shoppingcart" size={18} color="black" />
-                <Text style={styles.categoryText}>
-                  {props.transactionCategory}
-                </Text>
-              </View>
-            </View>
+    <TouchableOpacity style={styles.container} onPress={handlePress}>
+      <View style={styles.cardContent}>
+        <View style={styles.iconContainer}>
+          <Text>Logo</Text>
+        </View>
+        <View style={styles.details}>
+          <Text style={styles.transactionTitle}>{props.transactionTitle}</Text>
+          <View style={styles.row}>
+            <AntDesign name="shoppingcart" size={18} color="black" />
+            <Text style={styles.categoryText}>{props.transactionCategory}</Text>
           </View>
-          <View style={styles.amountContainer}>
-            <Text
-              style={[
-                styles.amount,
-                props.transactionType === "Expense"
-                  ? styles.expense
-                  : styles.income,
-              ]}
-            >
-              {props.transactionType === "Expense"
-                ? `- $${props.transactionAmount}`
-                : `+ $${props.transactionAmount}`}
-            </Text>
-            <Text style={styles.leftAmount}>left $200.00</Text>
-            {props.transactionDate && (
-              <Text style={styles.date}>{props.transactionDate}</Text>
-            )}
-          </View>
-        </Animated.View>
-      </GestureDetector>
+        </View>
+      </View>
+      <View style={styles.amountContainer}>
+        <Text
+          style={[
+            styles.amount,
+            props.transactionType === "Expense"
+              ? styles.expense
+              : styles.income,
+          ]}
+        >
+          {props.transactionType === "Expense"
+            ? `- $${props.transactionAmount}`
+            : `+ $${props.transactionAmount}`}
+        </Text>
+        <Text style={styles.leftAmount}>left $200.00</Text>
+        {props.transactionDate && (
+          <Text style={styles.date}>{props.transactionDate}</Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
     width: "100%",
     height: 80,
     marginBottom: 10,
-  },
-  deleteButton: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: 120,
-    height: 60,
-    marginTop: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: -1,
-    borderRadius: 8,
-  },
-  deleteText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  card: {
-    width: "100%",
-    height: "100%",
     backgroundColor: "#fff",
     borderRadius: 8,
-    overflow: "hidden",
     flexDirection: "row",
     paddingHorizontal: 10,
+    overflow: "hidden",
   },
   cardContent: {
     flexDirection: "row",

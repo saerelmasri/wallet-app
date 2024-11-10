@@ -32,7 +32,7 @@ const GoalProgressCard = (props: GoalProgressType) => {
           className="w-[60px] h-[60px] rounded-full justify-center items-center"
           style={{ backgroundColor: getRandomColor() }}
         >
-          <Text>{props.goalEmoji}</Text>
+          <Text className="text-3xl">{props.goalEmoji}</Text>
         </View>
         <View className=" w-[80%] p-2 justify-around">
           <Text className="font-pmedium text-base text-black mb-2">

@@ -55,4 +55,18 @@ export const MockGoals = [
     goalProgress: 0.5,
     amountSaved: 1500.0 * 0.5, // 750.0
   },
+  {
+    goalTitle: "Master in Spain",
+    goalAmount: 3500.0,
+    goalEmoji: "🏫",
+    goalProgress: 0.2,
+    amountSaved: 3500.0 * 0.2,
+  },
+  {
+    goalTitle: "Student Visa",
+    goalAmount: 9500.0,
+    goalEmoji: "🪪",
+    goalProgress: 0.1,
+    amountSaved: 9500.0 * 0.1,
+  },
 ];

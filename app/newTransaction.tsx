@@ -73,7 +73,6 @@ const AddTransaction = () => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
-  console.log(selectedRepeat);
 
   const CategoryButton = ({
     id,
@@ -109,7 +108,7 @@ const AddTransaction = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ flexGrow: 1 }}>
         <View className="w-full items-center">
           {/* Amount of transaction */}
           <View className="w-full justify-center items-center p-3">
@@ -191,7 +190,7 @@ const AddTransaction = () => {
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           {/* Categories List */}
-          <View className="m-3 w-full flex-col">
+          <View className="m-3 w-full h-[34vh] flex-col">
             <Text className="text-black font-pregular text-xs p-5">
               Based on your preference
             </Text>
@@ -211,15 +210,28 @@ const AddTransaction = () => {
 
           {/* Create Button */}
           <View className="w-full justify-end flex items-center">
-            <CustomButton
-              title="Create"
-              handlePress={() => {}}
-              containerStyle="mt-7 w-[90%] bg-[#05603A]"
-              textStyle={"text-[#FCFCFC]"}
-            />
+            {transactionAmount ? (
+              <CustomButton
+                title="Delete"
+                handlePress={() => {
+                  console.log("Delete");
+                }}
+                containerStyle="mt-7 w-[90%] bg-[#FF000F]"
+                textStyle={"text-[#FCFCFC]"}
+              />
+            ) : (
+              <CustomButton
+                title="Create"
+                handlePress={() => {
+                  console.log("Create");
+                }}
+                containerStyle="mt-7 w-[90%] bg-[#05603A]"
+                textStyle={"text-[#FCFCFC]"}
+              />
+            )}
           </View>
         </View>
-      </ScrollView>
+      </View>
 
       <ModalType
         modalTypeVisible={modalTypeVisible}
