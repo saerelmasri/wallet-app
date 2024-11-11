@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import ProgressCircle from "./ProgressCircle";
 import { router } from "expo-router";
-import { MockGoals } from "@/constants/MockTransactions";
+import { MockGoals } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
 
 const GoalProgressCircle = () => {

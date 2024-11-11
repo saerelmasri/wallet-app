@@ -13,7 +13,7 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Chip from "@/components/Chip";
 import TransactionCard from "@/components/TransactionCard";
-import { MockBudgetTransaction } from "@/constants/MockTransactions";
+import { MockBudgetTransaction } from "@/constants/MockData";
 import { Categories } from "@/constants/Category";
 
 const Transactions = () => {

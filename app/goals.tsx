@@ -4,7 +4,6 @@ import {
   View,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -12,7 +11,7 @@ import { router } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { MockGoals } from "@/constants/MockTransactions";
+import { MockGoals } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
 
 const Goals = () => {

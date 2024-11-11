@@ -4,8 +4,7 @@ import GoalProgressCircle from "@/components/GoalProgressCircle";
 import UpcomingPayments from "@/components/nextPayments";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useFocusEffect, useRouter } from "expo-router";
-import { MockBudgetTransaction } from "@/constants/MockTransactions";
-import TransactionCard from "@/components/TransactionCard";
+import BudgetCard from "@/components/BudgetCard";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -64,15 +63,7 @@ const Home = () => {
 
           {/* Transaction History Widgets */}
           <View className="rounded-lg mt-3 p-4 bg-white">
-            {MockBudgetTransaction.map((item) => (
-              <TransactionCard
-                transactionDate={item.transactionDate}
-                transactionType={item.transactionType}
-                transactionTitle={item.transactionTitle}
-                transactionAmount={item.transactionAmount}
-                transactionCategory={item.transactionCategory}
-              />
-            ))}
+            <BudgetCard/>
           </View>
         </ScrollView>
       </SafeAreaView>
