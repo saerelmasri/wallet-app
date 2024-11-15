@@ -10,7 +10,7 @@ import {
   initializeAuth,
   onAuthStateChanged,
 } from "firebase/auth";
-import { firebaseConfig } from "@/constants/test";
+import { firebaseConfig } from "@/test";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
