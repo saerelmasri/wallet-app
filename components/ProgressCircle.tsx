@@ -27,7 +27,7 @@ const ProgressCircle = ({
       showsText
       formatText={() => icon}
       textStyle={{
-        fontSize: "10px",
+        fontSize: 10,
       }}
       strokeCap="round"
       animated

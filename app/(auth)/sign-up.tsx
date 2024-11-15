@@ -2,14 +2,12 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   KeyboardAvoidingView,
   Alert,
-  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Image } from 'expo-image';
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
@@ -73,7 +71,7 @@ const SignUp = () => {
           <View className="w-full justify-center items-center h-full px-4 my-6">
             <Image
               source={images.coins}
-              resizeMode="contain"
+              contentFit="contain"
               className="w-[150px] h-[150px]"
             />
 

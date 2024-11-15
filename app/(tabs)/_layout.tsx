@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { router, Tabs, useNavigation, usePathname } from "expo-router";
+import { View, Text } from "react-native";
+import { Tabs } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -11,10 +10,9 @@ type TabIconTypes = {
   icon: "Home" | "Budget" | "Profile";
   name: string;
   focused: boolean;
-  circular?: boolean;
 };
 
-const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
+const TabIcon = ({ icon, name, focused }: TabIconTypes) => {
   const iconMap = {
     Home: (
       <MaterialIcons
@@ -40,35 +38,24 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   };
 
   return (
-    <View
-      className={`items-center justify-center ${
-        circular ? "rounded-full bg-[#32D74B]" : ""
-      }`}
-    >
+    <View className={`w-[20vw] items-center justify-center`}>
       {iconMap[icon]}
-      {!circular && (
-        <Text
-          className={`${
-            focused
-              ? "font-psemibold text-[#32D74B]"
-              : "font-pregular text-black"
-          } text-xs`}
-        >
-          {name}
-        </Text>
-      )}
+      <Text
+        style={{ fontSize: 12, marginTop: 4, textAlign: "center" }}
+        className={`${
+          focused ? "font-psemibold text-[#32D74B]" : "font-pregular text-black"
+        } text-xs`}
+      >
+        {name}
+      </Text>
     </View>
   );
 };
 
 const TabLayout = () => {
-  // Track the focused tab route name
-  const currentRouteName = usePathname();
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <>
-        {/* Tabs without Add Button */}
         <Tabs
           screenOptions={{
             tabBarShowLabel: false,
@@ -78,7 +65,7 @@ const TabLayout = () => {
               backgroundColor: "white",
               borderTopWidth: 1,
               borderTopColor: "white",
-              height: 84,
+              height: 85,
               paddingTop: 10,
             },
           }}
@@ -88,7 +75,7 @@ const TabLayout = () => {
             options={{
               title: "Overview",
               headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Home" focused={focused} name="Home" />
               ),
             }}
@@ -98,7 +85,7 @@ const TabLayout = () => {
             options={{
               title: "Transactions",
               headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Home" focused={focused} name="Transactions" />
               ),
             }}
@@ -108,7 +95,7 @@ const TabLayout = () => {
             options={{
               title: "Budget",
               headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Budget" focused={focused} name="Budget" />
               ),
             }}
@@ -118,40 +105,12 @@ const TabLayout = () => {
             options={{
               title: "Profile",
               headerShown: false,
-              tabBarIcon: ({ color, focused }) => (
+              tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Profile" focused={focused} name="Profile" />
               ),
             }}
           />
         </Tabs>
-
-        {/* Floating Add Transaction Button Only on Home */}
-        {currentRouteName === "/home" && (
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.replace("/numPad")}
-            hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
-            style={{
-              position: "absolute",
-              bottom: 100,
-              right: 40,
-              alignSelf: "center",
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: "#32D74B",
-              justifyContent: "center",
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 5 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}
-          >
-            <Ionicons name="add-outline" size={36} color="white" />
-          </TouchableOpacity>
-        )}
       </>
     </GestureHandlerRootView>
   );

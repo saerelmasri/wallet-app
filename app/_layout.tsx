@@ -102,6 +102,53 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
+          name="(budgetScreens)/buildBudgetIntro"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: () => (
+              <Ionicons
+                name="close-outline"
+                size={30}
+                color="black"
+                onPress={() => router.push("/home")}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="(budgetScreens)/budgetPeriod"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={30}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            presentation: "modal",
+          }}
+        />
+        <Stack.Screen
+          name="(budgetScreens)/budgetCategories"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={30}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            presentation: "modal",
+          }}
+        />
+        <Stack.Screen
           name="goals"
           options={{
             headerShown: true,

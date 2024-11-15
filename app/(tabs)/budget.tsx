@@ -32,7 +32,7 @@ const Budget = () => {
 
           <View className="w-full mt-5 flex justify-center items-center">
             <PlanningButton
-              redirectUrl="/addGoal"
+              redirectUrl="/buildBudgetIntro"
               color="#f1c232"
               icon={"Budget"}
               title="Budget"

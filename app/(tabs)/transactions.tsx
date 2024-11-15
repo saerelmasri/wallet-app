@@ -69,7 +69,8 @@ const Transactions = () => {
               </View>
               {MockBudgetTransaction.map((item) => (
                 <TransactionCard
-                  transactionDate={item.transactionDate}
+                transactionDate={item.transactionDate}
+                //@ts-ignore
                   transactionType={item.transactionType}
                   transactionTitle={item.transactionTitle}
                   transactionAmount={item.transactionAmount}

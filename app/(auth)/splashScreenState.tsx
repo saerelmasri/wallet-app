@@ -1,6 +1,7 @@
-import { View, Text, SafeAreaView, Image } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import React, { useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
+import { Image } from 'expo-image';
 import images from "@/constants/images";
 
 type SplashScreenTypes = {
@@ -27,8 +28,9 @@ const splashScreenState = () => {
     <SafeAreaView className="bg-[#05603A]">
       <View className="w-full h-full flex justify-center items-center ">
         <Image
+        // @ts-ignore
           source={imageMap[imageType]}
-          resizeMode="contain"
+          contentFit="contain"
           className="w-[300px] h-[300px]"
         />
         <Text className="text-white text-4xl font-pbold">{title}</Text>

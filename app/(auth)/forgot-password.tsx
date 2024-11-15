@@ -1,6 +1,7 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Image } from 'expo-image';
 
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
@@ -37,7 +38,7 @@ const ForgotPassword = () => {
         <View className="w-full justify-center items-center h-full px-4 my-6">
           <Image
             source={images.pig}
-            resizeMode="contain"
+            contentFit="contain"
             className="w-[150px] h-[150px]"
           />
           <Text className="font-pbold text-2xl text-center">

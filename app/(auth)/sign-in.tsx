@@ -2,11 +2,11 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from "react-native";
+import { Image } from 'expo-image';
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -53,7 +53,7 @@ const SignIn = () => {
           <View className="w-full justify-center items-center h-full px-4 my-6">
             <Image
               source={images.wallet}
-              resizeMode="contain"
+              contentFit="contain"
               className="w-[150px] h-[150px]"
             />
 
