@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 
 type ChipTypes = {
@@ -6,16 +6,20 @@ type ChipTypes = {
   selected: boolean;
   onPress: () => void;
   containerStyle?: string;
+  emoji: string;
 };
 
-const ChipCategory = ({ title, containerStyle, selected, onPress }: ChipTypes) => {
+const ChipCategory = ({ title, containerStyle, emoji, selected, onPress }: ChipTypes) => {
   return (
     <TouchableOpacity
       onPress={onPress} 
-      className={`p-3 h-[43px] border-[2px] ${
+      className={`p-3 h-[45px] border-[2px] ${
         selected ? "border-[#2F7E79] bg-[#2F7E79]" : "border-black bg-white"
-      } rounded-md flex justify-center items-center ${containerStyle}`}
+      } rounded-md flex-row justify-center items-center space-x-1 ${containerStyle}`}
     >
+      <Text>
+        {emoji}
+      </Text>
       <Text className={`font-psemibold text-xs ${selected ? "text-white" : "text-black"}`}>
         {title}
       </Text>

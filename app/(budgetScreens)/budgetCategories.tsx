@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import {
   NeedCategory,
@@ -7,25 +7,46 @@ import {
   WantsCategory,
 } from "@/constants/Category";
 import ChipCategory from "@/components/ChipCategory";
+import { router } from "expo-router";
 
 const BudgetCategories = () => {
+  const [selectedNeeds, setSelectedNeeds] = useState<number[]>([1, 3]);
+  const [selectedWants, setSelectedWants] = useState<number[]>([1, 2]);
+  const [selectedSavings, setSelectedSavings] = useState<number[]>([]);
+
+  const toggleSelection = (
+    categoryId: number,
+    selected: any[],
+    setSelected: {
+      (value: React.SetStateAction<number[]>): void;
+      (value: React.SetStateAction<number[]>): void;
+      (value: React.SetStateAction<number[]>): void;
+      (arg0: any[]): void;
+    }
+  ) => {
+    if (selected.includes(categoryId)) {
+      setSelected(selected.filter((id: number) => id !== categoryId));
+    } else {
+      setSelected([...selected, categoryId]);
+    }
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-        <View className="w-full h-full p-3">
-          {/*Title*/}
-          <View className="p-4 flex items-start space-y-3">
-            <Text className="text-black font-psemibold text-xl">
-              Select your common expenses - Choose the typical expenses for each
-              category.
-            </Text>
-            <Text className="text-black font-pregular text-xs ">
-              50-30-20 Strategy - We're using this method to build your budget,
-              but you can customize the categories to suit your needs.
-            </Text>
-          </View>
+      <View className="w-full h-full p-3">
+        {/*Title*/}
+        <View className="p-4 flex items-start space-y-3">
+          <Text className="text-black font-psemibold text-xl">
+            Select your common expenses - Choose the typical expenses for each
+            category.
+          </Text>
+          <Text className="text-black font-pregular text-xs ">
+            50-30-20 Strategy - We're using this method to build your budget,
+            but you can customize the categories to suit your needs.
+          </Text>
+        </View>
 
+        <ScrollView style={{ paddingBottom: 20 }}>
           {/*Needs Category*/}
           <View className="p-4 flex items-start space-y-3">
             <Text className="text-black font-pregular text-xs">
@@ -36,20 +57,20 @@ const BudgetCategories = () => {
               {[
                 ...NeedCategory.map((category) => (
                   <ChipCategory
+                    emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={false}
-                    onPress={() => console.log()}
+                    selected={selectedNeeds.includes(category.id)}
+                    onPress={() =>
+                      toggleSelection(
+                        category.id,
+                        selectedNeeds,
+                        setSelectedNeeds
+                      )
+                    }
                     containerStyle="m-[5px]"
                   />
                 )),
-                <ChipCategory
-                  key={"add-category-id"}
-                  title={"Add a category +"}
-                  selected={true}
-                  onPress={() => console.log()}
-                  containerStyle="m-[5px]"
-                />,
               ]}
             </View>
           </View>
@@ -64,20 +85,20 @@ const BudgetCategories = () => {
               {[
                 ...WantsCategory.map((category) => (
                   <ChipCategory
+                    emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={false}
-                    onPress={() => console.log()}
+                    selected={selectedWants.includes(category.id)}
+                    onPress={() =>
+                      toggleSelection(
+                        category.id,
+                        selectedWants,
+                        setSelectedWants
+                      )
+                    }
                     containerStyle="m-[5px]"
                   />
                 )),
-                <ChipCategory
-                  key={"add-category-id"}
-                  title={"Add a category +"}
-                  selected={true}
-                  onPress={() => console.log()}
-                  containerStyle="m-[5px]"
-                />,
               ]}
             </View>
           </View>
@@ -92,35 +113,31 @@ const BudgetCategories = () => {
               {[
                 ...SavingsDebtCategory.map((category) => (
                   <ChipCategory
+                    emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={false}
-                    onPress={() => console.log()}
+                    selected={selectedSavings.includes(category.id)}
+                    onPress={() =>
+                      toggleSelection(
+                        category.id,
+                        selectedSavings,
+                        setSelectedSavings
+                      )
+                    }
                     containerStyle="m-[5px]"
                   />
                 )),
-                <ChipCategory
-                  key={"add-category-id"}
-                  title={"Add a category +"}
-                  selected={true}
-                  onPress={() => console.log()}
-                  containerStyle="m-[5px]"
-                />,
               ]}
             </View>
           </View>
-          <View className="w-full justify-center items-center pt-3 pb-3">
-            <CustomButton
-              title="Let's start"
-              handlePress={() => {
-                console.log("Let's start");
-              }}
-              containerStyle="w-[90%] bg-[#05603A]"
-              textStyle={"text-[#FCFCFC]"}
-            />
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+        <CustomButton
+          title="Let's start"
+          handlePress={() => { router.push("/(budgetScreens)/budgetCalculation")}}
+          containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
+          textStyle={"text-[#FCFCFC]"}
+        />
+      </View>
     </SafeAreaView>
   );
 };
