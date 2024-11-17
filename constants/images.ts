@@ -10,6 +10,7 @@ import cardColor2 from "../assets/images/bg-card2.png";
 import cardColor3 from "../assets/images/bg-card3.png";
 import cardColor4 from "../assets/images/bg-card4.png";
 import cardColor5 from "../assets/images/bg-card5.png";
+import warning from "../assets/images/warning.png";
 
 const images = {
   wallet,
@@ -24,6 +25,7 @@ const images = {
   cardColor3,
   cardColor4,
   cardColor5,
+  warning,
 };
 
 export default images;

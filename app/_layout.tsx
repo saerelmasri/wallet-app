@@ -132,6 +132,29 @@ const RootLayout = () => {
           }}
         />
         <Stack.Screen
+          name="(budgetScreens)/budgetSummary"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={30}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerRight: () => (
+              <Ionicons
+                name="close-outline"
+                size={30}
+                color="black"
+                onPress={() => router.push("/home")}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
           name="(budgetScreens)/budgetPeriod"
           options={{
             headerShown: true,

@@ -42,7 +42,7 @@ const BudgetPeriod = () => {
             <CustomButton
               title="Continue"
               handlePress={() => {
-                  //@ts-ignore
+                //@ts-ignore
                 router.push("/(budgetScreens)/budgetCategories");
               }}
               containerStyle="w-[90%] bg-[#05603A]"

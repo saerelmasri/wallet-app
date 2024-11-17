@@ -1,7 +1,15 @@
-import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  Alert,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
-import { v4 as uuidv4 } from "uuid";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 import {
   CategoryTypes,
   NeedCategory,
@@ -12,14 +20,15 @@ import ChipCategory from "@/components/ChipCategory";
 import { router } from "expo-router";
 
 const BudgetCategories = () => {
+  const [alertShown, setAlertShown] = useState(false);
   const [selectedNeeds, setSelectedNeeds] = useState<CategoryTypes[]>([
-    { id: uuidv4(), name: "Housing", emoji: "🏠", color: "#D4A373" },
-    { id: uuidv4(), name: "Utilities", emoji: "🔌", color: "#4A90E2" },
-    { id: uuidv4(), name: "Groceries", emoji: "🛒", color: "#77DD77" },
+    { id: "housing-id", name: "Housing", emoji: "🏠", color: "#D4A373" },
+    { id: "utilities-id", name: "Utilities", emoji: "🔌", color: "#4A90E2" },
+    { id: "groceries-id", name: "Groceries", emoji: "🛒", color: "#77DD77" },
   ]);
   const [selectedWants, setSelectedWants] = useState<CategoryTypes[]>([
-    { id: uuidv4(), name: "Dining Out", emoji: "🍽️", color: "#FFD700" },
-    { id: uuidv4(), name: "Shopping", emoji: "🛍️", color: "#FF69B4" },
+    { id: "dining-out-id", name: "Dining Out", emoji: "🍽️", color: "#FFD700" },
+    { id: "shopping-id", name: "Shopping", emoji: "🛍️", color: "#FF69B4" },
   ]);
   const [selectedSavings, setSelectedSavings] = useState<CategoryTypes[]>([]);
 
@@ -28,20 +37,36 @@ const BudgetCategories = () => {
     selected: CategoryTypes[],
     setSelected: any
   ) => {
-    const isSelected = selected.some((item) => item.id === category.id);
+    const isSelected = selected.some((item) => item.name === category.name);
 
     if (isSelected) {
-      setSelected(selected.filter((item) => item.id !== category.id));
+      setSelected(selected.filter((item) => item.name !== category.name));
     } else {
       setSelected([...selected, category]);
     }
   };
+
+  useEffect(() => {
+    if (selectedNeeds.length === 0 && selectedWants.length === 0) {
+      setAlertShown(true);
+    } else setAlertShown(false);
+  }, [selectedNeeds, selectedWants, alertShown]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" />
       <View className="w-full h-full p-3">
         {/*Title*/}
-        <View className="p-4 flex items-start space-y-3">
+        <View className="p-3 flex items-start space-y-3">
+          {alertShown && (
+            <View className="border w-full p-3 flex-row justify-center items-center space-x-4 rounded-lg border-red-500">
+              <AntDesign name="warning" size={24} color="red" />
+              <Text className="text-red-500 font-pregular text-xs">
+                Please select at least one category from 'Needs' or 'Wants' to
+                proceed.
+              </Text>
+            </View>
+          )}
           <Text className="text-black font-psemibold text-xl">
             Select your common expenses - Choose the typical expenses for each
             category.
@@ -135,21 +160,23 @@ const BudgetCategories = () => {
             </View>
           </View>
         </ScrollView>
-        <CustomButton
-          title="Let's start"
-          handlePress={() => {
-            router.push({
-              pathname: "/(budgetScreens)/budgetCalculation",
-              params: {
-                needsCategory: JSON.stringify(selectedNeeds),
-                wantsCategory: JSON.stringify(selectedWants),
-                savingsCategory: JSON.stringify(selectedSavings),
-              },
-            });
-          }}
-          containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
-          textStyle={"text-[#FCFCFC]"}
-        />
+        {selectedNeeds.length === 0 && selectedWants.length === 0 ? null : (
+          <CustomButton
+            title="Let's start"
+            handlePress={() => {
+              router.push({
+                pathname: "/(budgetScreens)/budgetCalculation",
+                params: {
+                  needsCategory: JSON.stringify(selectedNeeds),
+                  wantsCategory: JSON.stringify(selectedWants),
+                  savingsCategory: JSON.stringify(selectedSavings),
+                },
+              });
+            }}
+            containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
+            textStyle={"text-[#FCFCFC]"}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

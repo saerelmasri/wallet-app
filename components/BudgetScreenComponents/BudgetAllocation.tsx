@@ -20,10 +20,13 @@ const BudgetAllocation = (props: BudgetAllocationType) => {
       <View className="flex-row space-x-1 pt-3 pb-3">
         <TextInput
           className="w-[150px] h-[55px] border text-black font-pmedium text-base p-3 rounded-lg"
-          value={props.value}
-          placeholder={"Budget"}
+          value={"$ " + (props.value || "")}
+          placeholder="Budget"
           placeholderTextColor="#A9A9A9"
-          onChangeText={props.onValueChange}
+          onChangeText={(text) => {
+            const cleanedText = text.replace(/^(\$?\s?)/, "");
+            props.onValueChange(cleanedText);
+          }}
           keyboardType="numeric"
         />
         <TouchableOpacity
