@@ -35,7 +35,7 @@ const AddTransaction = () => {
 
   const [selectedRepeat, setSelectedRepeat] = useState("Never");
   const [selectedType, setSelectedType] = useState("Expenses");
-  const [category, setCategory] = useState({ id: 0, name: "" });
+  const [category, setCategory] = useState({ id: "", name: "" });
 
   // Handle Functions
   const handleRepeatChange = (option: string) => {
@@ -80,7 +80,7 @@ const AddTransaction = () => {
     name,
     color,
   }: {
-    id: number;
+    id: string;
     emoji: string;
     name: string;
     color: string;

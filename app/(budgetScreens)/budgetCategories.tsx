@@ -1,7 +1,9 @@
 import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
 import React, { useState } from "react";
 import CustomButton from "@/components/CustomButton";
+import { v4 as uuidv4 } from "uuid";
 import {
+  CategoryTypes,
   NeedCategory,
   SavingsDebtCategory,
   WantsCategory,
@@ -10,24 +12,28 @@ import ChipCategory from "@/components/ChipCategory";
 import { router } from "expo-router";
 
 const BudgetCategories = () => {
-  const [selectedNeeds, setSelectedNeeds] = useState<number[]>([1, 3]);
-  const [selectedWants, setSelectedWants] = useState<number[]>([1, 2]);
-  const [selectedSavings, setSelectedSavings] = useState<number[]>([]);
+  const [selectedNeeds, setSelectedNeeds] = useState<CategoryTypes[]>([
+    { id: uuidv4(), name: "Housing", emoji: "🏠", color: "#D4A373" },
+    { id: uuidv4(), name: "Utilities", emoji: "🔌", color: "#4A90E2" },
+    { id: uuidv4(), name: "Groceries", emoji: "🛒", color: "#77DD77" },
+  ]);
+  const [selectedWants, setSelectedWants] = useState<CategoryTypes[]>([
+    { id: uuidv4(), name: "Dining Out", emoji: "🍽️", color: "#FFD700" },
+    { id: uuidv4(), name: "Shopping", emoji: "🛍️", color: "#FF69B4" },
+  ]);
+  const [selectedSavings, setSelectedSavings] = useState<CategoryTypes[]>([]);
 
   const toggleSelection = (
-    categoryId: number,
-    selected: any[],
-    setSelected: {
-      (value: React.SetStateAction<number[]>): void;
-      (value: React.SetStateAction<number[]>): void;
-      (value: React.SetStateAction<number[]>): void;
-      (arg0: any[]): void;
-    }
+    category: CategoryTypes,
+    selected: CategoryTypes[],
+    setSelected: any
   ) => {
-    if (selected.includes(categoryId)) {
-      setSelected(selected.filter((id: number) => id !== categoryId));
+    const isSelected = selected.some((item) => item.id === category.id);
+
+    if (isSelected) {
+      setSelected(selected.filter((item) => item.id !== category.id));
     } else {
-      setSelected([...selected, categoryId]);
+      setSelected([...selected, category]);
     }
   };
   return (
@@ -60,13 +66,11 @@ const BudgetCategories = () => {
                     emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={selectedNeeds.includes(category.id)}
+                    selected={selectedNeeds.some(
+                      (item) => item.id === category.id
+                    )}
                     onPress={() =>
-                      toggleSelection(
-                        category.id,
-                        selectedNeeds,
-                        setSelectedNeeds
-                      )
+                      toggleSelection(category, selectedNeeds, setSelectedNeeds)
                     }
                     containerStyle="m-[5px]"
                   />
@@ -88,13 +92,11 @@ const BudgetCategories = () => {
                     emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={selectedWants.includes(category.id)}
+                    selected={selectedWants.some(
+                      (item) => item.id === category.id
+                    )}
                     onPress={() =>
-                      toggleSelection(
-                        category.id,
-                        selectedWants,
-                        setSelectedWants
-                      )
+                      toggleSelection(category, selectedWants, setSelectedWants)
                     }
                     containerStyle="m-[5px]"
                   />
@@ -116,10 +118,12 @@ const BudgetCategories = () => {
                     emoji={category.emoji}
                     key={category.id}
                     title={category.name}
-                    selected={selectedSavings.includes(category.id)}
+                    selected={selectedSavings.some(
+                      (item) => item.id === category.id
+                    )}
                     onPress={() =>
                       toggleSelection(
-                        category.id,
+                        category,
                         selectedSavings,
                         setSelectedSavings
                       )
@@ -133,7 +137,16 @@ const BudgetCategories = () => {
         </ScrollView>
         <CustomButton
           title="Let's start"
-          handlePress={() => { router.push("/(budgetScreens)/budgetCalculation")}}
+          handlePress={() => {
+            router.push({
+              pathname: "/(budgetScreens)/budgetCalculation",
+              params: {
+                needsCategory: JSON.stringify(selectedNeeds),
+                wantsCategory: JSON.stringify(selectedWants),
+                savingsCategory: JSON.stringify(selectedSavings),
+              },
+            });
+          }}
           containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
           textStyle={"text-[#FCFCFC]"}
         />

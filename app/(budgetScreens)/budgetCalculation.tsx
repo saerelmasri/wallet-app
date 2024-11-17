@@ -1,17 +1,52 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
+import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import BudgetAllocation from "@/components/BudgetScreenComponents/BudgetAllocation";
+import { useLocalSearchParams } from "expo-router";
+import { CategoryTypes } from "@/constants/Category";
+
+type BudgetCategory = CategoryTypes & { value: string };
 
 const BudgetCalculation = () => {
+  const { needsCategory, wantsCategory, savingsCategory } =
+    useLocalSearchParams();
+  const selectedCategories = [needsCategory, wantsCategory, savingsCategory];
+
+  const [categories, setCategories] = useState<BudgetCategory[]>([]);
+
+  console.log("needsCategory:", needsCategory);
+  console.log("wantsCategory:", wantsCategory);
+  console.log("savingsCategory:", savingsCategory);
+
+  useEffect(() => {
+    const parsedCategories: CategoryTypes[] = selectedCategories
+      .map((categoryString) => JSON.parse(categoryString as string))
+      .flat();
+
+    const categoriesWithValues: BudgetCategory[] = parsedCategories.map(
+      (category) => ({
+        ...category,
+        value: "",
+      })
+    );
+
+    setCategories(categoriesWithValues);
+  }, []);
+
+  const handleValue = (id: string, newValue: string) => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.id === id ? { ...category, value: newValue } : category
+      )
+    );
+  };
+
+  const handleDelete = (id: string) => {
+    setCategories((prevCategories) =>
+      prevCategories.filter((categories) => categories.id !== id)
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" />
@@ -29,55 +64,22 @@ const BudgetCalculation = () => {
         </View>
 
         <ScrollView style={{ padding: 20 }}>
-          <View className="border border-black-200 w-full rounded-lg">
-            {/*Category name and emoji*/}
-            <View className="w-full flex-row p-3">
-              <View className="border w-[50px] h-[50px] rounded-full"></View>
-              <View className="justify-center p-3">
-                <Text className="text-black font-psemibold text-base">
-                  Category Name
-                </Text>
-              </View>
-            </View>
-            <View className="w-full pl-3 pr-3">
-              <Text className="text-black font-pregular text-xs">
-                Amount Allocated
-              </Text>
-              <View className="w-full flex-row space-x-3 pt-3 pb-3">
-                <TextInput
-                  className="w-[120px] h-[55px] border text-black font-pmedium text-base p-3 rounded-lg"
-                  value={`$ `}
-                  placeholder={"Budget"}
-                  placeholderTextColor="#A9A9A9"
-                  onChangeText={() => console.log("Test")}
-                  keyboardType="numeric"
-                />
-                <TextInput
-                  className="w-[150px] h-[55px] border text-black font-pmedium text-xs p-3 rounded-lg"
-                  value={""}
-                  placeholder={"Budget"}
-                  placeholderTextColor="#A9A9A9"
-                  onChangeText={() => console.log("Test")}
-                  autoCapitalize="none"
-                  keyboardType="numeric"
-                  autoCorrect={false}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log("Delete");
-                  }}
-                  className="justify-center items-center p-3 h-[60px]"
-                >
-                  <FontAwesome5 name="trash" size={20} color="red" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+          {categories.map((category, id) => (
+            <BudgetAllocation
+              key={id}
+              category={category.name + " " + category.emoji}
+              value={category.value}
+              onValueChange={(newValue: string) =>
+                handleValue(category.id, newValue)
+              }
+              onDelete={() => handleDelete(category.id)}
+            />
+          ))}
         </ScrollView>
         <CustomButton
-          title="Let's start"
+          title="Finish"
           handlePress={() => {
-            console.log("Let's start");
+            console.log("Finish");
           }}
           containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
           textStyle={"text-[#FCFCFC]"}
