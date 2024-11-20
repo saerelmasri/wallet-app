@@ -11,7 +11,7 @@ const Home = () => {
   const router = useRouter();
   useFocusEffect(
     useCallback(() => {
-      router.replace("/home");
+      router.replace("/(tabs)/home");
     }, [router])
   );
 

@@ -111,7 +111,7 @@ const RootLayout = () => {
                 name="close-outline"
                 size={30}
                 color="black"
-                onPress={() => router.push("/home")}
+                onPress={() => router.replace("/(tabs)/home")}
               />
             ),
           }}
@@ -149,7 +149,7 @@ const RootLayout = () => {
                 name="close-outline"
                 size={30}
                 color="black"
-                onPress={() => router.push("/home")}
+                onPress={() => router.replace("/(tabs)/home")}
               />
             ),
           }}
@@ -167,7 +167,6 @@ const RootLayout = () => {
                 onPress={() => router.back()}
               />
             ),
-            presentation: "modal",
           }}
         />
         <Stack.Screen
@@ -183,7 +182,6 @@ const RootLayout = () => {
                 onPress={() => router.back()}
               />
             ),
-            presentation: "modal",
           }}
         />
         <Stack.Screen
