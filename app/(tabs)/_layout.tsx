@@ -8,7 +8,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type TabIconTypes = {
-  icon: "Home" | "Budget" | "Profile";
+  icon: "Home" | "Budget" | "Profile" | "Transactions";
   name: string;
   focused: boolean;
   circular?: boolean;
@@ -30,10 +30,16 @@ const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
         color={focused ? "#32D74B" : "black"}
       />
     ),
-
     Profile: (
       <MaterialCommunityIcons
         name="account"
+        size={24}
+        color={focused ? "#32D74B" : "black"}
+      />
+    ),
+    Transactions: (
+      <MaterialIcons
+        name="swap-horiz"
         size={24}
         color={focused ? "#32D74B" : "black"}
       />
@@ -103,7 +109,7 @@ const TabLayout = () => {
               title: "Transactions",
               headerShown: false,
               tabBarIcon: ({ focused }) => (
-                <TabIcon icon="Home" focused={focused} name="Transactions" />
+                <TabIcon icon="Transactions" focused={focused} name="Transactions" />
               ),
             }}
           />
