@@ -4,15 +4,12 @@ import {
   ScrollView,
   StatusBar,
   Text,
-  StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 
-import PlanningButton from "@/components/PlanOptionCard";
+import PlanningButton from "@/components/PlanningComponents/PlanOptionCard";
 
 const Budget = () => {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>

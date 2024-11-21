@@ -1,7 +1,7 @@
 import { View, SafeAreaView, ScrollView, StatusBar, Text } from "react-native";
 import React from "react";
-import WalletDesign from "@/components/WalletDesign";
-import Records from "@/components/Records";
+import WalletDesign from "@/components/UnusedComponents/WalletDesign";
+import Records from "@/components/UnusedComponents/Records";
 import { useLocalSearchParams } from "expo-router";
 
 const Wallet = () => {

@@ -12,7 +12,7 @@ import FormInputText from "@/components/FormInputText";
 import FormDatePicker from "@/components/FormDatePicker";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useLocalSearchParams } from "expo-router";
-import ModalType from "@/components/ModalType";
+import ModalType from "@/components/NewTransactionComponents/ModalType";
 import ModalRepeat from "@/components/ModalRepeat";
 import { Categories } from "@/constants/Category";
 

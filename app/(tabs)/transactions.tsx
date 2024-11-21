@@ -12,7 +12,7 @@ import {
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Chip from "@/components/Chip";
-import TransactionCard from "@/components/TransactionCard";
+import TransactionCard from "@/components/TransactionComponents/TransactionCard";
 import { MockBudgetTransaction } from "@/constants/MockData";
 import { Categories } from "@/constants/Category";
 
@@ -35,6 +35,7 @@ const Transactions = () => {
   const toggleFilterOption = (key: string, option: string) => {
     setFilterOptions((prevOptions) => ({
       ...prevOptions,
+      //@ts-ignore
       [key]: prevOptions[key] === option ? "" : option, // Toggle the selected option
     }));
   };
@@ -108,7 +109,7 @@ const Transactions = () => {
                   Transaction Type
                 </Text>
                 <View className="w-full mt-3 flex-row flex-wrap space-x-2 space-y-2">
-                  {["Expenses", "Incomes"].map((type) => (
+                  {["Expenses", "Savings"].map((type) => (
                     <Chip
                       key={type}
                       title={type}

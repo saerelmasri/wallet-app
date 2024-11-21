@@ -7,7 +7,7 @@ type PlanningButtonType = {
   title: string;
   description: string;
   color: string;
-  redirectUrl: string
+  redirectUrl: string;
 };
 
 const PlanningButton = (props: PlanningButtonType) => {
@@ -16,13 +16,15 @@ const PlanningButton = (props: PlanningButtonType) => {
     Goals: <Text>🎯</Text>,
     Scheduled: <Text>🗓️</Text>,
   };
-  
+
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
+      //@ts-ignore
       onPress={() => router.push(props.redirectUrl as Href<string | object>)}
-      className="w-[90%] h-[100px] border rounded-lg flex-row justify-center items-center m-2">
+      className="w-[90%] h-[100px] border rounded-lg flex-row justify-center items-center m-2"
+    >
       <View
-      style={{backgroundColor: props.color}}
+        style={{ backgroundColor: props.color }}
         className={`w-[70px] h-[70px] rounded-lg justify-center items-center mr-3`}
       >
         <Text className="text-3xl">{iconMap[props.icon]}</Text>

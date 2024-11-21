@@ -1,7 +1,7 @@
 import { View, Text, Modal, TouchableOpacity } from "react-native";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import TransactionTypeCard from "./TransactionTypeCard";
+import TransactionTypeCard from "../TransactionTypeCard";
 
 type ModalTypes = {
   modalTypeVisible: boolean;
@@ -23,7 +23,7 @@ const ModalType = (props: ModalTypes) => {
         }}
         className="flex-1 justify-end items-center"
       >
-        <View className=" h-[40%] w-full bg-white rounded-[40%] p-6 border-black flex space-y-6">
+        <View className=" h-[40%] w-full bg-white rounded-2xl p-6 border-black flex space-y-6">
           <View className="w-full flex-row justify-between items-center">
             <Text className="font-pmedium text-lg">Transaction Type</Text>
             <TouchableOpacity onPress={() => props.setModalTypeVisible(false)}>

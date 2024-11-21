@@ -1,4 +1,4 @@
-import GoalProgressCard from "@/components/GoalProgressCard";
+import GoalProgressCard from "@/components/PlanningComponents/GoalProgressCard";
 import React from "react";
 import {
   View,

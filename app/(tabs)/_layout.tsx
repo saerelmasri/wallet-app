@@ -1,8 +1,9 @@
-import { View, Text } from "react-native";
-import { Tabs } from "expo-router";
+import { View, Text, TouchableOpacity } from "react-native";
+import { router, Tabs, usePathname } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
@@ -10,9 +11,10 @@ type TabIconTypes = {
   icon: "Home" | "Budget" | "Profile";
   name: string;
   focused: boolean;
+  circular?: boolean;
 };
 
-const TabIcon = ({ icon, name, focused }: TabIconTypes) => {
+const TabIcon = ({ icon, name, focused, circular }: TabIconTypes) => {
   const iconMap = {
     Home: (
       <MaterialIcons
@@ -28,6 +30,7 @@ const TabIcon = ({ icon, name, focused }: TabIconTypes) => {
         color={focused ? "#32D74B" : "black"}
       />
     ),
+
     Profile: (
       <MaterialCommunityIcons
         name="account"
@@ -38,24 +41,38 @@ const TabIcon = ({ icon, name, focused }: TabIconTypes) => {
   };
 
   return (
-    <View className={`w-[20vw] items-center justify-center`}>
+    <View
+      className={`w-[20vw] items-center justify-center ${
+        circular ? "rounded-full bg-[#32D74B]" : ""
+      }`}
+    >
       {iconMap[icon]}
-      <Text
-        style={{ fontSize: 12, marginTop: 4, textAlign: "center" }}
-        className={`${
-          focused ? "font-psemibold text-[#32D74B]" : "font-pregular text-black"
-        } text-xs`}
-      >
-        {name}
-      </Text>
+      {!circular && (
+        <Text
+          style={{ fontSize: 12, marginTop: 4, textAlign: "center" }}
+          className={`${
+            focused
+              ? "font-psemibold text-[#32D74B]"
+              : "font-pregular text-black"
+          } text-xs`}
+        >
+          {name}
+        </Text>
+      )}
     </View>
   );
 };
 
 const TabLayout = () => {
+  // Track the focused tab route name
+  const currentRouteName = usePathname();
+
+  console.log("Current:", currentRouteName);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <>
+        {/* Tabs without Add Button */}
         <Tabs
           screenOptions={{
             tabBarShowLabel: false,
@@ -111,6 +128,34 @@ const TabLayout = () => {
             }}
           />
         </Tabs>
+
+        {/* Floating Add Transaction Button Only on Home */}
+        {currentRouteName === "/home" && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => router.push("/numPad")}
+            hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
+            style={{
+              position: "absolute",
+              bottom: 100,
+              right: 40,
+              alignSelf: "center",
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              backgroundColor: "#32D74B",
+              justifyContent: "center",
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 5 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+          >
+            <Ionicons name="add-outline" size={36} color="white" />
+          </TouchableOpacity>
+        )}
       </>
     </GestureHandlerRootView>
   );

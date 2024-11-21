@@ -74,7 +74,7 @@ const AddGoal = () => {
           <FormInputText
             handleTextChange={() => {}}
             title="Amount"
-            value={"" || displayAmount(Number(goalAmount))}
+            value={""}
             placeHolder="$1,300.00"
           />
           <View className="border-[0.5px] border-black w-full" />
