@@ -49,7 +49,6 @@ const ForgotPassword = () => {
           </Text>
           <View className="w-full ">
             <FormFields
-              title="Email"
               value={form.email}
               handleTextChange={(e: any) => setForm({ ...form, email: e })}
               otherStyles="mt-7"

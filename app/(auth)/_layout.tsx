@@ -6,16 +6,32 @@ function AuthLayout() {
   return (
     <>
       <Stack>
-        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-        <Stack.Screen name="sign-up" options={{ headerShown: false }} />
-        <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
         <Stack.Screen
-          name="showNotifications"
-          options={{ headerShown: false }}
+          name="sign-in"
+          options={{
+            headerShown: false,
+            presentation: "modal", 
+            gestureEnabled: true,
+            animation: "slide_from_bottom"
+          }}
         />
         <Stack.Screen
-          name="splashScreenState"
-          options={{ headerShown: false }}
+          name="sign-up"
+          options={{
+            headerShown: false,
+            presentation: "modal", 
+            gestureEnabled: true,
+            animation: "slide_from_bottom" 
+          }}
+        />
+        <Stack.Screen
+          name="forgot-password"
+          options={{
+            headerShown: false,
+            presentation: "modal", 
+            gestureEnabled: true,
+            animation: "slide_from_bottom" 
+          }}
         />
       </Stack>
       <StatusBar style="dark" />

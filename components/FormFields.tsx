@@ -2,7 +2,6 @@ import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 
 type FormFieldsTypes = {
-  title: string;
   value: string;
   handleTextChange: any;
   placeHolder?: string;
@@ -13,7 +12,6 @@ type FormFieldsTypes = {
 import icons from "../constants/icons";
 
 const FormFields = ({
-  title,
   value,
   placeHolder,
   handleTextChange,
@@ -25,7 +23,6 @@ const FormFields = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className="text-base text-gray-100 font-pmedium">{title}</Text>
       <View className="border border-black-200 w-full h-16 px-4 bg-[#D6D6D6] opacity-50 rounded-2xl focus:border-green-500 flex-row items-center">
         <TextInput
           className="flex-1 text-black font-psemibold text-base"
