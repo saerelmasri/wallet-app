@@ -18,8 +18,12 @@ const App = () => {
           className="w-[250px] h-[250px]"
         />
         <View className="p-5 space-y-4">
-          <Text className="text-black font-psemibold text-2xl">Welcome to the app</Text>
-          <Text className="text-black font-pregular text-base">We’re so glad you’re here. 🎉</Text>
+          <Text className="text-black font-psemibold text-2xl">
+            Welcome to the app
+          </Text>
+          <Text className="text-black font-pregular text-base">
+            We’re so glad you’re here. 🎉
+          </Text>
           <Text className="text-black font-pregular text-base">
             Managing your money doesn’t have to be stressful. We’re here to help
             you take control, track your spending, and save for the things that

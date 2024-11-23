@@ -1,10 +1,5 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
-import { Image } from 'expo-image';
+import { View, Text, SafeAreaView, StatusBar } from "react-native";
+import { Image } from "expo-image";
 import React from "react";
 import images from "@/constants/images";
 import CustomButton from "@/components/CustomButton";
@@ -28,10 +23,10 @@ const BuildBudgetIntro = () => {
           <Image
             source={images.pig}
             contentFit="contain"
-            className="w-[350px] h-[350px] mt-auto"
+            className="w-[300px] h-[300px] mt-auto"
           />
           <View className="p-4 flex justify-center items-center mt-auto">
-            <Text className="text-black font-psemibold text-3xl text-center">
+            <Text className="text-black font-psemibold text-2xl text-center">
               Setup your first budget 💰
             </Text>
             <Text className="text-black font-pregular text-sm mt-3 text-center">
@@ -43,15 +38,11 @@ const BuildBudgetIntro = () => {
             <CustomButton
               title="Let's start"
               //@ts-ignore
-              handlePress={() => {router.push("/(budgetScreens)/budgetPeriod")}}
-              containerStyle="mt-7 w-[90%] bg-[#05603A]"
+              handlePress={() => {
+                router.push("/(budgetScreens)/budgetCategories");
+              }}
+              containerStyle="mt-7 w-[90%] h-[60px] bg-[#05603A]"
               textStyle={"text-[#FCFCFC]"}
-            />
-            <CustomButton
-              title="Skip"
-              handlePress={() => {console.log("Skip")}}
-              containerStyle="mt-[0.5px] w-[100%] bg-transparent"
-              textStyle={"text-black text-sm"}
             />
           </View>
         </View>

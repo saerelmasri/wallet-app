@@ -10,27 +10,27 @@ function AuthLayout() {
           name="sign-in"
           options={{
             headerShown: false,
-            presentation: "modal", 
+            presentation: "modal",
             gestureEnabled: true,
-            animation: "slide_from_bottom"
+            animation: "slide_from_bottom",
           }}
         />
         <Stack.Screen
           name="sign-up"
           options={{
             headerShown: false,
-            presentation: "modal", 
+            presentation: "modal",
             gestureEnabled: true,
-            animation: "slide_from_bottom" 
+            animation: "slide_from_bottom",
           }}
         />
         <Stack.Screen
           name="forgot-password"
           options={{
             headerShown: false,
-            presentation: "modal", 
+            presentation: "modal",
             gestureEnabled: true,
-            animation: "slide_from_bottom" 
+            animation: "slide_from_bottom",
           }}
         />
       </Stack>

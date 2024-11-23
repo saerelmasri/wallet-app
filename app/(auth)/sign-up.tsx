@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
@@ -53,7 +53,7 @@ const SignUp = () => {
       .then((user) => {
         console.log("User:", user);
         if (user) {
-          // router.replace("/showNotifications");
+          router.replace("/(budgetScreens)/buildBudgetIntro");
         }
       })
       .catch((error) => {

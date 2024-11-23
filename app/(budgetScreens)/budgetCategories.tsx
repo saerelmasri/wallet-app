@@ -162,7 +162,7 @@ const BudgetCategories = () => {
         </ScrollView>
         {selectedNeeds.length === 0 && selectedWants.length === 0 ? null : (
           <CustomButton
-            title="Let's start"
+            title="Next"
             handlePress={() => {
               router.push({
                 pathname: "/(budgetScreens)/budgetCalculation",
@@ -173,7 +173,7 @@ const BudgetCategories = () => {
                 },
               });
             }}
-            containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[140px]"
+            containerStyle="bg-[#05603A] absolute bottom-0 right-0 mr-5 mb-5 h-[50px] w-[120px]"
             textStyle={"text-[#FCFCFC]"}
           />
         )}

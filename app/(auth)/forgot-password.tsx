@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     sendPasswordResetEmail(getAuth(), form.email)
       .then(() => {
         router.push({
-          pathname: "/splashScreenState",
+          pathname: "/(auth)/sign-in",
           params: {
             imageType: "email",
             title: "Reset Email Sent",

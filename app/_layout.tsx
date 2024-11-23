@@ -36,10 +36,9 @@ const RootLayout = () => {
   const app =
     getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-  // Initialize Firebase Auth if not already initialized
   let auth;
   try {
-    auth = getAuth(app); // Get the existing Auth instance if it exists
+    auth = getAuth(app);
   } catch (error) {
     auth = initializeAuth(app, {
       persistence: getReactNativePersistence(ReactNativeAsyncStorage),
@@ -55,18 +54,15 @@ const RootLayout = () => {
       }
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [auth]);
 
-  // Hide SplashScreen once everything is loaded
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
-  // Return null while fonts and first launch data are being loaded
   if (!fontsLoaded) {
     return <Text className="text-2xl text-black-100">Loading...</Text>;
   }
@@ -78,112 +74,20 @@ const RootLayout = () => {
           gestureEnabled: false,
         }}
       >
+        {/* Main App Screens */}
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false, presentation: "modal"}} />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            headerShown: false,
+            presentation: "modal",
+            gestureEnabled: true,
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="transactions"
-          options={{
-            headerShown: true,
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerTitle: "",
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="(budgetScreens)/buildBudgetIntro"
-          options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="close-outline"
-                size={30}
-                color="black"
-                onPress={() => router.replace("/(tabs)/home")}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(budgetScreens)/budgetCalculation"
-          options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="close-outline"
-                size={30}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(budgetScreens)/budgetSummary"
-          options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={30}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerRight: () => (
-              <Ionicons
-                name="close-outline"
-                size={30}
-                color="black"
-                onPress={() => router.replace("/(tabs)/home")}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(budgetScreens)/budgetPeriod"
-          options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={30}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(budgetScreens)/budgetCategories"
-          options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={30}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-          }}
-        />
+        <Stack.Screen name="(budgetScreens)" options={{ headerShown: false }} />
+
+        {/* Goal Screens*/}
         <Stack.Screen
           name="goals"
           options={{
@@ -237,6 +141,8 @@ const RootLayout = () => {
             ),
           }}
         />
+
+        {/* Wallet Screens */}
         <Stack.Screen
           name="wallet"
           options={{
@@ -296,6 +202,28 @@ const RootLayout = () => {
                 </Text>
               </TouchableOpacity>
             ),
+          }}
+        />
+
+        {/* Transaction Screens */}
+        <Stack.Screen
+          name="transactions"
+          options={{
+            headerShown: true,
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitle: "",
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
           }}
         />
         <Stack.Screen
