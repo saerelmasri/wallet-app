@@ -13,9 +13,9 @@ import {
 import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import BudgetAllocation from "@/components/BudgetScreenComponents/BudgetAllocation";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { CategoryTypes } from "@/constants/Category";
-import { displayAmount } from "@/helpers/common-helper";
+import { displayAmount, getRandomColor } from "@/helpers/common-helper";
 
 type BudgetCategory = CategoryTypes & { value: string; isEditable?: boolean };
 
@@ -125,7 +125,7 @@ const BudgetCalculation = () => {
       name: "",
       emoji: "🙂", // Default emoji
       value: "",
-      color: "#E0E0E0", // Default color
+      color: `${getRandomColor()}`, // Default color
       isEditable: true, // New categories are editable
     };
 
@@ -155,14 +155,14 @@ const BudgetCalculation = () => {
               Update the allocated money on each category. We'll ensure it
               doesn't exceed the budget.
             </Text>
-            <View className="border w-full p-3 flex-row items-center rounded-md">
+            <TouchableOpacity onPress={() => router.push("/budgetIncome")} className="border w-full p-3 flex-row items-center rounded-md">
               <Text className="text-black font-psemibold text-base">
                 Your Income:{" "}
               </Text>
               <Text className="text-black font-pbold text-base">
                 ${displayAmount(remainingIncome)} left
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           {/* Scrollable Categories */}

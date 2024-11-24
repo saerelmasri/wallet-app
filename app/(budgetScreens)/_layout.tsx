@@ -12,14 +12,6 @@ const BudgetLayout = () => {
         options={{
           headerShown: false,
           headerTitle: "",
-          //   headerLeft: () => (
-          //     <Ionicons
-          //       name="close-outline"
-          //       size={30}
-          //       color="black"
-          //       onPress={() => router.replace("/(tabs)/home")}
-          //     />
-          //   ),
         }}
       />
       <Stack.Screen
@@ -53,7 +45,7 @@ const BudgetLayout = () => {
         }}
       />
       <Stack.Screen
-        name="budgetPeriod"
+        name="budgetIncome"
         options={{
           headerShown: true,
           headerTitle: "",
