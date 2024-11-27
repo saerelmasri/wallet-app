@@ -20,7 +20,7 @@ import { displayAmount, getRandomColor } from "@/helpers/common-helper";
 type BudgetCategory = CategoryTypes & { value: string; isEditable?: boolean };
 
 const BudgetCalculation = () => {
-  const { needsCategory, wantsCategory, savingsCategory } =
+  const { needsCategory, wantsCategory, savingsCategory, userIncome } =
     useLocalSearchParams();
   const selectedCategories = [needsCategory, wantsCategory];
   const selectedSavings = [savingsCategory];
@@ -30,7 +30,7 @@ const BudgetCalculation = () => {
   const [remainingIncome, setRemainingIncome] = useState<number>(0);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
-  const initialIncome = 3000;
+  const initialIncome = Number(userIncome);
 
   useEffect(() => {
     const parseCategories = (categoryArray: any[]) =>
@@ -134,7 +134,37 @@ const BudgetCalculation = () => {
   };
 
   const handleFinish = () => {
+    const allCategories = [...expenses, ...savings];
+
+
+    const hasEmptyExpense = allCategories.some(
+      (category) => !category.value || parseFloat(category.value) < 0
+    );
+
+    if (hasEmptyExpense) {
+      Alert.alert(
+        "Incomplete Allocation",
+        "All expense categories must have money allocated or be removed before proceeding."
+      );
+      return;
+    }
+
+    if (remainingIncome < 0) {
+      Alert.alert(
+        "Invalid Budget",
+        "Your allocated amounts exceed your income. Please adjust the values."
+      );
+      return;
+    }
+
     Alert.alert("Budget Allocation", "Budget allocation is complete!");
+    router.push({
+      pathname: "/(budgetScreens)/budgetSummary",
+      params: {
+        initialIncome: userIncome,
+        remainingIncome: remainingIncome
+      }
+    });
   };
 
   return (
@@ -155,7 +185,10 @@ const BudgetCalculation = () => {
               Update the allocated money on each category. We'll ensure it
               doesn't exceed the budget.
             </Text>
-            <TouchableOpacity onPress={() => router.push("/budgetIncome")} className="border w-full p-3 flex-row items-center rounded-md">
+            <TouchableOpacity
+              onPress={() => router.push("/budgetIncome")}
+              className="border w-full p-3 flex-row items-center rounded-md"
+            >
               <Text className="text-black font-psemibold text-base">
                 Your Income:{" "}
               </Text>

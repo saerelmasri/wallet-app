@@ -17,9 +17,12 @@ import {
   WantsCategory,
 } from "@/constants/Category";
 import ChipCategory from "@/components/ChipCategory";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const BudgetCategories = () => {
+  const { incomingIncome } =
+    useLocalSearchParams();
+
   const [alertShown, setAlertShown] = useState(false);
   const [selectedNeeds, setSelectedNeeds] = useState<CategoryTypes[]>([
     { id: "housing-id", name: "Housing", emoji: "🏠", color: "#D4A373" },
@@ -170,6 +173,7 @@ const BudgetCategories = () => {
                   needsCategory: JSON.stringify(selectedNeeds),
                   wantsCategory: JSON.stringify(selectedWants),
                   savingsCategory: JSON.stringify(selectedSavings),
+                  userIncome: incomingIncome
                 },
               });
             }}

@@ -15,6 +15,21 @@ const BudgetLayout = () => {
         }}
       />
       <Stack.Screen
+        name="budgetIncome"
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerLeft: () => (
+            <Ionicons
+              name="arrow-back-sharp"
+              size={30}
+              color="black"
+              onPress={() => router.back()}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
         name="budgetCategories"
         options={{
           headerShown: false,
@@ -44,43 +59,11 @@ const BudgetLayout = () => {
           ),
         }}
       />
-      <Stack.Screen
-        name="budgetIncome"
-        options={{
-          headerShown: true,
-          headerTitle: "",
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={30}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-        }}
-      />
 
       <Stack.Screen
-        name="(budgetScreens)/budgetSummary"
+        name="budgetSummary"
         options={{
-          headerShown: true,
-          headerTitle: "",
-          headerLeft: () => (
-            <Ionicons
-              name="arrow-back-sharp"
-              size={30}
-              color="black"
-              onPress={() => router.back()}
-            />
-          ),
-          headerRight: () => (
-            <Ionicons
-              name="close-outline"
-              size={30}
-              color="black"
-              onPress={() => router.replace("/(tabs)/home")}
-            />
-          ),
+          headerShown: false,
         }}
       />
     </Stack>

@@ -39,7 +39,7 @@ const BuildBudgetIntro = () => {
               title="Let's start"
               //@ts-ignore
               handlePress={() => {
-                router.push("/(budgetScreens)/budgetCategories");
+                router.push("/budgetIncome");
               }}
               containerStyle="mt-7 w-[90%] h-[60px] bg-[#05603A]"
               textStyle={"text-[#FCFCFC]"}

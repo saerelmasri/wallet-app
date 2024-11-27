@@ -10,9 +10,14 @@ import CustomButton from "@/components/CustomButton";
 import CollapsibleView from "@/components/BudgetScreenComponents/CollapsibleView";
 import { TestData } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 const BudgetSummary = () => {
+  const { initialIncome, remainingIncome } =
+  useLocalSearchParams();
+
+  const monthlyBudget = Number(initialIncome) - Number(remainingIncome);
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" />
@@ -47,10 +52,10 @@ const BudgetSummary = () => {
         {/* Budget Summary */}
         <View className="w-full mt-5 p-3 space-y-2">
           <Text className="text-black font-pmedium text-sm">
-            Your initial income: ${displayAmount(1200)}
+            Your initial income: ${displayAmount(Number(initialIncome))}
           </Text>
           <Text className="text-black font-pmedium text-sm">
-            Remaining unallocated funds: ${displayAmount(150)}
+            Remaining unallocated funds: ${displayAmount(Number(remainingIncome))}
           </Text>
           <Text className="font-pmedium text-xs text-gray-600">
             Great job! You’ve left some money unallocated. Consider saving
@@ -63,14 +68,20 @@ const BudgetSummary = () => {
       <View
         style={{
           position: "absolute",
-          bottom: 20, // Use spacing that fits your design
+          bottom: 40, // Use spacing that fits your design
           right: 20,
         }}
       >
         <CustomButton
           title="Finish"
           handlePress={() => {
-            router.push("/(tabs)/home");
+            router.push({
+              pathname: "/(tabs)/home",
+              params: {
+                monthlyBudget: monthlyBudget,
+                unallocatedMoney: remainingIncome
+              }
+            });
           }}
           containerStyle="bg-[#05603A] h-[50px] w-[140px]"
           textStyle={"text-[#FCFCFC]"}

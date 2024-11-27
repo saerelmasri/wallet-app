@@ -1,10 +1,11 @@
 import { View, Text, SafeAreaView, ScrollView, StatusBar } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import GoalProgressCircle from "@/components/HomeComponents/GoalProgressCircle";
 import UpcomingPayments from "@/components/HomeComponents/nextPayments";
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import BudgetCard from "@/components/HomeComponents/BudgetCard";
 import { Categories } from "@/constants/Category";
+import { displayAmount } from "@/helpers/common-helper";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -15,6 +16,20 @@ const Home = () => {
     }, [router])
   );
 
+  const [monthly, setMonthly] = useState(1500);
+  const [unallocated, setUnallocated] = useState(894);
+
+  useEffect(() => {
+    const monthlyFromParams = 1500;
+    const unallocatedFromParams = 500;
+
+    setMonthly(Number(monthlyFromParams));
+    setUnallocated(Number(unallocatedFromParams));
+  }, []);
+
+  console.log("monthlyBudget:", monthly);
+  console.log("unallocatedMoney:", unallocated);
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle={"dark-content"} />
@@ -23,33 +38,42 @@ const Home = () => {
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
         >
           <View className="w-full flex-row p-3 items-center">
-            {/*Profile Pic*/}
-            {/* <View className="w-[60%] flex-row">
-              <View className="w-[30%] flex justify-center items-center">
-                <View className=" w-[50px] h-[50px] rounded-full border-[2px] border-[#32D74B] flex justify-center items-center bg-white">
-                  <MaterialCommunityIcons
-                    name="account"
-                    size={30}
-                    color="black"
-                  />
-                </View>
-              </View>
-            </View> */}
-
             {/* Remaining budget of the month*/}
-            <View className="bg-white p-3">
-              <Text className="font-pregular text-xs text-black text-right">
-                My budget for Nov
-              </Text>
-              <Text className="font-psemibold text-xl text-black tracking-tighter text-right">
-                $ 1,500.20{" "}
-                <Text className="font-pmedium text-xs text-black text-right">
-                  left
+            <View className="bg-white p-3 w-full">
+              {monthly ? (
+                <>
+                  <View className=" flex-row justify-between">
+                    <View>
+                      <Text className="font-pregular text-xs text-black text-left">
+                        My budget for Nov
+                      </Text>
+                      <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
+                        $ {displayAmount(monthly)}
+                        <Text className="font-pmedium text-xs text-black text-left">
+                          {" "}
+                          left
+                        </Text>
+                      </Text>
+                      <Text className="font-pregular text-xs text-black tracking-tighter text-left">
+                        09 days left in Nov
+                      </Text>
+                    </View>
+                    <View>
+                      <Text className="font-pregular text-xs text-black text-right">
+                        Unallocated Money
+                      </Text>
+                      <Text className="font-psemibold text-xl text-black tracking-tighter text-right">
+                        $ {displayAmount(unallocated)}
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              ) : (
+                <Text className="font-psemibold text-sm text-black tracking-tighter text-left">
+                  Your monthly budget has not been set up yet. Please build your
+                  budget
                 </Text>
-              </Text>
-              <Text className="font-pregular text-xs text-black tracking-tighter text-right">
-                09 days left in Nov
-              </Text>
+              )}
             </View>
           </View>
 
