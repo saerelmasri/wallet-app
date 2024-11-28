@@ -16,8 +16,8 @@ const Home = () => {
     }, [router])
   );
 
-  const [monthly, setMonthly] = useState(1500);
-  const [unallocated, setUnallocated] = useState(894);
+  const [monthly, setMonthly] = useState<number | null>(null);
+  const [unallocated, setUnallocated] = useState<number | null>(null);
 
   useEffect(() => {
     const monthlyFromParams = 1500;
@@ -40,7 +40,7 @@ const Home = () => {
           <View className="w-full flex-row p-3 items-center">
             {/* Remaining budget of the month*/}
             <View className="bg-white p-3 w-full">
-              {monthly ? (
+              {monthly && unallocated ? (
                 <>
                   <View className=" flex-row justify-between">
                     <View>

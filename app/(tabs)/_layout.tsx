@@ -73,8 +73,6 @@ const TabLayout = () => {
   // Track the focused tab route name
   const currentRouteName = usePathname();
 
-  console.log("Current:", currentRouteName);
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <>
