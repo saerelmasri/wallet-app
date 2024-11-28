@@ -27,9 +27,6 @@ const Home = () => {
     setUnallocated(Number(unallocatedFromParams));
   }, []);
 
-  console.log("monthlyBudget:", monthly);
-  console.log("unallocatedMoney:", unallocated);
-
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle={"dark-content"} />
