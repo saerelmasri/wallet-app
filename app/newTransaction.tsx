@@ -9,12 +9,13 @@ import {
 import React, { useEffect, useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import FormInputText from "@/components/FormInputText";
-import FormDatePicker from "@/components/FormDatePicker";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useLocalSearchParams } from "expo-router";
 import ModalType from "@/components/NewTransactionComponents/ModalType";
 import ModalRepeat from "@/components/ModalRepeat";
 import { Categories } from "@/constants/Category";
+import ModalDatePicker from "@/components/NewTransactionComponents/ModalCalendar";
 
 const AddTransaction = () => {
   //Information from other Routes: Numnpad or existing transaction
@@ -25,17 +26,26 @@ const AddTransaction = () => {
     transactionAmount,
     transactionType,
     transactionDate,
-    repeat = "what",
+    repeat = "Never",
   } = useLocalSearchParams();
 
   // State variables
   const [modalRepeatVisible, setModalRepeatVisible] = useState(false);
   const [modalTypeVisible, setModalTypeVisible] = useState(false);
+  const [modalDatePickerVisible, setModalDatePickerVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedRepeat, setSelectedRepeat] = useState("Never");
   const [selectedType, setSelectedType] = useState("Expenses");
   const [category, setCategory] = useState({ id: "", name: "" });
+
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0] // Default to today
+  );
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+  };
 
   // Handle Functions
   const handleRepeatChange = (option: string) => {
@@ -153,7 +163,37 @@ const AddTransaction = () => {
 
           {/* Date Picker */}
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-          <FormDatePicker />
+          <View
+            className={`bg-white p-3 flex-row justify-between items-center w-full`}
+          >
+            <Text
+              className="text-base text-black font-psemibold "
+              style={{ width: 100, paddingLeft: 20 }}
+            >
+              Date
+            </Text>
+
+            <View className="w-full h-12 flex-row items-center">
+              <AntDesign name="calendar" size={24}
+                color="#A9A9A9"/>
+              <TouchableOpacity
+                className="ml-3"
+                onPress={() => setModalDatePickerVisible(true)}
+              >
+                <Text className=
+                  {`${
+                    selectedDate === new Date().toISOString().split("T")[0]
+                      ? "text-[#A9A9A9]"
+                      : "text-black"
+                  }`}>
+                  
+                  {selectedDate === new Date().toISOString().split("T")[0]
+                    ? "Today"
+                    : selectedDate}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           {/* Repeat */}
@@ -244,6 +284,13 @@ const AddTransaction = () => {
         setModalRepeatVisible={setModalRepeatVisible}
         handleRepeatChange={handleRepeatChange}
         selectedRepeat={selectedRepeat}
+      />
+
+      <ModalDatePicker
+        modalDatePickerVisible={modalDatePickerVisible}
+        setModalDatePickerVisible={setModalDatePickerVisible}
+        onDateChange={handleDateChange}
+        initialDate={selectedDate}
       />
     </SafeAreaView>
   );

@@ -138,7 +138,7 @@ const TabLayout = () => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push("/numPad")}
-            hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
+            hitSlop={{ bottom: 120, left: 50, right: 50 }}
             style={{
               position: "absolute",
               bottom: 100,

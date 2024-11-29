@@ -19,11 +19,11 @@ const ModalType = (props: ModalTypes) => {
     >
       <View
         style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "transparent",
         }}
         className="flex-1 justify-end items-center"
       >
-        <View className=" h-[40%] w-full bg-white rounded-2xl p-6 border-black flex space-y-6">
+        <View className=" h-[40%] w-full bg-white rounded-2xl p-6 border border-black flex space-y-6">
           <View className="w-full flex-row justify-between items-center">
             <Text className="font-pmedium text-lg">Transaction Type</Text>
             <TouchableOpacity onPress={() => props.setModalTypeVisible(false)}>

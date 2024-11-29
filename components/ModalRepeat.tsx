@@ -31,11 +31,11 @@ const ModalRepeat = (props: ModalRepeat) => {
     >
       <View
         style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "transparent",
         }}
         className="flex-1 justify-end"
       >
-        <View className="h-[90%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border-black">
+        <View className="h-[90%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border border-black">
           <View className="w-full flex-row justify-between items-center">
             <View />
             <Text className="font-pmedium text-lg">Repeats</Text>
