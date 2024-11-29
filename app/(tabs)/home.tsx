@@ -27,6 +27,14 @@ const Home = () => {
     setUnallocated(Number(unallocatedFromParams));
   }, []);
 
+  const groupedCategories = Categories.reduce((acc, category) => {
+    if (!acc[category.categorySection]) {
+      acc[category.categorySection] = [];
+    }
+    acc[category.categorySection].push(category);
+    return acc;
+  }, {} as Record<string, typeof Categories>);
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle={"dark-content"} />
@@ -80,15 +88,28 @@ const Home = () => {
           </View>
 
           {/* Transaction History Widgets */}
-          <View className="p-3">
-            {Categories.slice(0, 3).map((item, key) => (
-              <BudgetCard
-                budgetCategory={item.name}
-                budgetColor={item.color}
-                budgetEmoji={item.emoji}
-                budgetInitialAmount={2300}
-                budgetUsedAmount={1230}
-              />
+          <View className="p-3 w-full">
+            {Object.entries(groupedCategories).map(([section, categories]) => (
+              <View key={section}>
+                {/* Section Title */}
+                <Text
+                className="text-lg font-pregular p-3"
+                >
+                  {section}
+                </Text>
+
+                {/* Categories in this section */}
+                {categories.map((item) => (
+                  <BudgetCard
+                    key={item.id}
+                    budgetCategory={item.name}
+                    budgetColor={item.color}
+                    budgetEmoji={item.emoji}
+                    budgetInitialAmount={2300}
+                    budgetUsedAmount={1230}
+                  />
+                ))}
+              </View>
             ))}
           </View>
         </ScrollView>
