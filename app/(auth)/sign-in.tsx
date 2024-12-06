@@ -14,7 +14,7 @@ import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
 import { Link, useRouter } from "expo-router";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 
 const SignIn = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const SignIn = () => {
       return Alert.alert("Fields cannot be empty");
     }
 
-    signInWithEmailAndPassword(getAuth(), form.email, form.password)
+    auth().signInWithEmailAndPassword(form.email, form.password)
       .then((userCredential) => {
         const user = userCredential.user;
         if (user) {
@@ -83,7 +83,7 @@ const SignIn = () => {
             </View>
             <CustomButton
               title="Sign In"
-              handlePress={() => router.replace("/(tabs)/home")}
+              handlePress={() => submit()}
               containerStyle="mt-7 w-full bg-[#32D74B]"
               textStyle={"text-[#FCFCFC]"}
               isLoading={isSubmitting}

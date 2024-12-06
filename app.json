@@ -12,12 +12,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.saerelmasri.moneyflow"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "com.saerelmasri.moneyflow"
     },
     "web": {
       "bundler": "metro",
@@ -26,10 +30,28 @@
     "plugins": [
       "expo-router",
       "expo-build-properties",
-      "expo-font"
+      "expo-font",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d2f28530-74c5-488d-8634-6d11b19df522"
+      }
     }
   }
 }

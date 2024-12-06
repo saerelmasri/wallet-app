@@ -12,7 +12,7 @@ import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import {
   validateEmailAddress,
   validatePassword,
@@ -49,11 +49,11 @@ const SignUp = () => {
       return;
     }
 
-    createUserWithEmailAndPassword(getAuth(), form.email, form.password)
+    auth().createUserWithEmailAndPassword(form.email, form.password)
       .then((user) => {
         console.log("User:", user);
         if (user) {
-          router.replace("/(budgetScreens)/buildBudgetIntro");
+          router.replace("/(tabs)/home");
         }
       })
       .catch((error) => {

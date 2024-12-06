@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { router, SplashScreen, Stack } from "expo-router";
+import { router, useSegments, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { Text, TouchableOpacity } from "react-native";
-import { getApps, initializeApp } from "firebase/app";
-import {
-  getAuth,
-  getReactNativePersistence,
-  initializeAuth,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { firebaseConfig } from "@/test";
+import auth from "@react-native-firebase/auth";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  // const [isFirstLaunched, setIsFirstLaunched] = useState<boolean | null>(null);
-  const [user, setUser] = useState<any | null>(null);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
 
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -33,39 +26,30 @@ const RootLayout = () => {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
-  const app =
-    getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
+    console.log("onAuthStateChanged:", user);
+    setUser(user);
+    if (initializing) setInitializing(false);
+  };
 
-  let auth;
-  try {
-    auth = getAuth(app);
-  } catch (error) {
-    auth = initializeAuth(app, {
-      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-    });
-  }
+  const segments = useSegments();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authenticatedUser) => {
-      if (authenticatedUser) {
-        setUser(authenticatedUser);
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [auth]);
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
+    if (initializing) return;
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (user && !inAuthGroup) {
+      router.replace("/(tabs)/home");
+    } else if (!user && inAuthGroup) {
+      router.replace("/");
     }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return <Text className="text-2xl text-black-100">Loading...</Text>;
-  }
+  }, [user, initializing]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

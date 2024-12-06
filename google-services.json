@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674693894370",
+    "project_id": "walletapp-fdfc6",
+    "storage_bucket": "walletapp-fdfc6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674693894370:android:aca9ac172a82d3aea5cebb",
+        "android_client_info": {
+          "package_name": "com.saerelmasri.moneyflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATzdTSLynTIYrW5NUx5I7FLLz1UClCKcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

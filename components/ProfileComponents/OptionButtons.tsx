@@ -5,7 +5,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 type OptionButtonType = {
   title: string;
   emoji: string;
-  onPress?: () => {};
+  onPress?: () => void;
   icon?: boolean;
 };
 

@@ -5,11 +5,13 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import ModalNotification from "@/components/ProfileComponents/NotificationModal";
 
 import OptionButtons from "@/components/ProfileComponents/OptionButtons";
+import auth from "@react-native-firebase/auth";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -95,11 +97,16 @@ const Profile = () => {
 
           <View className="w-full p-6 space-y-4">
             <Text className="font-pmedium text-sm mb-3">Help & Support</Text>
-            <OptionButtons emoji="" icon={true} title="Contact Support"/>
-            <OptionButtons emoji="❤️‍🔥" title="About"/>
-            <OptionButtons emoji="🗑️" title="Delete all"/>
-            <OptionButtons emoji="👋" title="Log out"/>
-            
+            <OptionButtons emoji="" icon={true} title="Contact Support" />
+            <OptionButtons emoji="❤️‍🔥" title="About" />
+            <OptionButtons emoji="🗑️" title="Delete all" />
+            <OptionButtons
+              emoji="👋"
+              title="Log out"
+              onPress={() => {
+                auth().signOut();
+              }}
+            />
           </View>
         </ScrollView>
       </View>
