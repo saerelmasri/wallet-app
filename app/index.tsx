@@ -43,7 +43,7 @@ const App = () => {
           />
           <CustomButton
             title="Login"
-            handlePress={() => router.push("/(auth)/sign-in")}
+            handlePress={() => router.replace("/(auth)/sign-in")}
             containerStyle="w-[100%] h-[60px] bg-[#2C2C2C] mt-2"
             textStyle={"text-[#FCFCFC]"}
           />

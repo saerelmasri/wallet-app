@@ -5,13 +5,13 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import ModalNotification from "@/components/ProfileComponents/NotificationModal";
 
 import OptionButtons from "@/components/ProfileComponents/OptionButtons";
-import auth from "@react-native-firebase/auth";
+import { signOut } from "firebase/auth";
+import { auth } from "@/configs/firebaseConfig";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -104,7 +104,7 @@ const Profile = () => {
               emoji="👋"
               title="Log out"
               onPress={() => {
-                auth().signOut();
+                signOut(auth);
               }}
             />
           </View>

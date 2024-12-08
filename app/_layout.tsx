@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { router, useSegments, SplashScreen, Stack } from "expo-router";
+import {
+  router,
+  useSegments,
+  SplashScreen,
+  Stack,
+  useRouter,
+} from "expo-router";
 import { useFonts } from "expo-font";
 import { Text, TouchableOpacity } from "react-native";
-import auth from "@react-native-firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { auth } from "@/configs/firebaseConfig";
 
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  // const [initializing, setInitializing] = useState(true);
+  // const [user, setUser] = useState<User | null>(null);
+  // const segments = useSegments();
+  const router = useRouter();
 
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -26,30 +34,29 @@ const RootLayout = () => {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
-  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    console.log("onAuthStateChanged:", user);
-    setUser(user);
-    if (initializing) setInitializing(false);
-  };
+  // const handleAuthStateChanged = (user: User | null) => {
+  //   console.log("handleAuthStateChanged:", user);
+  //   setUser(user);
+  //   if (initializing) setInitializing(false);
+  // };
 
-  const segments = useSegments();
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   const unsubscribe = onAuthStateChanged(auth, handleAuthStateChanged);
+  //   return unsubscribe;
+  // }, []);
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
+  // useEffect(() => {
+  //   if (initializing) return;
 
-  useEffect(() => {
-    if (initializing) return;
+  //   const inAuthGroup = segments[0] === "(auth)";
 
-    const inAuthGroup = segments[0] === "(auth)";
-
-    if (user && !inAuthGroup) {
-      router.replace("/(tabs)/home");
-    } else if (!user && inAuthGroup) {
-      router.replace("/");
-    }
-  }, [user, initializing]);
+  //   if (user && !inAuthGroup) {
+  //     router.replace("/(tabs)/home");
+  //   } else if (!user && inAuthGroup) {
+  //     router.replace("/");
+  //   }
+  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -126,7 +133,7 @@ const RootLayout = () => {
           }}
         />
 
-        {/* Wallet Screens */}
+        {/* Wallet Screens
         <Stack.Screen
           name="wallet"
           options={{
@@ -187,29 +194,9 @@ const RootLayout = () => {
               </TouchableOpacity>
             ),
           }}
-        />
+        /> */}
 
         {/* Transaction Screens */}
-        <Stack.Screen
-          name="transactions"
-          options={{
-            headerShown: true,
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerTitle: "",
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-          }}
-        />
         <Stack.Screen
           name="newTransaction"
           options={{

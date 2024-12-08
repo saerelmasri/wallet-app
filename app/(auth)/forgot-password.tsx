@@ -7,7 +7,8 @@ import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/configs/firebaseConfig";
 
 const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -16,7 +17,7 @@ const ForgotPassword = () => {
   });
 
   const submit = () => {
-    sendPasswordResetEmail(getAuth(), form.email)
+    sendPasswordResetEmail(auth, form.email)
       .then(() => {
         router.push({
           pathname: "/(auth)/sign-in",

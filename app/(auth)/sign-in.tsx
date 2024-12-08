@@ -6,7 +6,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,7 +14,8 @@ import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
 import { Link, useRouter } from "expo-router";
-import auth from "@react-native-firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/configs/firebaseConfig";
 
 const SignIn = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const SignIn = () => {
       return Alert.alert("Fields cannot be empty");
     }
 
-    auth().signInWithEmailAndPassword(form.email, form.password)
+    signInWithEmailAndPassword(auth, form.email, form.password)
       .then((userCredential) => {
         const user = userCredential.user;
         if (user) {
