@@ -1,6 +1,7 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getReactNativePersistence, initializeAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { FirebaseApp, initializeApp, getApps } from "firebase/app";
+import { Auth, initializeAuth, getAuth } from "firebase/auth";
+import { getReactNativePersistence } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
@@ -13,13 +14,21 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIRABASE_MEASUREMENTID,
 };
 
-// Initialize Firebase app only if it hasn't been initialized
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+// Explicitly type app and auth
+let app: FirebaseApp;
+let auth: Auth;
+let database: Firestore;
 
-// Initialize Firebase Auth
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
-// const database = getFirestore(app);
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  });
+  database = getFirestore(app);
+} else {
+  app = getApps()[0];
+  auth = getAuth(app);
+  database = getFirestore(app);
+}
 
-export { app, auth };
+export { app, auth, database };

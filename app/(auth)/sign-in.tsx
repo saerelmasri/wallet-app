@@ -13,12 +13,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
-import { Link, useRouter } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { Link } from "expo-router";
+import { loginUser } from "@/functions/auth/firebaseAuth";
 
 const SignIn = () => {
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -30,17 +28,7 @@ const SignIn = () => {
       return Alert.alert("Fields cannot be empty");
     }
 
-    signInWithEmailAndPassword(auth, form.email, form.password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        if (user) {
-          console.log("User info:", user);
-          router.replace("/(tabs)/home");
-        }
-      })
-      .catch(() => {
-        Alert.alert("Email or Password doesn't match.\n Please try again.");
-      });
+    loginUser(form);
   };
 
   return (

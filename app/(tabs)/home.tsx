@@ -6,6 +6,7 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import BudgetCard from "@/components/HomeComponents/BudgetCard";
 import { Categories } from "@/constants/Category";
 import { displayAmount } from "@/helpers/common-helper";
+import { getAuth } from "firebase/auth";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -15,6 +16,15 @@ const Home = () => {
       router.replace("/(tabs)/home");
     }, [router])
   );
+
+  const auth = getAuth();
+  const user = {
+    email: auth.currentUser?.email,
+    uid: auth.currentUser?.uid,
+    createdAt: auth.currentUser?.metadata.creationTime
+  };
+
+  console.log("user:", user);
 
   const [monthly, setMonthly] = useState<number | null>(null);
   const [unallocated, setUnallocated] = useState<number | null>(null);
@@ -92,11 +102,7 @@ const Home = () => {
             {Object.entries(groupedCategories).map(([section, categories]) => (
               <View key={section}>
                 {/* Section Title */}
-                <Text
-                className="text-lg font-pregular p-3"
-                >
-                  {section}
-                </Text>
+                <Text className="text-lg font-pregular p-3">{section}</Text>
 
                 {/* Categories in this section */}
                 {categories.map((item) => (

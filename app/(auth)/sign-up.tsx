@@ -11,14 +11,13 @@ import { Image } from "expo-image";
 import images from "../../constants/images";
 import FormFields from "@/components/FormFields";
 import CustomButton from "@/components/CustomButton";
-import { Link, router } from "expo-router";
+import { Link } from "expo-router";
 
 import {
   validateEmailAddress,
   validatePassword,
 } from "@/helpers/authValidators";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { registerUser } from "@/functions/auth/firebaseAuth";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,20 +50,7 @@ const SignUp = () => {
       return;
     }
 
-    createUserWithEmailAndPassword(auth, form.email, form.password)
-      .then((user) => {
-        console.log("User:", user);
-        if (user) {
-          router.replace("/(tabs)/home");
-        }
-      })
-      .catch((error) => {
-        console.log("Error: ", error);
-
-        Alert.alert(
-          "We found an user with the same email, is that you? Please sign in instead!"
-        );
-      });
+    registerUser(form);
   };
 
   return (
