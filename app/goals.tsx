@@ -1,5 +1,5 @@
 import GoalProgressCard from "@/components/PlanningComponents/GoalProgressCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   SafeAreaView,
@@ -13,12 +13,42 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { MockGoals } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
+import { getAuth } from "firebase/auth";
+import { getAllUserGoals, getSavingAmount } from "@/api/database/goalFunctions";
 
 const Goals = () => {
-  const totalSaved = MockGoals.reduce(
-    (accum, goal) => accum + goal.amountSaved,
-    0
-  );
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+
+  const [error, setError] = useState<string | null>(null);
+  const [totalSaved, setTotalSaved] = useState<number>(0);
+  const [userGoals, setUserGoals] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchTotalSavings = async () => {
+      const result = await getSavingAmount(userId as string);
+      if (result instanceof Error) {
+        setError(result.message);
+      } else {
+        setTotalSaved(result);
+      }
+    };
+
+    fetchTotalSavings();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserGoals = async () => {
+      const result = await getAllUserGoals(userId as string);
+      if (result instanceof Error) {
+        setError(result.message);
+      } else {
+        setUserGoals(result);
+      }
+    };
+
+    fetchUserGoals();
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -53,16 +83,35 @@ const Goals = () => {
 
               <View className="w-full h-[1px] mt-4 mb-4 bg-black" />
 
-              {MockGoals.map((item, key) => (
-                <GoalProgressCard
-                  key={key}
-                  goalTitle={item.goalTitle}
-                  amountSaved={item.amountSaved}
-                  goalEmoji={item.goalEmoji}
-                  goalProgress={item.goalProgress}
-                  goalAmount={item.goalAmount}
-                />
-              ))}
+              {userGoals.length > 0 ? (
+                userGoals.map(
+                  (
+                    item: {
+                      goalTitle: string;
+                      amountSaved: number;
+                      goalEmoji: string;
+                      goalProgress: number;
+                      goalAmount: number;
+                    },
+                    key: React.Key | null | undefined
+                  ) => (
+                    <GoalProgressCard
+                      key={key}
+                      goalTitle={item.goalTitle}
+                      amountSaved={item.amountSaved}
+                      goalEmoji={item.goalEmoji}
+                      goalProgress={item.goalProgress}
+                      goalAmount={item.goalAmount}
+                    />
+                  )
+                )
+              ) : (
+                <View className="w-full justify-center items-center p-3">
+                  <Text className="text-black font-psemibold text-xs text-center">
+                    No goals yet! Create some and keep track of them!
+                  </Text>
+                </View>
+              )}
 
               <TouchableOpacity
                 onPress={() => {

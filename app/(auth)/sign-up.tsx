@@ -17,7 +17,7 @@ import {
   validateEmailAddress,
   validatePassword,
 } from "@/helpers/authValidators";
-import { registerUser } from "@/functions/auth/firebaseAuth";
+import { registerUser } from "@/api/auth/firebaseAuth";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

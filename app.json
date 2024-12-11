@@ -13,14 +13,12 @@
     },
     "ios": {
       "supportsTablet": false,
-      "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.saerelmasri.moneyflow"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "./google-services.json",
       "package": "com.saerelmasri.moneyflow"
     },
     "web": {

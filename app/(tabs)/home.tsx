@@ -7,6 +7,9 @@ import BudgetCard from "@/components/HomeComponents/BudgetCard";
 import { Categories } from "@/constants/Category";
 import { displayAmount } from "@/helpers/common-helper";
 import { getAuth } from "firebase/auth";
+import { database } from "@/configs/firebaseConfig";
+import {  doc, getDoc } from "firebase/firestore";
+import { getUserFromDB } from "@/api/database/userFunctions";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -18,24 +21,22 @@ const Home = () => {
   );
 
   const auth = getAuth();
-  const user = {
-    email: auth.currentUser?.email,
-    uid: auth.currentUser?.uid,
-    createdAt: auth.currentUser?.metadata.creationTime
-  };
+  const userId = auth.currentUser?.uid;
 
-  console.log("user:", user);
-
-  const [monthly, setMonthly] = useState<number | null>(null);
+  const [monthly, setMonthly] = useState<number | undefined>(undefined);
   const [unallocated, setUnallocated] = useState<number | null>(null);
 
   useEffect(() => {
-    const monthlyFromParams = 1500;
-    const unallocatedFromParams = 500;
+    const fetchUser = async () => {
+      const result = await getUserFromDB(userId as string);
+      if (result instanceof Error) {
+        console.error("Error fetching user:", result.message);
+      }
+      setMonthly(result.income)
+    };
 
-    setMonthly(Number(monthlyFromParams));
-    setUnallocated(Number(unallocatedFromParams));
-  }, []);
+    fetchUser();
+  }, [userId]);
 
   const groupedCategories = Categories.reduce((acc, category) => {
     if (!acc[category.categorySection]) {

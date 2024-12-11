@@ -14,21 +14,12 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIRABASE_MEASUREMENTID,
 };
 
-// Explicitly type app and auth
 let app: FirebaseApp;
 let auth: Auth;
 let database: Firestore;
 
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-  });
-  database = getFirestore(app);
-} else {
-  app = getApps()[0];
-  auth = getAuth(app);
-  database = getFirestore(app);
-}
+app = initializeApp(firebaseConfig);
+auth = initializeAuth(app)
+database = getFirestore(app);
 
 export { app, auth, database };

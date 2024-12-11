@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { addUserToDB } from "../queries/addDb";
+import { addUserToDB } from "../database/userFunctions";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import { app } from "@/configs/firebaseConfig";
