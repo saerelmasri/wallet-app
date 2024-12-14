@@ -5,24 +5,64 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
 import FormInputText from "@/components/FormInputText";
 import CustomButton from "@/components/CustomButton";
-import ModalRepeat from "@/components/ModalRepeat";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { displayAmount } from "@/helpers/common-helper";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { database } from "@/configs/firebaseConfig";
 
 const AddGoal = () => {
-  const { goalTitle, goalEmoji, goalAmount } = useLocalSearchParams();
-
-  const [modalRepeatVisible, setModalRepeatVisible] = useState(false);
-  const [selectedRepeat, setSelectedRepeat] = useState("Never");
+  const { goalId, goalTitle, goalEmoji, goalAmount } = useLocalSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedEmoji, setSelectedEmoji] = useState({ emoji: "" });
+  const [selectedEmoji, setSelectedEmoji] = useState<{ emoji: string }>({
+    emoji: "",
+  });
+  const [newGoalProp, setNewGoalProp] = useState({
+    title: "",
+    amount: "",
+  });
+
+  const handleSaveNewGoal = async () => {
+    if (selectedEmoji.emoji === "") {
+      return Alert.alert("Validation Error", "Please select an emoji");
+    }
+    if (newGoalProp.title.trim() === "") {
+      return Alert.alert("Validation Error", "Please give it a name");
+    }
+    if (newGoalProp.amount.trim() === "" || isNaN(Number(newGoalProp.amount))) {
+      return Alert.alert("Validation Error", "Please give it a goal amount");
+    }
+
+    try {
+      const goalData = {
+        goalName: newGoalProp.title,
+        target: Number(newGoalProp.amount),
+        emoji: selectedEmoji.emoji,
+        saved: 0,
+      };
+
+      // Exisiting goal
+      if (goalId) {
+        const goalDocRef = doc(database, "goals", goalId as string);
+        await setDoc(goalDocRef, goalData, { merge: true });
+        Alert.alert("Success", "Goal updated successfully");
+        router.back();
+      } else {
+        const goalDocRef = collection(database, "goals");
+        await addDoc(goalDocRef, goalData);
+        Alert.alert("Success", "New goal created successfully");
+      }
+    } catch (error) {
+      console.log("Error saving goal:", error);
+      Alert.alert("Error", "An error occurred while saving the goal.");
+    }
+  };
 
   const handlePick = (emoji: EmojiType) => {
     setSelectedEmoji({
@@ -31,25 +71,26 @@ const AddGoal = () => {
     setIsModalOpen((prev) => !prev);
   };
 
-  const handleRepeatChange = (option: string) => {
-    setSelectedRepeat(option);
-    setTimeout(() => {
-      setModalRepeatVisible(false);
-    }, 200);
-  };
-
   useEffect(() => {
+    if (goalTitle) {
+      setNewGoalProp((prev) => ({ ...prev, title: goalTitle as string }));
+    }
+    if (goalAmount) {
+      setNewGoalProp((prev) => ({ ...prev, amount: goalAmount as string }));
+    }
     if (goalEmoji) {
       setSelectedEmoji({ emoji: goalEmoji as string });
     }
-  }, []);
+  }, [goalTitle, goalAmount, goalEmoji]);
+
+  console.log("Goals:", newGoalProp);
 
   return (
     <SafeAreaView
       className="flex-1 h-full"
       style={{
         flex: 1,
-        backgroundColor: modalRepeatVisible ? "rgba(0, 0, 0, 0.5)" : "white",
+        backgroundColor: "white",
       }}
     >
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
@@ -65,56 +106,28 @@ const AddGoal = () => {
           </Text>
           <View className="border-[0.5px] border-black w-full" />
           <FormInputText
-            handleTextChange={() => {}}
+            handleTextChange={() => () => (e: any) =>
+              setNewGoalProp({ ...newGoalProp, title: e })}
             title="Name"
-            value={"" || goalTitle}
+            value={newGoalProp.title}
             placeHolder="Madrid Trip"
           />
           <View className="border-[0.5px] border-black w-full" />
           <FormInputText
-            handleTextChange={() => {}}
+            handleTextChange={() => (e: any) =>
+              setNewGoalProp({ ...newGoalProp, amount: e })}
             title="Amount"
-            value={""}
+            value={newGoalProp.amount}
             placeHolder="$1,300.00"
           />
           <View className="border-[0.5px] border-black w-full" />
-          <View
-            className={`bg-white p-3 flex-row justify-between items-center w-full`}
-          >
-            <Text
-              className="text-base text-black font-psemibold "
-              style={{ width: 100, paddingLeft: 20 }}
-            >
-              Repeat
-            </Text>
-
-            <View className="w-full h-12 flex-row items-center">
-              <MaterialCommunityIcons
-                name="calendar-clock"
-                size={24}
-                color="#A9A9A9"
-              />
-              <TouchableOpacity
-                className="ml-3"
-                onPress={() => setModalRepeatVisible(true)}
-              >
-                <Text
-                  className={`${
-                    selectedRepeat === "Never" ? "text-[#A9A9A9]" : "text-black"
-                  }`}
-                >
-                  {selectedRepeat || "Never"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
 
           <View className="border-[0.5px] border-black w-full" />
           <View className="w-full h-[25vh] justify-end flex p-3">
             <View className="border hidden"></View>
             <CustomButton
               title="Save Goal"
-              handlePress={() => {}}
+              handlePress={handleSaveNewGoal}
               containerStyle="w-full bg-[#2F7E79]"
               textStyle="text-white"
             />
@@ -127,12 +140,6 @@ const AddGoal = () => {
           />
         </View>
       </ScrollView>
-      <ModalRepeat
-        modalRepeatVisible={modalRepeatVisible}
-        setModalRepeatVisible={setModalRepeatVisible}
-        handleRepeatChange={handleRepeatChange}
-        selectedRepeat={selectedRepeat}
-      />
     </SafeAreaView>
   );
 };

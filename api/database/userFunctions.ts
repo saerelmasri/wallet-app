@@ -1,5 +1,5 @@
 import { database } from "@/configs/firebaseConfig";
-import { doc, DocumentData, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export async function addUserToDB(user: {
   userId: string;
