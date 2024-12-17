@@ -1,15 +1,44 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { router } from "expo-router";
-import { MockGoals } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
+import { getAllUserGoals, getSavingAmount } from "@/api/database/goalFunctions";
+import { getAuth } from "firebase/auth";
 
 const GoalProgressCircle = () => {
-  const totalSaved = MockGoals.reduce(
-    (accum, goal) => accum + goal.amountSaved,
-    0
-  );
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+
+  const [error, setError] = useState<string | null>(null);
+  const [totalSaved, setTotalSaved] = useState<number>(0);
+  const [userGoals, setUserGoals] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchTotalSavings = async () => {
+      const result = await getSavingAmount(userId as string);
+      if (result instanceof Error) {
+        setError(result.message);
+      } else {
+        setTotalSaved(result);
+      }
+    };
+
+    fetchTotalSavings();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserGoals = async () => {
+      const result = await getAllUserGoals(userId as string);
+      if (result instanceof Error) {
+        setError(result.message);
+      } else {
+        setUserGoals(result);
+      }
+    };
+
+    fetchUserGoals();
+  }, []);
 
   return (
     <TouchableOpacity
@@ -26,21 +55,23 @@ const GoalProgressCircle = () => {
       </View>
       <View className="w-full flex p-3 justify-center">
         <View className=" flex-row">
-          {MockGoals.slice(0, 4).map((item, key) => (
-            <ProgressCircle
-              progress={item.goalProgress}
-              size={37}
-              thickness={3}
-              icon={item.goalEmoji}
-              extraStyle="mr-1"
-            />
-          ))}
+          {userGoals
+            .slice(0, 4)
+            .map((item: { emoji: string; saved: number; target: number }) => (
+              <ProgressCircle
+                progress={item.target > 0 ? item.saved / item.target : 0}
+                size={37}
+                thickness={3}
+                icon={item.emoji}
+                extraStyle="mr-1"
+              />
+            ))}
         </View>
         <View className=" flex-row p-1">
           <Text className="text-black text-xs font-pmedium">
-            {MockGoals.length > 4
+            {userGoals.length > 4
               ? "+4 active goals"
-              : `${MockGoals.length} active goals`}
+              : `${userGoals.length} active goals`}
           </Text>
         </View>
       </View>

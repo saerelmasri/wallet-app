@@ -17,9 +17,9 @@ import { auth } from "@/configs/firebaseConfig";
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  // const [initializing, setInitializing] = useState(true);
-  // const [user, setUser] = useState<User | null>(null);
-  // const segments = useSegments();
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const segments = useSegments();
   const router = useRouter();
 
   const [fontsLoaded, error] = useFonts({
@@ -34,29 +34,37 @@ const RootLayout = () => {
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
 
-  // const handleAuthStateChanged = (user: User | null) => {
-  //   console.log("handleAuthStateChanged:", user);
-  //   setUser(user);
-  //   if (initializing) setInitializing(false);
-  // };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Auth state changed:", currentUser);
+      setUser(currentUser);
+      if (initializing) setInitializing(false);
+    });
 
-  // useEffect(() => {
-  //   //@ts-ignore
-  //   const unsubscribe = onAuthStateChanged(auth, handleAuthStateChanged);
-  //   return unsubscribe;
-  // }, []);
+    // Clean up the listener on unmount
+    return () => unsubscribe();
+  }, [initializing]);
 
-  // useEffect(() => {
-  //   if (initializing) return;
+  useEffect(() => {
+    if (initializing) return; // Wait for initialization
 
-  //   const inAuthGroup = segments[0] === "(auth)";
+    const inAuthGroup = segments[0] === "(auth)";
 
-  //   if (user && !inAuthGroup) {
-  //     router.replace("/(tabs)/home");
-  //   } else if (!user && inAuthGroup) {
-  //     router.replace("/");
-  //   }
-  // }, []);
+    if (user && inAuthGroup) {
+      router.replace("/(tabs)/home");
+    } else if (!user && !inAuthGroup) {
+      router.replace("/");
+    }
+  }, [user, segments, initializing]);
+
+  if (!fontsLoaded || initializing) {
+    // Show loading screen while fonts or auth is initializing
+    return <Text>Loading...</Text>;
+  }
+
+  if (!initializing && fontsLoaded) {
+    SplashScreen.hideAsync();
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

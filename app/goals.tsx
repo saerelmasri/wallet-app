@@ -11,7 +11,6 @@ import { router } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { MockGoals } from "@/constants/MockData";
 import { displayAmount } from "@/helpers/common-helper";
 import { getAuth } from "firebase/auth";
 import { getAllUserGoals, getSavingAmount } from "@/api/database/goalFunctions";
@@ -40,6 +39,8 @@ const Goals = () => {
   useEffect(() => {
     const fetchUserGoals = async () => {
       const result = await getAllUserGoals(userId as string);
+      console.log("result:", result);
+      
       if (result instanceof Error) {
         setError(result.message);
       } else {
@@ -87,23 +88,38 @@ const Goals = () => {
                 userGoals.map(
                   (
                     item: {
-                      goalTitle: string;
-                      amountSaved: number;
-                      goalEmoji: string;
-                      goalProgress: number;
-                      goalAmount: number;
-                    },
-                    key: React.Key | null | undefined
-                  ) => (
-                    <GoalProgressCard
-                      key={key}
-                      goalTitle={item.goalTitle}
-                      amountSaved={item.amountSaved}
-                      goalEmoji={item.goalEmoji}
-                      goalProgress={item.goalProgress}
-                      goalAmount={item.goalAmount}
-                    />
-                  )
+                      id: string;
+                      emoji: string;
+                      goalName: string;
+                      saved: number;
+                      target: number;
+                      color: string
+                    }
+                  ) => {
+                    const transformedGoal = {
+                      goalId: item.id,
+                      goalTitle: item.goalName,
+                      amountSaved: item.saved,
+                      goalEmoji: item.emoji,
+                      goalProgress:
+                        item.target > 0 ? item.saved / item.target : 0,
+                      goalAmount: item.target,
+                      color: item.color
+                    };
+
+                    return (
+                      <GoalProgressCard
+                        key={transformedGoal.goalId}
+                        goalId={transformedGoal.goalId}
+                        goalTitle={transformedGoal.goalTitle}
+                        amountSaved={transformedGoal.amountSaved}
+                        goalEmoji={transformedGoal.goalEmoji}
+                        goalProgress={transformedGoal.goalProgress}
+                        goalAmount={transformedGoal.goalAmount}
+                        color={transformedGoal.color}
+                      />
+                    );
+                  }
                 )
               ) : (
                 <View className="w-full justify-center items-center p-3">

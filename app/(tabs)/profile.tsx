@@ -2,26 +2,64 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalNotification from "@/components/ProfileComponents/NotificationModal";
 
 import OptionButtons from "@/components/ProfileComponents/OptionButtons";
-import { signOut } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { getAuth, signOut } from "firebase/auth";
+import {
+  getUserFromDB,
+  updateNotificationSettings,
+} from "@/api/database/userFunctions";
 
 const Profile = () => {
-  const [name, setName] = useState("");
-  const [notification, setNotification] = useState("Off");
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
 
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    notificationSettings: "Off",
+  });
   const [modalNotificationVisible, setModalNotificationVisible] =
     useState(false);
+  const [error, setError] = useState("");
 
-  const handleNotificationChange = (notificationType: string) => {
-    setNotification(notificationType);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const result = await getUserFromDB(userId as string);
+
+      if (result instanceof Error) {
+        setError(result.message);
+      } else if (result) {
+        setProfile({
+          email: result.email || "",
+          name: result.name || "",
+          notificationSettings: result.notificationSettings || "Off",
+        });
+      }
+    };
+
+    if (userId) {
+      fetchUserProfile();
+    }
+  }, [userId]);
+
+  const handleNotificationChange = async (notificationType: string) => {
+    const updateSettings = await updateNotificationSettings(
+      userId as string,
+      notificationType
+    );
+
+    if (updateSettings instanceof Error) {
+      Alert.alert("Something happens");
+      return;
+    }
+    setProfile((prev) => ({ ...prev, notificationSettings: notificationType }));
     setModalNotificationVisible(false);
   };
 
@@ -50,33 +88,17 @@ const Profile = () => {
 
           <View className="w-full p-6 space-y-4">
             <Text className="font-pmedium text-sm">Account Settings</Text>
-            <View className="border flex-row items-center p-2 rounded-md space-x-5">
+            <View className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5">
               <Text className="font-psemibold text-sm w-[50px]">Name</Text>
-              <TextInput
-                className="w-[200px] h-12 text-black font-pregular text-base pr-3"
-                value={name}
-                placeholder={"Saer"}
-                placeholderTextColor="#A9A9A9"
-                onChangeText={(value) => {
-                  setName(value);
-                }}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+              <Text className="w-full font-psemibold text-sm text-[#A9A9A9]">
+                {profile.name}
+              </Text>
             </View>
-            <View className="border flex-row items-center p-2 rounded-md space-x-5">
+            <View className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5">
               <Text className="font-psemibold text-sm w-[50px]">Email</Text>
-              <TextInput
-                className="w-[200px] h-12 text-black font-pregular text-base pr-3"
-                value={name}
-                placeholder={"saer@gmail.com"}
-                placeholderTextColor="#A9A9A9"
-                onChangeText={(value) => {
-                  setName(value);
-                }}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+              <Text className="font-psemibold text-sm w-full text-[#A9A9A9]">
+                {profile.email}
+              </Text>
             </View>
           </View>
 
@@ -89,8 +111,8 @@ const Profile = () => {
               className="border flex-row justify-between items-center p-2 rounded-md space-x-5 h-16"
             >
               <Text className="font-psemibold text-sm">Notifications</Text>
-              <Text className="font-pregular text-base text-gray-400">
-                {notification}
+              <Text className="font-pregular text-base text-gray-400 mr-4">
+                {profile.notificationSettings}
               </Text>
             </TouchableOpacity>
           </View>
@@ -115,7 +137,7 @@ const Profile = () => {
         modalNotificationVisible={modalNotificationVisible}
         setModalNotificationVisible={setModalNotificationVisible}
         handleNotificationChange={handleNotificationChange}
-        currentNotification={notification}
+        currentNotification={profile.notificationSettings}
       />
     </SafeAreaView>
   );

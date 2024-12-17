@@ -7,8 +7,6 @@ import BudgetCard from "@/components/HomeComponents/BudgetCard";
 import { Categories } from "@/constants/Category";
 import { displayAmount } from "@/helpers/common-helper";
 import { getAuth } from "firebase/auth";
-import { database } from "@/configs/firebaseConfig";
-import {  doc, getDoc } from "firebase/firestore";
 import { getUserFromDB } from "@/api/database/userFunctions";
 
 const Home = () => {
@@ -23,7 +21,7 @@ const Home = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid;
 
-  const [monthly, setMonthly] = useState<number | undefined>(undefined);
+  const [monthly, setMonthly] = useState("");
   const [unallocated, setUnallocated] = useState<number | null>(null);
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const Home = () => {
       if (result instanceof Error) {
         console.error("Error fetching user:", result.message);
       }
-      setMonthly(result.income)
+      setMonthly("")
     };
 
     fetchUser();
@@ -64,7 +62,7 @@ const Home = () => {
                         My budget for Nov
                       </Text>
                       <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
-                        $ {displayAmount(monthly)}
+                        $ {displayAmount(0)}
                         <Text className="font-pmedium text-xs text-black text-left">
                           {" "}
                           left

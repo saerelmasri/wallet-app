@@ -12,12 +12,14 @@ import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
 import FormInputText from "@/components/FormInputText";
 import CustomButton from "@/components/CustomButton";
 import { router, useLocalSearchParams } from "expo-router";
-import { displayAmount } from "@/helpers/common-helper";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { database } from "@/configs/firebaseConfig";
+import { getAuth } from "firebase/auth";
+import { createNewGoal, updateGoalDesc } from "@/api/database/goalFunctions";
+import { getRandomColor } from "@/helpers/common-helper";
 
 const AddGoal = () => {
-  const { goalId, goalTitle, goalEmoji, goalAmount } = useLocalSearchParams();
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+  const { goalId, goalTitle, goalEmoji, goalAmount, color } = useLocalSearchParams();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedEmoji, setSelectedEmoji] = useState<{ emoji: string }>({
@@ -27,6 +29,9 @@ const AddGoal = () => {
     title: "",
     amount: "",
   });
+  const [ bgColor, setBgColor ] = useState<string>(getRandomColor());
+
+  console.log("goalId:", goalId);
 
   const handleSaveNewGoal = async () => {
     if (selectedEmoji.emoji === "") {
@@ -45,18 +50,32 @@ const AddGoal = () => {
         target: Number(newGoalProp.amount),
         emoji: selectedEmoji.emoji,
         saved: 0,
+        userId: userId,
       };
 
       // Exisiting goal
       if (goalId) {
-        const goalDocRef = doc(database, "goals", goalId as string);
-        await setDoc(goalDocRef, goalData, { merge: true });
+        const updateError = await updateGoalDesc(goalId as string, goalData);
+
+        if (updateError instanceof Error) {
+          console.error("Error updating goal:", updateError.message);
+          Alert.alert("Error", "An error occurred while updating the goal.");
+          return;
+        }
+
         Alert.alert("Success", "Goal updated successfully");
         router.back();
       } else {
-        const goalDocRef = collection(database, "goals");
-        await addDoc(goalDocRef, goalData);
-        Alert.alert("Success", "New goal created successfully");
+        const createError = await createNewGoal({...goalData, color: bgColor});
+
+        if (createError instanceof Error) {
+          console.error("Error updating goal:", createError.message);
+          Alert.alert("Error", "An error occurred while updating the goal.");
+          return;
+        }
+
+        Alert.alert("Success", "Goal updated successfully");
+        router.back();
       }
     } catch (error) {
       console.log("Error saving goal:", error);
@@ -81,9 +100,11 @@ const AddGoal = () => {
     if (goalEmoji) {
       setSelectedEmoji({ emoji: goalEmoji as string });
     }
-  }, [goalTitle, goalAmount, goalEmoji]);
 
-  console.log("Goals:", newGoalProp);
+    if(color){
+      setBgColor(color as string);
+    }
+  }, [goalTitle, goalAmount, goalEmoji]);
 
   return (
     <SafeAreaView
@@ -97,7 +118,8 @@ const AddGoal = () => {
         <View className="w-full p-3justify-center items-center flex">
           <TouchableOpacity
             onPress={() => setIsModalOpen(true)}
-            className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6 bg-[#05603A]"
+            className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
+            style={{backgroundColor: bgColor}}
           >
             <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
           </TouchableOpacity>
@@ -106,19 +128,22 @@ const AddGoal = () => {
           </Text>
           <View className="border-[0.5px] border-black w-full" />
           <FormInputText
-            handleTextChange={() => () => (e: any) =>
-              setNewGoalProp({ ...newGoalProp, title: e })}
+            handleTextChange={(e: any) =>
+              setNewGoalProp({ ...newGoalProp, title: e })
+            }
             title="Name"
             value={newGoalProp.title}
             placeHolder="Madrid Trip"
           />
           <View className="border-[0.5px] border-black w-full" />
           <FormInputText
-            handleTextChange={() => (e: any) =>
-              setNewGoalProp({ ...newGoalProp, amount: e })}
+            handleTextChange={(e: any) =>
+              setNewGoalProp({ ...newGoalProp, amount: e })
+            }
             title="Amount"
             value={newGoalProp.amount}
             placeHolder="$1,300.00"
+            isNumber
           />
           <View className="border-[0.5px] border-black w-full" />
 
