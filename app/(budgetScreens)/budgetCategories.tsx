@@ -7,33 +7,35 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "../../components/CustomButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-import {
-  CategoryTypes,
-  NeedCategory,
-  SavingsDebtCategory,
-  WantsCategory,
-} from "@/constants/Category";
-import ChipCategory from "@/components/ChipCategory";
+import ChipCategory from "../../components/ChipCategory";
 import { router, useLocalSearchParams } from "expo-router";
+import { Categories, CategoryTypes } from "../../constants/Category";
 
 const BudgetCategories = () => {
   const { incomingIncome } =
     useLocalSearchParams();
 
   const [alertShown, setAlertShown] = useState(false);
-  const [selectedNeeds, setSelectedNeeds] = useState<CategoryTypes[]>([
-    { id: "housing-id", name: "Housing", emoji: "🏠", color: "#D4A373" },
-    { id: "utilities-id", name: "Utilities", emoji: "🔌", color: "#4A90E2" },
-    { id: "groceries-id", name: "Groceries", emoji: "🛒", color: "#77DD77" },
-  ]);
-  const [selectedWants, setSelectedWants] = useState<CategoryTypes[]>([
-    { id: "dining-out-id", name: "Dining Out", emoji: "🍽️", color: "#FFD700" },
-    { id: "shopping-id", name: "Shopping", emoji: "🛍️", color: "#FF69B4" },
-  ]);
-  const [selectedSavings, setSelectedSavings] = useState<CategoryTypes[]>([]);
+  const [needsCategory, setNeedsCategory] = useState<CategoryTypes[]>([]);
+  const [wantsCategory, setWantsCategory] = useState<CategoryTypes[]>([]);
+  const [savingsCategory, setSavingsCategory] = useState<CategoryTypes[]>([]);
+
+  const [selectedNeeds, setselectedNeeds] = useState<CategoryTypes[]>([]);
+  const [selectedWants, setselectedWants] = useState<CategoryTypes[]>([]);
+  const [selectedSavings, setselectedSavings] = useState<CategoryTypes[]>([]);
+
+  useEffect(() => {
+    const needs = Categories.filter((category) => category.categorySection === "Needs");
+    const wants = Categories.filter((category) => category.categorySection === "Wants");
+    const savings = Categories.filter((category) => category.categorySection === "Savings");
+
+    setNeedsCategory(needs);
+    setWantsCategory(wants);
+    setSavingsCategory(savings);
+  }, [])
 
   const toggleSelection = (
     category: CategoryTypes,
@@ -89,16 +91,16 @@ const BudgetCategories = () => {
             </Text>
             <View className="flex-row flex-wrap ">
               {[
-                ...NeedCategory.map((category) => (
+                ...needsCategory.map((category, index) => (
                   <ChipCategory
                     emoji={category.emoji}
-                    key={category.id}
+                    key={index}
                     title={category.name}
                     selected={selectedNeeds.some(
-                      (item) => item.id === category.id
+                      (item) => item.name === category.name
                     )}
                     onPress={() =>
-                      toggleSelection(category, selectedNeeds, setSelectedNeeds)
+                      toggleSelection(category, selectedNeeds, setselectedNeeds)
                     }
                     containerStyle="m-[5px]"
                   />
@@ -115,16 +117,16 @@ const BudgetCategories = () => {
             </Text>
             <View className="flex-row flex-wrap ">
               {[
-                ...WantsCategory.map((category) => (
+                ...wantsCategory.map((category, index) => (
                   <ChipCategory
                     emoji={category.emoji}
-                    key={category.id}
+                    key={index}
                     title={category.name}
                     selected={selectedWants.some(
-                      (item) => item.id === category.id
+                      (item) => item.name === category.name
                     )}
                     onPress={() =>
-                      toggleSelection(category, selectedWants, setSelectedWants)
+                      toggleSelection(category, selectedWants, setselectedWants)
                     }
                     containerStyle="m-[5px]"
                   />
@@ -141,19 +143,19 @@ const BudgetCategories = () => {
             </Text>
             <View className="flex-row flex-wrap ">
               {[
-                ...SavingsDebtCategory.map((category) => (
+                ...savingsCategory.map((category, index) => (
                   <ChipCategory
                     emoji={category.emoji}
-                    key={category.id}
+                    key={index}
                     title={category.name}
                     selected={selectedSavings.some(
-                      (item) => item.id === category.id
+                      (item) => item.name === category.name
                     )}
                     onPress={() =>
                       toggleSelection(
                         category,
                         selectedSavings,
-                        setSelectedSavings
+                        setselectedSavings
                       )
                     }
                     containerStyle="m-[5px]"

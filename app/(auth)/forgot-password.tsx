@@ -4,11 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
 import images from "../../constants/images";
-import FormFields from "@/components/FormFields";
-import CustomButton from "@/components/CustomButton";
+import FormFields from "../../components/FormFields";
+import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "../../configs/firebaseConfig";
 
 const ForgotPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

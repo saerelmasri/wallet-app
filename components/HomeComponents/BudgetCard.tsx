@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import * as Progress from "react-native-progress";
-import { displayAmount } from "@/helpers/common-helper";
+import { displayAmount } from "../../helpers/common-helper";
 
 type BudgetCardType = {
   budgetColor: string;

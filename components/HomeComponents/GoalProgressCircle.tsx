@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { router } from "expo-router";
-import { displayAmount } from "@/helpers/common-helper";
-import { getAllUserGoals, getSavingAmount } from "@/api/database/goalFunctions";
+import { displayAmount } from "../../helpers/common-helper";
+import { getAllUserGoals, getSavingAmount } from "../../api/database/goalFunctions";
 import { getAuth } from "firebase/auth";
 
 const GoalProgressCircle = () => {

@@ -6,10 +6,10 @@ import {
   ScrollView,
 } from "react-native";
 import React from "react";
-import CustomButton from "@/components/CustomButton";
-import CollapsibleView from "@/components/BudgetScreenComponents/CollapsibleView";
-import { TestData } from "@/constants/MockData";
-import { displayAmount } from "@/helpers/common-helper";
+import CustomButton from "../../components/CustomButton";
+import CollapsibleView from "../../components/BudgetScreenComponents/CollapsibleView";
+import { TestData } from "../../constants/MockData";
+import { displayAmount } from "../../helpers/common-helper";
 import { router, useLocalSearchParams } from "expo-router";
 
 const BudgetSummary = () => {

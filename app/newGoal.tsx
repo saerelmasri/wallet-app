@@ -9,12 +9,12 @@ import {
 } from "react-native";
 
 import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
-import FormInputText from "@/components/FormInputText";
-import CustomButton from "@/components/CustomButton";
+import FormInputText from "../components/FormInputText";
+import CustomButton from "../components/CustomButton";
 import { router, useLocalSearchParams } from "expo-router";
 import { getAuth } from "firebase/auth";
-import { createNewGoal, updateGoalDesc } from "@/api/database/goalFunctions";
-import { getRandomColor } from "@/helpers/common-helper";
+import { createNewGoal, updateGoalDesc } from "../api/database/goalFunctions";
+import { getRandomColor } from "../helpers/common-helper";
 
 const AddGoal = () => {
   const auth = getAuth();

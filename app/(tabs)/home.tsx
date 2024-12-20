@@ -1,13 +1,13 @@
 import { View, Text, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import GoalProgressCircle from "@/components/HomeComponents/GoalProgressCircle";
-import UpcomingPayments from "@/components/HomeComponents/nextPayments";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import BudgetCard from "@/components/HomeComponents/BudgetCard";
-import { Categories } from "@/constants/Category";
-import { displayAmount } from "@/helpers/common-helper";
+import GoalProgressCircle from "../../components/HomeComponents/GoalProgressCircle";
+import UpcomingPayments from "../../components/HomeComponents/nextPayments";
+import { useFocusEffect, useRouter } from "expo-router";
+import BudgetCard from "../../components/HomeComponents/BudgetCard";
+import { Categories } from "../../constants/Category";
+import { displayAmount } from "../../helpers/common-helper";
 import { getAuth } from "firebase/auth";
-import { getUserFromDB } from "@/api/database/userFunctions";
+import { getUserFromDB } from "../../api/database/userFunctions";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -106,7 +106,7 @@ const Home = () => {
                 {/* Categories in this section */}
                 {categories.map((item) => (
                   <BudgetCard
-                    key={item.id}
+                    // key={item.id}
                     budgetCategory={item.name}
                     budgetColor={item.color}
                     budgetEmoji={item.emoji}

@@ -7,14 +7,14 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import ModalNotification from "@/components/ProfileComponents/NotificationModal";
+import ModalNotification from "../../components/ProfileComponents/NotificationModal";
 
-import OptionButtons from "@/components/ProfileComponents/OptionButtons";
+import OptionButtons from "../../components/ProfileComponents/OptionButtons";
 import { getAuth, signOut } from "firebase/auth";
 import {
   getUserFromDB,
   updateNotificationSettings,
-} from "@/api/database/userFunctions";
+} from "../../api/database/userFunctions";
 
 const Profile = () => {
   const auth = getAuth();

@@ -1,7 +1,7 @@
 import { View, SafeAreaView, StatusBar, Text } from "react-native";
 import React from "react";
-import CustomButton from "@/components/CustomButton";
-import FormInputText from "@/components/FormInputText";
+import CustomButton from "../components/CustomButton";
+import FormInputText from "../components/FormInputText";
 
 const colorData = [
   { label: "Green 1", value: "1", color: "#32CD32" },

@@ -1,5 +1,4 @@
-import { database } from "@/configs/firebaseConfig";
-import { getRandomColor } from "@/helpers/common-helper";
+import { database } from "../../configs/firebaseConfig";
 import {
   addDoc,
   collection,

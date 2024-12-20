@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 
-import images from "@/constants/images";
-import CustomButton from "@/components/CustomButton";
+import images from "../constants/images";
+import CustomButton from "../components/CustomButton";
 
 const App = () => {
   return (

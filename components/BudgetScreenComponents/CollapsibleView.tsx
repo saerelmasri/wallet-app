@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { displayAmount } from "@/helpers/common-helper";
+import { displayAmount } from "../../helpers/common-helper";
 
 export type ValueTypes = {
   breakdown: {

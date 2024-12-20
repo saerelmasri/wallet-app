@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "../components/CustomButton";
 import { router } from "expo-router";
 
 type NumpadItem = { label: any; action?: string };

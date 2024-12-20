@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 
 const BudgetIncome = () => {

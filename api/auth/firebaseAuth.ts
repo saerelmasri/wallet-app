@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { addUserToDB } from "../database/userFunctions";
 import { router } from "expo-router";
 import { Alert } from "react-native";
-import { app } from "@/configs/firebaseConfig";
+import { app } from "../../configs/firebaseConfig";
 
 export async function registerUser(form: { email: string; password: string }) {
   try {

@@ -6,7 +6,7 @@ import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
 type BudgetAllocationType = {
   category: string;
   emoji: string;
-  value: string;
+  value: number;
   color: string;
   isEditable?: boolean; // New flag to toggle editability
   onValueChange: (newValue: string) => void;

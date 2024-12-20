@@ -11,10 +11,10 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import images from "../../constants/images";
-import FormFields from "@/components/FormFields";
-import CustomButton from "@/components/CustomButton";
+import FormFields from "../../components/FormFields";
+import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
-import { loginUser } from "@/api/auth/firebaseAuth";
+import { loginUser } from "../../api/auth/firebaseAuth";
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import * as Progress from "react-native-progress";
-import { displayAmount, getRandomColor } from "@/helpers/common-helper";
+import { displayAmount } from "../../helpers/common-helper";
 import { router } from "expo-router";
 
 type GoalProgressType = {

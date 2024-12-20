@@ -1,8 +1,8 @@
 import { View, Text, SafeAreaView, StatusBar } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
-import images from "@/constants/images";
-import CustomButton from "@/components/CustomButton";
+import images from "../../constants/images";
+import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 
 const BuildBudgetIntro = () => {

@@ -1,4 +1,4 @@
-import GoalProgressCard from "@/components/PlanningComponents/GoalProgressCard";
+import GoalProgressCard from "../components/PlanningComponents/GoalProgressCard";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -11,9 +11,9 @@ import { router } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { displayAmount } from "@/helpers/common-helper";
+import { displayAmount } from "../helpers/common-helper";
 import { getAuth } from "firebase/auth";
-import { getAllUserGoals, getSavingAmount } from "@/api/database/goalFunctions";
+import { getAllUserGoals, getSavingAmount } from "../api/database/goalFunctions";
 
 const Goals = () => {
   const auth = getAuth();

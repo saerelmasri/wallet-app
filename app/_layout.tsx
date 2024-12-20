@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { auth } from "@/configs/firebaseConfig";
+import { auth } from "../configs/firebaseConfig";
 
 SplashScreen.preventAutoHideAsync();
 

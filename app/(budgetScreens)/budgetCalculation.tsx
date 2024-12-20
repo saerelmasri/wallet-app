@@ -11,26 +11,32 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "@/components/CustomButton";
-import BudgetAllocation from "@/components/BudgetScreenComponents/BudgetAllocation";
+import CustomButton from "../../components/CustomButton";
+import BudgetAllocation from "../../components/BudgetScreenComponents/BudgetAllocation";
 import { router, useLocalSearchParams } from "expo-router";
-import { CategoryTypes } from "@/constants/Category";
-import { displayAmount, getRandomColor } from "@/helpers/common-helper";
+import { CategoryTypes } from "../../constants/Category";
+import { getRandomColor } from "../../helpers/common-helper";
+import { getAuth } from "@firebase/auth";
+import { createCategories } from "../../api/database/categoryFunctions";
 
-type BudgetCategory = CategoryTypes & { value: string; isEditable?: boolean };
+type BudgetCategory = CategoryTypes & {
+  allocatedMoney: number;
+  isEditable?: boolean;
+};
 
 const BudgetCalculation = () => {
   const { needsCategory, wantsCategory, savingsCategory, userIncome } =
     useLocalSearchParams();
-  const selectedCategories = [needsCategory, wantsCategory];
-  const selectedSavings = [savingsCategory];
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+  const initialIncome = Number(userIncome);
+
+  const selectedCategories = [needsCategory, wantsCategory, savingsCategory];
 
   const [expenses, setExpenses] = useState<BudgetCategory[]>([]);
-  const [savings, setSavings] = useState<BudgetCategory[]>([]);
-  const [remainingIncome, setRemainingIncome] = useState<number>(0);
+  const [remainingIncome, setRemainingIncome] = useState<number>(initialIncome);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-  const initialIncome = Number(userIncome);
+  const [newCategoryType, setNewCategoryType] = useState<string>("");
 
   useEffect(() => {
     const parseCategories = (categoryArray: any[]) =>
@@ -39,21 +45,20 @@ const BudgetCalculation = () => {
         .flat()
         .map((category: CategoryTypes) => ({
           ...category,
-          value: "",
+          allocatedMoney: 0,
           isEditable: false, // Predefined categories are not editable by default
         }));
 
     setExpenses(parseCategories(selectedCategories));
-    setSavings(parseCategories(selectedSavings));
   }, []);
 
   useEffect(() => {
-    const totalAllocated = [...expenses, ...savings].reduce(
-      (sum, category) => sum + (parseFloat(category.value) || 0),
+    const totalAllocated = expenses.reduce(
+      (sum, category) => sum + (category.allocatedMoney || 0),
       0
     );
     setRemainingIncome(initialIncome - totalAllocated);
-  }, [expenses, savings]);
+  }, [expenses]);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -69,76 +74,73 @@ const BudgetCalculation = () => {
     };
   }, []);
 
-  const handleValueChange = (
-    id: string,
-    newValue: string,
-    isSavings: boolean
-  ) => {
+  const handleValueChange = (name: string, newValue: number) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
-        category.id === id ? { ...category, value: newValue } : category
+        category.name === name
+          ? { ...category, allocatedMoney: newValue }
+          : category
       );
 
-    if (isSavings) setSavings((prev) => updateCategories(prev));
-    else setExpenses((prev) => updateCategories(prev));
+    setExpenses((prev) => updateCategories(prev));
   };
 
-  const handleNameChange = (
-    id: string,
-    newName: string,
-    isSavings: boolean
-  ) => {
+  const handleNameChange = (name: string, newName: string) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
-        category.id === id ? { ...category, name: newName } : category
+        category.name === name ? { ...category, name: newName } : category
       );
 
-    if (isSavings) setSavings((prev) => updateCategories(prev));
-    else setExpenses((prev) => updateCategories(prev));
+    setExpenses((prev) => updateCategories(prev));
   };
 
-  const handleEmojiChange = (
-    id: string,
-    newEmoji: string,
-    isSavings: boolean
-  ) => {
+  const handleEmojiChange = (name: string, newEmoji: string) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
-        category.id === id ? { ...category, emoji: newEmoji } : category
+        category.name === name ? { ...category, emoji: newEmoji } : category
       );
 
-    if (isSavings) setSavings((prev) => updateCategories(prev));
-    else setExpenses((prev) => updateCategories(prev));
+    setExpenses((prev) => updateCategories(prev));
   };
 
-  const handleDelete = (id: string, isSavings: boolean) => {
+  const handleDelete = (name: string) => {
     const filterCategories = (categories: BudgetCategory[]) =>
-      categories.filter((category) => category.id !== id);
+      categories.filter((category) => category.name !== name);
 
-    if (isSavings) setSavings((prev) => filterCategories(prev));
-    else setExpenses((prev) => filterCategories(prev));
+    setExpenses((prev) => filterCategories(prev));
   };
 
-  const handleAddNewCategory = (isSavings: boolean) => {
-    const newCategory = {
-      id: `${Date.now()}`, // Generate unique ID
-      name: "",
-      emoji: "🙂", // Default emoji
-      value: "",
-      color: `${getRandomColor()}`, // Default color
-      isEditable: true, // New categories are editable
+  const handleAddNewCategory = () => {
+    if (!newCategoryType) {
+      Alert.alert(
+        "Select Category Type",
+        "Please select a category type first."
+      );
+      return;
+    }
+
+    const newCategory: BudgetCategory = {
+      name: `New Category ${Date.now()}`,
+      emoji: "🙂",
+      allocatedMoney: 0,
+      color: getRandomColor(),
+      isEditable: true,
+      categorySection: "Needs",
     };
 
-    if (isSavings) setSavings((prev) => [...prev, newCategory]);
-    else setExpenses((prev) => [...prev, newCategory]);
+    // Add the new category based on selected section
+    setExpenses((prev) => [...prev, newCategory]);
+
+    // Reset category type after adding
+    setNewCategoryType("");
   };
 
-  const handleFinish = () => {
-    const allCategories = [...expenses, ...savings];
-
+  const handleFinish = async () => {
+    const allCategories = [...expenses];
 
     const hasEmptyExpense = allCategories.some(
-      (category) => !category.value || parseFloat(category.value) < 0
+      (category) =>
+        !category.allocatedMoney || category.allocatedMoney < 0
     );
 
     if (hasEmptyExpense) {
@@ -157,15 +159,42 @@ const BudgetCalculation = () => {
       return;
     }
 
+    const savedBudget = expenses.map(async (item) => {
+      const category = {
+        categoryName: item.name,
+        categoryEmoji: item.emoji,
+        categoryType: item.categorySection,
+        categoryColor: item.color,
+        allocatedMoney: item.allocatedMoney,
+        usedMoney: 0,
+      };
+  
+      await createCategories(
+        userId as string,
+        category.categoryName,
+        category.categoryEmoji,
+        category.categoryType,
+        category.categoryColor,
+        category.allocatedMoney,
+        category.usedMoney
+      );
+    });
+
+    if(savedBudget instanceof Error){
+      return Alert.alert("Something unexpected happened");
+    }
+
     Alert.alert("Budget Allocation", "Budget allocation is complete!");
     router.push({
       pathname: "/(budgetScreens)/budgetSummary",
       params: {
         initialIncome: userIncome,
-        remainingIncome: remainingIncome
-      }
+        remainingIncome: remainingIncome,
+      },
     });
+    return;
   };
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -185,17 +214,38 @@ const BudgetCalculation = () => {
               Update the allocated money on each category. We'll ensure it
               doesn't exceed the budget.
             </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/budgetIncome")}
-              className="border w-full p-3 flex-row items-center rounded-md"
-            >
-              <Text className="text-black font-psemibold text-base">
-                Your Income:{" "}
+
+            {/* Show remaining budget */}
+            <View className="mt-4">
+              <Text className="text-black font-pregular text-lg">
+                Remaining Income: ${remainingIncome.toFixed(2)}
               </Text>
-              <Text className="text-black font-pbold text-base">
-                ${displayAmount(remainingIncome)} left
-              </Text>
-            </TouchableOpacity>
+            </View>
+
+            {/* Category Type Selector */}
+            <View className="flex-row space-x-4">
+              {["Wants", "Needs", "Savings"].map((section) => (
+                <TouchableOpacity
+                  key={section}
+                  onPress={() => setNewCategoryType(section)}
+                  style={{
+                    backgroundColor:
+                      newCategoryType === section ? "#05603A" : "#ddd",
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: newCategoryType === section ? "#fff" : "#000",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {section}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
           {/* Scrollable Categories */}
@@ -208,7 +258,7 @@ const BudgetCalculation = () => {
               Expenses
             </Text>
             <TouchableOpacity
-              onPress={() => handleAddNewCategory(false)}
+              onPress={handleAddNewCategory}
               className="border border-black-200 border-dashed w-full h-[50px] rounded-lg flex-row justify-center items-center mb-3"
             >
               <Text className="text-gray-400 font-plight text-xs">
@@ -221,51 +271,18 @@ const BudgetCalculation = () => {
                 emoji={category.emoji}
                 category={category.name}
                 color={category.color}
-                value={category.value}
+                value={category.allocatedMoney}
                 isEditable={category.isEditable}
-                onValueChange={(newValue: string) =>
-                  handleValueChange(category.id, newValue, false)
+                onValueChange={(newValue) =>
+                  handleValueChange(category.name, Number(newValue))
                 }
                 onNameChange={(newName: string) =>
-                  handleNameChange(category.id, newName, false)
+                  handleNameChange(category.name, newName)
                 }
                 onEmojiChange={(newEmoji: string) =>
-                  handleEmojiChange(category.id, newEmoji, false)
+                  handleEmojiChange(category.name, newEmoji)
                 }
-                onDelete={() => handleDelete(category.id, false)}
-              />
-            ))}
-
-            {/* Savings Section */}
-            <Text className="text-black font-pregular text-sm pb-3 mt-6">
-              Savings
-            </Text>
-            <TouchableOpacity
-              onPress={() => handleAddNewCategory(true)}
-              className="border border-black-200 border-dashed w-full h-[50px] rounded-lg flex-row justify-center items-center mb-3"
-            >
-              <Text className="text-gray-400 font-plight text-xs">
-                Add a new category
-              </Text>
-            </TouchableOpacity>
-            {savings.map((category, id) => (
-              <BudgetAllocation
-                key={id}
-                emoji={category.emoji}
-                category={category.name}
-                color={category.color}
-                value={category.value}
-                isEditable={category.isEditable}
-                onValueChange={(newValue: string) =>
-                  handleValueChange(category.id, newValue, true)
-                }
-                onNameChange={(newName: string) =>
-                  handleNameChange(category.id, newName, true)
-                }
-                onEmojiChange={(newEmoji: string) =>
-                  handleEmojiChange(category.id, newEmoji, true)
-                }
-                onDelete={() => handleDelete(category.id, true)}
+                onDelete={() => handleDelete(category.name)}
               />
             ))}
           </ScrollView>

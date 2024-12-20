@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 
-import PlanningButton from "@/components/PlanningComponents/PlanOptionCard";
+import PlanningButton from "../../components/PlanningComponents/PlanOptionCard";
 
 const Budget = () => {
 

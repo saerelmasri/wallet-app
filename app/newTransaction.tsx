@@ -4,18 +4,17 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "@/components/CustomButton";
-import FormInputText from "@/components/FormInputText";
+import CustomButton from "../components/CustomButton";
+import FormInputText from "../components/FormInputText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useLocalSearchParams } from "expo-router";
-import ModalType from "@/components/NewTransactionComponents/ModalType";
-import ModalRepeat from "@/components/ModalRepeat";
-import { Categories } from "@/constants/Category";
-import ModalDatePicker from "@/components/NewTransactionComponents/ModalCalendar";
+import ModalType from "../components/NewTransactionComponents/ModalType";
+import ModalRepeat from "../components/ModalRepeat";
+import { Categories } from "../constants/Category";
+import ModalDatePicker from "../components/NewTransactionComponents/ModalCalendar";
 
 const AddTransaction = () => {
   //Information from other Routes: Numnpad or existing transaction
@@ -37,7 +36,7 @@ const AddTransaction = () => {
 
   const [selectedRepeat, setSelectedRepeat] = useState("Never");
   const [selectedType, setSelectedType] = useState("Expenses");
-  const [category, setCategory] = useState({ id: "", name: "" });
+  // const [category, setCategory] = useState({ id: "", name: "" });
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0] // Default to today
@@ -63,12 +62,12 @@ const AddTransaction = () => {
   };
 
   useEffect(() => {
-    const initialCategory = Categories.find(
-      (cat) => cat.name === transactionCategory
-    );
-    if (initialCategory) {
-      setCategory(initialCategory);
-    }
+    // const initialCategory = Categories.find(
+    //   (cat) => cat.name === transactionCategory
+    // );
+    // if (initialCategory) {
+    //   setCategory(initialCategory);
+    // }
 
     if (transactionType) {
       setSelectedType(transactionType as string);
@@ -97,14 +96,14 @@ const AddTransaction = () => {
   }) => (
     <TouchableOpacity
       className={`w-full flex-row items-center p-4 space-x-3`}
-      style={{
-        borderColor: category.id === id ? "green" : "transparent",
-        borderWidth: category.id === id ? 2 : 1,
-        borderRadius: category.id === id ? 7 : 0,
-      }}
-      onPress={() => {
-        setCategory({ id: id, name: name });
-      }}
+      // style={{
+      //   borderColor: category.id === id ? "green" : "transparent",
+      //   borderWidth: category.id === id ? 2 : 1,
+      //   borderRadius: category.id === id ? 7 : 0,
+      // }}
+      // onPress={() => {
+      //   setCategory({ id: id, name: name });
+      // }}
     >
       <View
         style={{ backgroundColor: color }}
@@ -234,7 +233,7 @@ const AddTransaction = () => {
             <Text className="text-black font-pregular text-xs p-5">
               Based on your preference
             </Text>
-            <FlatList
+            {/* <FlatList
               data={Categories}
               renderItem={({ item }) => (
                 <CategoryButton
@@ -245,7 +244,7 @@ const AddTransaction = () => {
                 />
               )}
               keyExtractor={(item) => item.id.toString()}
-            />
+            /> */}
           </View>
 
           {/* Create Button */}

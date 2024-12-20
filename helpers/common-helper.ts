@@ -1,5 +1,3 @@
-import images from "@/constants/images";
-
 export const currencySigns = {
   dolar: "$",
   euro: "€",

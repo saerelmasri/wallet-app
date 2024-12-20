@@ -1,4 +1,4 @@
-import { database } from "@/configs/firebaseConfig";
+import { database } from "../../configs/firebaseConfig";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 type UserData = {
