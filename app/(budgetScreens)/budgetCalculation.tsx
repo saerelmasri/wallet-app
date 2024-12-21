@@ -170,10 +170,14 @@ const BudgetCalculation = () => {
     const budgetMetadata = {
       totalAllocated: remainingIncome,
       initialIncome: initialIncome,
-    }
+    };
 
     try {
-      const result = await createCategories(userId as string, budgetMetadata, categories);
+      const result = await createCategories(
+        userId as string,
+        budgetMetadata,
+        categories
+      );
 
       if (result instanceof Error) {
         Alert.alert(
@@ -189,6 +193,7 @@ const BudgetCalculation = () => {
         params: {
           initialIncome: userIncome,
           remainingIncome: remainingIncome,
+          expenses: JSON.stringify(categories),
         },
       });
     } catch (error) {

@@ -16,7 +16,6 @@ import { displayAmount } from "../../helpers/common-helper";
 
 export type ValueTypes = {
   breakdown: {
-    id: string;
     name: string;
     emoji: string;
     color: string;
@@ -67,7 +66,6 @@ const CollapsibleView = (props: ValueTypes) => {
           {props.breakdown.map(
             (
               value: {
-                id: string;
                 name: string;
                 emoji: string;
                 color: string;

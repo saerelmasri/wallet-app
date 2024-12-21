@@ -7,7 +7,7 @@ import BudgetCard from "../../components/HomeComponents/BudgetCard";
 import { Categories } from "../../constants/Category";
 import { displayAmount } from "../../helpers/common-helper";
 import { getAuth } from "firebase/auth";
-import { getUserFromDB } from "../../api/database/userFunctions";
+import { getUserBudget } from "../../api/database/categoryFunctions";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -21,16 +21,30 @@ const Home = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid;
 
-  const [monthly, setMonthly] = useState("");
+  const [monthly, setMonthly] = useState<number | null>(null);
   const [unallocated, setUnallocated] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const result = await getUserFromDB(userId as string);
+      const result = await getUserBudget(userId as string);
       if (result instanceof Error) {
-        console.error("Error fetching user:", result.message);
+        console.log("Error fetching user:", result.message);
+        return;
       }
-      setMonthly("")
+
+      if (result.length === 0) {
+        console.log("No budget found for user.");
+        return;
+      }
+
+      const userBudget = result[0];
+
+      const { initialIncome, totalAllocated } = userBudget.budgetMetadata; // Extract relevant values
+
+      const unallocated = initialIncome - totalAllocated;
+
+      setMonthly(totalAllocated);
+      setUnallocated(unallocated);
     };
 
     fetchUser();
@@ -62,7 +76,7 @@ const Home = () => {
                         My budget for Nov
                       </Text>
                       <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
-                        $ {displayAmount(0)}
+                        $ {displayAmount(Number(monthly))}
                         <Text className="font-pmedium text-xs text-black text-left">
                           {" "}
                           left

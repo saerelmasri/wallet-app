@@ -1,23 +1,60 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-} from "react-native";
-import React from "react";
+import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import CollapsibleView from "../../components/BudgetScreenComponents/CollapsibleView";
-import { TestData } from "../../constants/MockData";
-import { displayAmount } from "../../helpers/common-helper";
+import { displayAmount, organizeExpenses } from "../../helpers/common-helper";
 import { router, useLocalSearchParams } from "expo-router";
 
+type BreakdownItem = {
+  usedPercentage: string;
+  title: string;
+  breakdown: {
+    name: string;
+    emoji: string;
+    color: string;
+    allocatedBudget: number;
+  }[];
+};
 const BudgetSummary = () => {
-  const { initialIncome, remainingIncome } =
-  useLocalSearchParams();
+  const { initialIncome, remainingIncome, expenses } = useLocalSearchParams();
+
+  const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
 
   const monthlyBudget = Number(initialIncome) - Number(remainingIncome);
-  
+
+  useEffect(() => {
+    let parsedExpenses;
+
+    try {
+      // Safely parse expenses
+      if (typeof expenses === "string") {
+        parsedExpenses = JSON.parse(expenses); // Parse if it's a string
+      } else if (Array.isArray(expenses)) {
+        // Combine string array into a single string and parse
+        parsedExpenses = JSON.parse(expenses.join(""));
+      } else {
+        throw new Error(
+          "Expenses must be a valid JSON string or string array."
+        );
+      }
+
+      // Ensure it's an array before proceeding
+      if (!Array.isArray(parsedExpenses)) {
+        throw new Error("Parsed expenses is not an array.");
+      }
+
+      // Organize the parsed expenses
+      const breakdownExpenses = organizeExpenses(
+        parsedExpenses,
+        Number(initialIncome)
+      );
+
+      setBreakdown(breakdownExpenses); // Update the state with organized data
+    } catch (error) {
+      console.error("Error parsing or organizing expenses:", error);
+    }
+  }, [expenses, initialIncome]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle="dark-content" />
@@ -32,14 +69,14 @@ const BudgetSummary = () => {
             You're all set up!
           </Text>
           <Text className="text-black font-pregular text-base text-center">
-            Great job! Remember, you can edit everything you've just entered
-            and add new categories later on.
+            Great job! Remember, you can edit everything you've just entered and
+            add new categories later on.
           </Text>
         </View>
 
         {/* Summary Section */}
         <View>
-          {TestData.map((item, index) => (
+          {breakdown.map((item, index) => (
             <CollapsibleView
               key={index} // Add key for each mapped element
               title={item.title}
@@ -55,11 +92,12 @@ const BudgetSummary = () => {
             Your initial income: ${displayAmount(Number(initialIncome))}
           </Text>
           <Text className="text-black font-pmedium text-sm">
-            Remaining unallocated funds: ${displayAmount(Number(remainingIncome))}
+            Remaining unallocated funds: $
+            {displayAmount(Number(remainingIncome))}
           </Text>
           <Text className="font-pmedium text-xs text-gray-600">
-            Great job! You’ve left some money unallocated. Consider saving
-            this amount for emergencies or future goals.
+            Great job! You’ve left some money unallocated. Consider saving this
+            amount for emergencies or future goals.
           </Text>
         </View>
       </ScrollView>
@@ -79,8 +117,8 @@ const BudgetSummary = () => {
               pathname: "/(tabs)/home",
               params: {
                 monthlyBudget: monthlyBudget,
-                unallocatedMoney: remainingIncome
-              }
+                unallocatedMoney: remainingIncome,
+              },
             });
           }}
           containerStyle="bg-[#05603A] h-[50px] w-[140px]"
