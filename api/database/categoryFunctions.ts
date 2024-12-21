@@ -1,32 +1,28 @@
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
 
 export const createCategories = async (
   userId: string,
-  categoryName: string,
-  categoryEmoji: string,
-  categoryType: string,
-  categoryColor: string,
-  allocatedMoney: number,
-  usedMoney: number,
+  budgetMetadata : {
+    totalAllocated: number,
+    initialIncome: number
+  },
+  categories: {
+    categoryName: string;
+    categoryEmoji: string;
+    categoryType: string;
+    categoryColor: string;
+    allocatedMoney: number;
+    usedMoney: number;
+  }[]
 ) => {
   try {
     const categoryCollection = collection(database, "categories");
 
     const categoryData = {
       userId: userId,
-      categoryName: categoryName,
-      categoryEmoji: categoryEmoji,
-      categoryType: categoryType,
-      categoryColor: categoryColor,
-      allocatedMoney: allocatedMoney,
-      usedMoney: usedMoney,
+      budgetMetadata : budgetMetadata,
+      categories: categories,
       createdAt: new Date().toISOString(),
       updatedAt: "",
     };
@@ -34,14 +30,13 @@ export const createCategories = async (
     await addDoc(categoryCollection, categoryData);
     return {
       success: true,
-      message: `Category "${categoryName}" added successfully.`,
+      message: `Budget Created.`,
     };
   } catch (error) {
     console.error(
-      `Error adding category "${categoryName}":`,
       error instanceof Error ? error.message : "Unknown error"
     );
-    throw new Error(
+    return new Error(
       error instanceof Error ? error.message : "Something went wrong"
     );
   }

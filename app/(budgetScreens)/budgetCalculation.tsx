@@ -139,8 +139,7 @@ const BudgetCalculation = () => {
     const allCategories = [...expenses];
 
     const hasEmptyExpense = allCategories.some(
-      (category) =>
-        !category.allocatedMoney || category.allocatedMoney < 0
+      (category) => !category.allocatedMoney || category.allocatedMoney < 0
     );
 
     if (hasEmptyExpense) {
@@ -159,42 +158,44 @@ const BudgetCalculation = () => {
       return;
     }
 
-    const savedBudget = expenses.map(async (item) => {
-      const category = {
-        categoryName: item.name,
-        categoryEmoji: item.emoji,
-        categoryType: item.categorySection,
-        categoryColor: item.color,
-        allocatedMoney: item.allocatedMoney,
-        usedMoney: 0,
-      };
-  
-      await createCategories(
-        userId as string,
-        category.categoryName,
-        category.categoryEmoji,
-        category.categoryType,
-        category.categoryColor,
-        category.allocatedMoney,
-        category.usedMoney
-      );
-    });
+    const categories = expenses.map((item) => ({
+      categoryName: item.name,
+      categoryEmoji: item.emoji,
+      categoryType: item.categorySection,
+      categoryColor: item.color,
+      allocatedMoney: item.allocatedMoney,
+      usedMoney: 0,
+    }));
 
-    if(savedBudget instanceof Error){
-      return Alert.alert("Something unexpected happened");
+    const budgetMetadata = {
+      totalAllocated: remainingIncome,
+      initialIncome: initialIncome,
     }
 
-    Alert.alert("Budget Allocation", "Budget allocation is complete!");
-    router.push({
-      pathname: "/(budgetScreens)/budgetSummary",
-      params: {
-        initialIncome: userIncome,
-        remainingIncome: remainingIncome,
-      },
-    });
-    return;
-  };
+    try {
+      const result = await createCategories(userId as string, budgetMetadata, categories);
 
+      if (result instanceof Error) {
+        Alert.alert(
+          "Error",
+          "Something unexpected happened. Please try again."
+        );
+        return;
+      }
+
+      Alert.alert("Budget Allocation", "Budget allocation is complete!");
+      router.push({
+        pathname: "/(budgetScreens)/budgetSummary",
+        params: {
+          initialIncome: userIncome,
+          remainingIncome: remainingIncome,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
