@@ -120,7 +120,7 @@ const BudgetCalculation = () => {
     }
 
     const newCategory: BudgetCategory = {
-      name: `New Category ${Date.now()}`,
+      name: `New Category`,
       emoji: "🙂",
       allocatedMoney: 0,
       color: getRandomColor(),
@@ -139,13 +139,13 @@ const BudgetCalculation = () => {
     const allCategories = [...expenses];
 
     const hasEmptyExpense = allCategories.some(
-      (category) => !category.allocatedMoney || category.allocatedMoney < 0
+      (category) => !category.allocatedMoney || category.allocatedMoney <= 0
     );
 
     if (hasEmptyExpense) {
       Alert.alert(
         "Incomplete Allocation",
-        "All expense categories must have money allocated or be removed before proceeding."
+        "All categories must have money allocated or be removed before proceeding."
       );
       return;
     }

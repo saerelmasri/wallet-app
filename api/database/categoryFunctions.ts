@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
 
-type BudgetData = {
+export type BudgetData = {
   budgetMetadata: {
     initialIncome: number;
     totalAllocated: number;

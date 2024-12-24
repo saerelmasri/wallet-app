@@ -18,6 +18,8 @@ type BreakdownItem = {
 const BudgetSummary = () => {
   const { initialIncome, remainingIncome, expenses } = useLocalSearchParams();
 
+  console.log("expenses incoming:", expenses);
+
   const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
 
   const monthlyBudget = Number(initialIncome) - Number(remainingIncome);
@@ -26,11 +28,9 @@ const BudgetSummary = () => {
     let parsedExpenses;
 
     try {
-      // Safely parse expenses
       if (typeof expenses === "string") {
-        parsedExpenses = JSON.parse(expenses); // Parse if it's a string
+        parsedExpenses = JSON.parse(expenses);
       } else if (Array.isArray(expenses)) {
-        // Combine string array into a single string and parse
         parsedExpenses = JSON.parse(expenses.join(""));
       } else {
         throw new Error(
@@ -38,18 +38,16 @@ const BudgetSummary = () => {
         );
       }
 
-      // Ensure it's an array before proceeding
       if (!Array.isArray(parsedExpenses)) {
         throw new Error("Parsed expenses is not an array.");
       }
 
-      // Organize the parsed expenses
       const breakdownExpenses = organizeExpenses(
         parsedExpenses,
         Number(initialIncome)
       );
 
-      setBreakdown(breakdownExpenses); // Update the state with organized data
+      setBreakdown(breakdownExpenses);
     } catch (error) {
       console.error("Error parsing or organizing expenses:", error);
     }
@@ -78,7 +76,7 @@ const BudgetSummary = () => {
         <View>
           {breakdown.map((item, index) => (
             <CollapsibleView
-              key={index} // Add key for each mapped element
+              key={index}
               title={item.title}
               breakdown={item.breakdown}
               usedPercentage={item.usedPercentage}

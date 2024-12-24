@@ -8,6 +8,7 @@ type PlanningButtonType = {
   description: string;
   color: string;
   redirectUrl: string;
+  params?: { initialIncome: number; remainingIncome: number; expenses: any };
 };
 
 const PlanningButton = (props: PlanningButtonType) => {
@@ -19,8 +20,13 @@ const PlanningButton = (props: PlanningButtonType) => {
 
   return (
     <TouchableOpacity
-      //@ts-ignore
-      onPress={() => router.push(props.redirectUrl as Href<string | object>)}
+      onPress={() =>
+        router.push({
+          //@ts-ignore
+          pathname: props.redirectUrl,
+          params: props.params,
+        })
+      }
       className="w-[90%] h-[100px] border rounded-lg flex-row justify-center items-center m-2"
     >
       <View

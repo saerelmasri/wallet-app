@@ -25,7 +25,6 @@ export const organizeExpenses = (expenses: any[], totalIncome: number) => {
   //prepare final structure
   const result = Object.keys(groupedByCategory).map((categoryType) => {
     const breakdown = groupedByCategory[categoryType].map((item: any) => ({
-      // id: `${item.categoryName.toLowerCase().replace(/\s/g, "-")}-id`,
       name: item.categoryName,
       emoji: item.categoryEmoji,
       color: item.categoryColor,
