@@ -1,3 +1,5 @@
+import { Alert } from "react-native";
+
 export const currencySigns = {
   dolar: "$",
   euro: "€",
@@ -47,4 +49,19 @@ export const organizeExpenses = (expenses: any[], totalIncome: number) => {
   });
 
   return result;
+};
+
+const today = new Date();
+export const currentMonth = today.toLocaleString("default", { month: "short" });
+
+const daysInThisMonth = () => {
+  var now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+};
+
+const daysLeft = daysInThisMonth() - new Date().getDate();
+export const daysLeftInMonth = daysLeft < 10 ? "0" + daysLeft : daysLeft;
+
+export const showAlert = (title: string, message: string) => {
+  Alert.alert(title, message);
 };

@@ -4,10 +4,17 @@ import GoalProgressCircle from "../../components/HomeComponents/GoalProgressCirc
 import UpcomingPayments from "../../components/HomeComponents/nextPayments";
 import { useFocusEffect, useRouter } from "expo-router";
 import BudgetCard from "../../components/HomeComponents/BudgetCard";
-import { Categories } from "../../constants/Category";
-import { displayAmount } from "../../helpers/common-helper";
+import {
+  currentMonth,
+  daysLeftInMonth,
+  displayAmount,
+} from "../../helpers/common-helper";
 import { getAuth } from "firebase/auth";
-import { getUserBudget } from "../../api/database/categoryFunctions";
+import { getAllocatedBudget } from "../../api/database/userFunctions";
+import {
+  BudgetData,
+  getUserCategories,
+} from "../../api/database/categoryFunctions";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -22,41 +29,40 @@ const Home = () => {
   const userId = auth.currentUser?.uid;
 
   const [monthly, setMonthly] = useState<number | null>(null);
-  const [unallocated, setUnallocated] = useState<number | null>(null);
+  const [categories, setCategories] = useState<BudgetData[] | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const result = await getUserBudget(userId as string);
+    const fetchUserBudget = async () => {
+      const result = await getAllocatedBudget(userId as string);
       if (result instanceof Error) {
         console.log("Error fetching user:", result.message);
         return;
       }
-
-      if (result.length === 0) {
-        console.log("No budget found for user.");
-        return;
-      }
-
-      const userBudget = result[0];
-
-      const { initialIncome, totalAllocated } = userBudget.budgetMetadata; // Extract relevant values
-
-      const unallocated = initialIncome - totalAllocated;
-
-      setMonthly(totalAllocated);
-      setUnallocated(unallocated);
+      setMonthly(result.totalAllocated);
     };
 
-    fetchUser();
+    const fetchUserCategories = async () => {
+      const result = await getUserCategories(userId as string);
+      if (result instanceof Error) {
+        console.log("Error fetching user:", result.message);
+        return;
+      }
+      setCategories(result);
+    };
+
+    fetchUserBudget();
+    fetchUserCategories();
   }, [userId]);
 
-  const groupedCategories = Categories.reduce((acc, category) => {
-    if (!acc[category.categorySection]) {
-      acc[category.categorySection] = [];
-    }
-    acc[category.categorySection].push(category);
-    return acc;
-  }, {} as Record<string, typeof Categories>);
+  const groupedCategories = categories
+    ? categories.reduce((acc, category) => {
+        if (!acc[category.categoryType]) {
+          acc[category.categoryType] = [];
+        }
+        acc[category.categoryType].push(category);
+        return acc;
+      }, {} as Record<string, (typeof categories)[number][]>)
+    : {};
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -68,12 +74,12 @@ const Home = () => {
           <View className="w-full flex-row p-3 items-center">
             {/* Remaining budget of the month*/}
             <View className="bg-white p-3 w-full">
-              {monthly && unallocated ? (
+              {monthly ? (
                 <>
                   <View className=" flex-row justify-between">
                     <View>
                       <Text className="font-pregular text-xs text-black text-left">
-                        My budget for Nov
+                        My budget for {currentMonth}
                       </Text>
                       <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
                         $ {displayAmount(Number(monthly))}
@@ -83,15 +89,7 @@ const Home = () => {
                         </Text>
                       </Text>
                       <Text className="font-pregular text-xs text-black tracking-tighter text-left">
-                        09 days left in Nov
-                      </Text>
-                    </View>
-                    <View>
-                      <Text className="font-pregular text-xs text-black text-right">
-                        Unallocated Money
-                      </Text>
-                      <Text className="font-psemibold text-xl text-black tracking-tighter text-right">
-                        $ {displayAmount(unallocated)}
+                        {daysLeftInMonth} days left in {currentMonth}
                       </Text>
                     </View>
                   </View>
@@ -112,24 +110,31 @@ const Home = () => {
 
           {/* Transaction History Widgets */}
           <View className="p-3 w-full">
-            {Object.entries(groupedCategories).map(([section, categories]) => (
-              <View key={section}>
-                {/* Section Title */}
-                <Text className="text-lg font-pregular p-3">{section}</Text>
+            {
+              //@ts-ignore
+              Object.entries(groupedCategories).map(
+                ([categoryType, categoryArray]) => (
+                  <View key={categoryType}>
+                    {/* Section Title */}
+                    <Text className="text-lg font-pregular p-3">
+                      {categoryType}
+                    </Text>
 
-                {/* Categories in this section */}
-                {categories.map((item) => (
-                  <BudgetCard
-                    // key={item.id}
-                    budgetCategory={item.name}
-                    budgetColor={item.color}
-                    budgetEmoji={item.emoji}
-                    budgetInitialAmount={2300}
-                    budgetUsedAmount={1230}
-                  />
-                ))}
-              </View>
-            ))}
+                    {/* Categories in this section */}
+                    {categoryArray.map((category) => (
+                      <BudgetCard
+                        key={category.categoryName} // Ensure unique key
+                        budgetCategory={category.categoryName}
+                        budgetColor={category.categoryColor}
+                        budgetEmoji={category.categoryEmoji}
+                        budgetInitialAmount={category.allocatedMoney}
+                        budgetUsedAmount={category.usedMoney}
+                      />
+                    ))}
+                  </View>
+                )
+              )
+            }
           </View>
         </ScrollView>
       </SafeAreaView>

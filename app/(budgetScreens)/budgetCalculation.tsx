@@ -8,16 +8,16 @@ import {
   Platform,
   Keyboard,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import BudgetAllocation from "../../components/BudgetScreenComponents/BudgetAllocation";
 import { router, useLocalSearchParams } from "expo-router";
 import { CategoryTypes } from "../../constants/Category";
-import { getRandomColor } from "../../helpers/common-helper";
+import { getRandomColor, showAlert } from "../../helpers/common-helper";
 import { getAuth } from "@firebase/auth";
 import { createCategories } from "../../api/database/categoryFunctions";
+import { updateBudgetMetadata } from "../../api/database/userFunctions";
 
 type BudgetCategory = CategoryTypes & {
   allocatedMoney: number;
@@ -112,10 +112,7 @@ const BudgetCalculation = () => {
 
   const handleAddNewCategory = () => {
     if (!newCategoryType) {
-      Alert.alert(
-        "Select Category Type",
-        "Please select a category type first."
-      );
+      showAlert("Select Category Type", "Please select a category type first.");
       return;
     }
 
@@ -136,14 +133,12 @@ const BudgetCalculation = () => {
   };
 
   const handleFinish = async () => {
-    const allCategories = [...expenses];
-
-    const hasEmptyExpense = allCategories.some(
+    const hasEmptyExpense = expenses.some(
       (category) => !category.allocatedMoney || category.allocatedMoney <= 0
     );
 
     if (hasEmptyExpense) {
-      Alert.alert(
+      showAlert(
         "Incomplete Allocation",
         "All categories must have money allocated or be removed before proceeding."
       );
@@ -151,54 +146,65 @@ const BudgetCalculation = () => {
     }
 
     if (remainingIncome < 0) {
-      Alert.alert(
+      showAlert(
         "Invalid Budget",
         "Your allocated amounts exceed your income. Please adjust the values."
       );
       return;
     }
 
-    const categories = expenses.map((item) => ({
-      categoryName: item.name,
-      categoryEmoji: item.emoji,
-      categoryType: item.categorySection,
-      categoryColor: item.color,
-      allocatedMoney: item.allocatedMoney,
-      usedMoney: 0,
-    }));
-
-    const budgetMetadata = {
-      totalAllocated: remainingIncome,
-      initialIncome: initialIncome,
-    };
-
     try {
-      const result = await createCategories(
-        userId as string,
-        budgetMetadata,
-        categories
-      );
+      const budgetMetadata = {
+        totalAllocated: remainingIncome,
+        initialIncome: initialIncome,
+      };
 
+      const result = await updateBudgetMetadata(
+        userId as string,
+        budgetMetadata
+      );
       if (result instanceof Error) {
-        Alert.alert(
-          "Error",
-          "Something unexpected happened. Please try again."
-        );
+        showAlert("Error", "Something unexpected happened. Please try again.");
         return;
       }
+    } catch (error) {
+      console.error(error);
+      showAlert("Error", "An unexpected error occurred. Please try again.");
+    }
 
-      Alert.alert("Budget Allocation", "Budget allocation is complete!");
+    try {
+      for (const item of expenses) {
+        const result = await createCategories(
+          userId as string,
+          item.name,
+          item.emoji,
+          item.categorySection,
+          item.color,
+          item.allocatedMoney,
+          0
+        );
+
+        if (result instanceof Error) {
+          showAlert(
+            "Error",
+            "Something unexpected happened. Please try again."
+          );
+          return;
+        }
+      }
+      showAlert("Budget Allocation", "Budget allocation is complete!");
+
       router.push({
         pathname: "/(budgetScreens)/budgetSummary",
         params: {
           initialIncome: userIncome,
           remainingIncome: remainingIncome,
-          expenses: JSON.stringify(categories),
+          expenses: JSON.stringify(expenses),
         },
       });
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "An unexpected error occurred. Please try again.");
+      showAlert("Error", "An unexpected error occurred. Please try again.");
     }
   };
 

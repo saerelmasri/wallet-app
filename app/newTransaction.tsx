@@ -1,45 +1,39 @@
-import {
-  View,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import FormInputText from "../components/FormInputText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useLocalSearchParams } from "expo-router";
-import ModalType from "../components/NewTransactionComponents/ModalType";
 import ModalRepeat from "../components/ModalRepeat";
-import { Categories } from "../constants/Category";
 import ModalDatePicker from "../components/NewTransactionComponents/ModalCalendar";
+import { getUserCategories } from "../api/database/categoryFunctions";
+import { getAuth } from "@firebase/auth";
 
 const AddTransaction = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid;
+
   //Information from other Routes: Numnpad or existing transaction
   const {
     amountOfTransaction,
     transactionTitle,
     transactionCategory,
     transactionAmount,
-    transactionType,
     transactionDate,
     repeat = "Never",
   } = useLocalSearchParams();
 
   // State variables
   const [modalRepeatVisible, setModalRepeatVisible] = useState(false);
-  const [modalTypeVisible, setModalTypeVisible] = useState(false);
   const [modalDatePickerVisible, setModalDatePickerVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedRepeat, setSelectedRepeat] = useState("Never");
-  const [selectedType, setSelectedType] = useState("Expenses");
   // const [category, setCategory] = useState({ id: "", name: "" });
 
   const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0] // Default to today
+    new Date().toISOString().split("T")[0]
   );
 
   const handleDateChange = (date: string) => {
@@ -54,29 +48,23 @@ const AddTransaction = () => {
     }, 200);
   };
 
-  const handleTypeChange = (option: string) => {
-    setSelectedType(option);
-    setTimeout(() => {
-      setModalTypeVisible(false);
-    }, 200);
-  };
+  useEffect(() => {
+    const usersCategory = async () => {
+      const result = await getUserCategories(userId as string);
+      if (result instanceof Error) {
+        console.log("Error fetching user:", result.message);
+        return;
+      }
+      console.log(result);
+    };
+    user sCategory();
+  }, [userId]);
 
   useEffect(() => {
-    // const initialCategory = Categories.find(
-    //   (cat) => cat.name === transactionCategory
-    // );
-    // if (initialCategory) {
-    //   setCategory(initialCategory);
-    // }
-
-    if (transactionType) {
-      setSelectedType(transactionType as string);
-    }
-
     if (repeat) {
       setSelectedRepeat(repeat as string);
     }
-  }, [transactionCategory, transactionType]);
+  }, [transactionCategory]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
@@ -137,20 +125,16 @@ const AddTransaction = () => {
               Type
             </Text>
             <View className="w-full h-12 flex-row items-center">
-              <TouchableOpacity
-                className={`p-2 rounded-md ${
-                  selectedType === "Income" ? "bg-[#04EE7E]" : "bg-[#FF000F]"
-                }`}
-                onPress={() => setModalTypeVisible(true)}
-              >
+              <View className="p-2 rounded-md bg-[#FF000F]">
+                {" "}
                 <Text className="text-white font-pmedium text-sm">
-                  {selectedType}
+                  Expenses
                 </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
 
-          {/* Category */}
+          {/* Transaction Title */}
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
           <FormInputText
             title="For"
@@ -173,19 +157,18 @@ const AddTransaction = () => {
             </Text>
 
             <View className="w-full h-12 flex-row items-center">
-              <AntDesign name="calendar" size={24}
-                color="#A9A9A9"/>
+              <AntDesign name="calendar" size={24} color="#A9A9A9" />
               <TouchableOpacity
                 className="ml-3"
                 onPress={() => setModalDatePickerVisible(true)}
               >
-                <Text className=
-                  {`${
+                <Text
+                  className={`${
                     selectedDate === new Date().toISOString().split("T")[0]
                       ? "text-[#A9A9A9]"
                       : "text-black"
-                  }`}>
-                  
+                  }`}
+                >
                   {selectedDate === new Date().toISOString().split("T")[0]
                     ? "Today"
                     : selectedDate}
@@ -271,12 +254,6 @@ const AddTransaction = () => {
           </View>
         </View>
       </View>
-
-      <ModalType
-        modalTypeVisible={modalTypeVisible}
-        setModalTypeVisible={setModalTypeVisible}
-        setSelectedType={handleTypeChange}
-      />
 
       <ModalRepeat
         modalRepeatVisible={modalRepeatVisible}

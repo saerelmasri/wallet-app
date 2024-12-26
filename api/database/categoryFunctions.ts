@@ -2,45 +2,37 @@ import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
 
 export type BudgetData = {
-  budgetMetadata: {
-    initialIncome: number;
-    totalAllocated: number;
-  };
-  categories: {
-    allocatedMoney: number;
-    categoryColor: string;
-    categoryEmoji: string;
-    categoryName: string;
-    categoryType: "Needs" | "Wants" | "Savings"; // Assuming these are the only possible values
-    usedMoney: number;
-  }[];
+  userId: string;
+  allocatedMoney: number;
+  categoryColor: string;
+  categoryEmoji: string;
+  categoryName: string;
+  categoryType: "Needs" | "Wants" | "Savings"; // Assuming these are the only possible values
+  usedMoney: number;
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp (empty if not updated yet)
-  userId: string;
 };
 
 export const createCategories = async (
   userId: string,
-  budgetMetadata: {
-    totalAllocated: number;
-    initialIncome: number;
-  },
-  categories: {
-    categoryName: string;
-    categoryEmoji: string;
-    categoryType: string;
-    categoryColor: string;
-    allocatedMoney: number;
-    usedMoney: number;
-  }[]
+  categoryName: string,
+  categoryEmoji: string,
+  categoryType: string,
+  categoryColor: string,
+  allocatedMoney: number,
+  usedMoney: number
 ) => {
   try {
     const categoryCollection = collection(database, "categories");
 
     const categoryData = {
       userId: userId,
-      budgetMetadata: budgetMetadata,
-      categories: categories,
+      categoryName: categoryName,
+      categoryEmoji: categoryEmoji,
+      categoryType: categoryType,
+      categoryColor: categoryColor,
+      allocatedMoney: allocatedMoney,
+      usedMoney: usedMoney,
       createdAt: new Date().toISOString(),
       updatedAt: "",
     };
@@ -58,7 +50,7 @@ export const createCategories = async (
   }
 };
 
-export const getUserBudget = async (
+export const getUserCategories = async (
   userId: string
 ): Promise<Error | BudgetData[]> => {
   try {
@@ -80,21 +72,15 @@ export const getUserBudget = async (
       const docData = doc.data();
 
       return {
-        budgetMetadata: {
-          initialIncome: docData.budgetMetadata?.initialIncome || 0,
-          totalAllocated: docData.budgetMetadata?.totalAllocated || 0,
-        },
-        categories: docData.categories.map((category: any) => ({
-          allocatedMoney: category.allocatedMoney,
-          categoryColor: category.categoryColor,
-          categoryEmoji: category.categoryEmoji,
-          categoryName: category.categoryName,
-          categoryType: category.categoryType,
-          usedMoney: category.usedMoney,
-        })),
+        userId: docData.userId,
+        categoryName: docData.categoryName,
+        categoryType: docData.categoryType,
+        categoryColor: docData.categoryColor,
+        categoryEmoji: docData.categoryEmoji,
+        usedMoney: docData.usedMoney,
+        allocatedMoney: docData.allocatedMoney,
         createdAt: docData.createdAt,
         updatedAt: docData.updatedAt || "",
-        userId: docData.userId,
       };
     });
 

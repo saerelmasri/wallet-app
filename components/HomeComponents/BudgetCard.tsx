@@ -21,22 +21,33 @@ const BudgetCard = (props: BudgetCardType) => {
       }}
     >
       <View className="flex-1 flex-row items-center">
-        <View style={{backgroundColor: props.budgetColor}} className="w-12 h-12 rounded-full justify-center items-center">
+        <View
+          style={{ backgroundColor: props.budgetColor }}
+          className="w-12 h-12 rounded-full justify-center items-center"
+        >
           <Text className="text-lg">{props.budgetEmoji}</Text>
         </View>
         <View className="ml-2.5 border-black">
-          <Text className="text-base font-pmedium text-black">{props.budgetCategory}</Text>
-          <Text className="text-xs font-pextralight text-black">Last Transaction date</Text>
+          <Text className="text-base font-pmedium text-black">
+            {props.budgetCategory}
+          </Text>
+          <Text className="text-xs font-pextralight text-black">
+            Last Transaction date
+          </Text>
         </View>
       </View>
       <View className="justify-center items-end px-2.5">
-        <Text
-          className="text-sm font-pmedium text-black"
-        >
-          Left ${displayAmount(budgetLeft)}
-        </Text>
+        {budgetLeft < 0 ? (
+          <Text className="text-sm font-pmedium text-red-600">
+            No budget left
+          </Text>
+        ) : (
+          <Text className="text-sm font-pmedium text-black">
+            Left ${displayAmount(budgetLeft)}
+          </Text>
+        )}
         <Text className="text-xs text-black opacity-100 mt-1">
-          Used ${displayAmount(props.budgetInitialAmount)}
+          Initial budget ${displayAmount(props.budgetInitialAmount)}
         </Text>
       </View>
     </TouchableOpacity>

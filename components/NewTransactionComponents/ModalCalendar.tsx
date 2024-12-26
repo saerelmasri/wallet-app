@@ -7,7 +7,7 @@ type ModalDatePickerTypes = {
   modalDatePickerVisible: boolean;
   setModalDatePickerVisible: (value: boolean) => void;
   onDateChange: (selectedDate: string) => void;
-  initialDate?: string
+  initialDate?: string;
 };
 
 const ModalDatePicker = (props: ModalDatePickerTypes) => {
@@ -18,7 +18,7 @@ const ModalDatePicker = (props: ModalDatePickerTypes) => {
     setSelected(day.dateString);
     props.onDateChange(day.dateString);
     props.setModalDatePickerVisible(false);
-  }
+  };
 
   return (
     <Modal
@@ -51,9 +51,7 @@ const ModalDatePicker = (props: ModalDatePickerTypes) => {
             <Calendar
               onDayPress={handleDayPress}
               style={{
-                borderWidth: 1,
-                borderColor: 'gray',
-                height: 350
+                height: 350,
               }}
               markedDates={{
                 [selected]: {

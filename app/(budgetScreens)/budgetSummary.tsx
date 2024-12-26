@@ -18,7 +18,7 @@ type BreakdownItem = {
 const BudgetSummary = () => {
   const { initialIncome, remainingIncome, expenses } = useLocalSearchParams();
 
-  console.log("expenses incoming:", expenses);
+  console.log("expenses incominggg:", expenses);
 
   const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
 

@@ -17,6 +17,11 @@ export async function addUserToDB(user: {
       email: user.email,
       name: "",
       notificationSettings: "off",
+      hasBudget: false,
+      budgetMetadata: {
+        initialIncome: 0,
+        totalAllocated: 0,
+      },
       createdAt: new Date(),
       updatedAt: "",
     });
@@ -30,6 +35,59 @@ export async function addUserToDB(user: {
     );
   }
 }
+
+export const updateBudgetMetadata = async (
+  userId: string,
+  budgetMetadata: {
+    initialIncome: number;
+    totalAllocated: number;
+  }
+) => {
+  try {
+    const userDocRef = doc(database, "users", userId);
+    const user = await getDoc(userDocRef);
+    if (!user.exists()) {
+      return new Error("User doesn't exists in database");
+    }
+
+    await setDoc(
+      userDocRef,
+      {
+        budgetMetadata: budgetMetadata,
+        hasBudget: true,
+        updatedAt: new Date().toDateString(),
+      },
+      { merge: true }
+    );
+    return undefined;
+  } catch (error) {
+    console.log("Error updating budgetMetadata:", error);
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const getAllocatedBudget = async (userId: string) => {
+  try {
+    const userCollection = doc(database, "users", userId);
+    const userSnapshot = await getDoc(userCollection);
+
+    if (userSnapshot.exists()) {
+      const data = userSnapshot.data();
+      return {
+        initialIncome: data.budgetMetadata.initialIncome,
+        totalAllocated: data.budgetMetadata.totalAllocated,
+      };
+    } else {
+      return new Error("User does not exist");
+    }
+  } catch (error) {
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
 
 export const updateNotificationSettings = async (
   userId: string,
