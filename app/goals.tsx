@@ -12,17 +12,21 @@ import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { displayAmount } from "../helpers/common-helper";
-import { getAuth } from "firebase/auth";
-import { getAllUserGoals, getSavingAmount } from "../api/database/goalFunctions";
+import {
+  getAllUserGoals,
+  getSavingAmount,
+} from "../api/database/goalFunctions";
+import { userId } from "../configs/authenticatedUser";
 
 const Goals = () => {
-  const auth = getAuth();
-  const userId = auth.currentUser?.uid;
-
+  // Error variable
   const [error, setError] = useState<string | null>(null);
+
+  // State variables
   const [totalSaved, setTotalSaved] = useState<number>(0);
   const [userGoals, setUserGoals] = useState<any>([]);
 
+  // Fetch total savings on all goals based on user
   useEffect(() => {
     const fetchTotalSavings = async () => {
       const result = await getSavingAmount(userId as string);
@@ -36,18 +40,16 @@ const Goals = () => {
     fetchTotalSavings();
   }, []);
 
+  // Fetch all user's goals
   useEffect(() => {
     const fetchUserGoals = async () => {
       const result = await getAllUserGoals(userId as string);
-      console.log("result:", result);
-      
       if (result instanceof Error) {
         setError(result.message);
       } else {
         setUserGoals(result);
       }
     };
-
     fetchUserGoals();
   }, []);
 
@@ -86,16 +88,14 @@ const Goals = () => {
 
               {userGoals.length > 0 ? (
                 userGoals.map(
-                  (
-                    item: {
-                      id: string;
-                      emoji: string;
-                      goalName: string;
-                      saved: number;
-                      target: number;
-                      color: string
-                    }
-                  ) => {
+                  (item: {
+                    id: string;
+                    emoji: string;
+                    goalName: string;
+                    saved: number;
+                    target: number;
+                    color: string;
+                  }) => {
                     const transformedGoal = {
                       goalId: item.id,
                       goalTitle: item.goalName,
@@ -104,7 +104,7 @@ const Goals = () => {
                       goalProgress:
                         item.target > 0 ? item.saved / item.target : 0,
                       goalAmount: item.target,
-                      color: item.color
+                      color: item.color,
                     };
 
                     return (

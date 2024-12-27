@@ -12,8 +12,10 @@ import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 
 const BudgetIncome = () => {
+  // Variable to save user's salary
   const [income, setIncome] = useState("");
 
+  // Handle Income function
   const handleIncome = () => {
     if (income === "") {
       Alert.alert(
@@ -27,9 +29,8 @@ const BudgetIncome = () => {
       pathname: "/budgetCategories",
       params: {
         incomingIncome: income,
-      }});
-
-   
+      },
+    });
   };
 
   return (

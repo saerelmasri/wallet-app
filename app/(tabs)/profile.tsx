@@ -10,25 +10,30 @@ import React, { useEffect, useState } from "react";
 import ModalNotification from "../../components/ProfileComponents/NotificationModal";
 
 import OptionButtons from "../../components/ProfileComponents/OptionButtons";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import {
   getUserFromDB,
   updateNotificationSettings,
 } from "../../api/database/userFunctions";
+import { userId } from "../../configs/authenticatedUser";
+import { auth } from "../../configs/firebaseConfig";
 
 const Profile = () => {
-  const auth = getAuth();
-  const userId = auth.currentUser?.uid;
-
+  // State Variable
   const [profile, setProfile] = useState({
     name: "",
     email: "",
     notificationSettings: "Off",
   });
+
+  // Modal Variables
   const [modalNotificationVisible, setModalNotificationVisible] =
     useState(false);
+
+  // Error Variables
   const [error, setError] = useState("");
 
+  // Fetch user's info
   useEffect(() => {
     const fetchUserProfile = async () => {
       const result = await getUserFromDB(userId as string);
@@ -49,6 +54,7 @@ const Profile = () => {
     }
   }, [userId]);
 
+  // Handle notification setting change
   const handleNotificationChange = async (notificationType: string) => {
     const updateSettings = await updateNotificationSettings(
       userId as string,

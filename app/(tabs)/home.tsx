@@ -9,12 +9,12 @@ import {
   daysLeftInMonth,
   displayAmount,
 } from "../../helpers/common-helper";
-import { getAuth } from "firebase/auth";
 import { getAllocatedBudget } from "../../api/database/userFunctions";
 import {
   BudgetData,
   getUserCategories,
 } from "../../api/database/categoryFunctions";
+import { userId } from "../../configs/authenticatedUser";
 
 const Home = () => {
   // Clean up the stack by replacing it with only the home screen
@@ -25,12 +25,11 @@ const Home = () => {
     }, [router])
   );
 
-  const auth = getAuth();
-  const userId = auth.currentUser?.uid;
-
+  // State Variables
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
 
+  // Fetch user budget function
   useEffect(() => {
     const fetchUserBudget = async () => {
       const result = await getAllocatedBudget(userId as string);
@@ -41,6 +40,7 @@ const Home = () => {
       setMonthly(result.totalAllocated);
     };
 
+    // Fetch user's category function
     const fetchUserCategories = async () => {
       const result = await getUserCategories(userId as string);
       if (result instanceof Error) {
@@ -54,6 +54,7 @@ const Home = () => {
     fetchUserCategories();
   }, [userId]);
 
+  // Group and organize categories for being displayed
   const groupedCategories = categories
     ? categories.reduce((acc, category) => {
         if (!acc[category.categoryType]) {

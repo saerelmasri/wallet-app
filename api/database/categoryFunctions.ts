@@ -2,6 +2,7 @@ import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
 
 export type BudgetData = {
+  categoryId: string;
   userId: string;
   allocatedMoney: number;
   categoryColor: string;
@@ -72,6 +73,7 @@ export const getUserCategories = async (
       const docData = doc.data();
 
       return {
+        categoryId: doc.id,
         userId: docData.userId,
         categoryName: docData.categoryName,
         categoryType: docData.categoryType,

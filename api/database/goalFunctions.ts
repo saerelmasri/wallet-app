@@ -10,6 +10,18 @@ import {
   where,
 } from "firebase/firestore";
 
+export type GoalType = {
+  id: string;
+  userId: string;
+  goalName: string;
+  target: number;
+  saved: number;
+  emoji: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string
+}
+
 export const createNewGoal = async (goalDesc: {
   goalName: string;
   target: number;
@@ -66,6 +78,38 @@ export const updateGoalDesc = async (
     }
     const goalDocRef = doc(database, "goals", goalId);
     const updatedGoalData = { ...goalData, updatedAt: new Date().toISOString() };
+    await setDoc(goalDocRef, updatedGoalData, { merge: true });
+    return undefined;
+  } catch (error) {
+    console.log("Error creating goal:", error);
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const updateSavedAmount = async (
+  goalId: string,
+  userId: string,
+  newSaved: number
+): Promise<Error | undefined> => {
+  try {
+    const userCollection = doc(database, "users", userId as string);
+    const user = await getDoc(userCollection);
+    if (!user.exists()) {
+      return new Error("User doesn't exists in database");
+    }
+    const goalDocRef = doc(database, "goals", goalId);
+    const goalDoc = await getDoc(goalDocRef);
+
+    if(!goalDoc.exists()){
+      return new Error("Goal doesn't exist in database");
+    }
+
+    const goalData = goalDoc.data();
+    const currentSaved = goalData?.saved || 0;
+    const updatedGoalData = { saved: currentSaved + newSaved, updatedAt: new Date().toISOString() };
+    
     await setDoc(goalDocRef, updatedGoalData, { merge: true });
     return undefined;
   } catch (error) {

@@ -12,16 +12,19 @@ import EmojiPicker, { type EmojiType } from "rn-emoji-keyboard";
 import FormInputText from "../components/FormInputText";
 import CustomButton from "../components/CustomButton";
 import { router, useLocalSearchParams } from "expo-router";
-import { getAuth } from "firebase/auth";
 import { createNewGoal, updateGoalDesc } from "../api/database/goalFunctions";
-import { getRandomColor } from "../helpers/common-helper";
+import { getRandomColor, showAlert } from "../helpers/common-helper";
+import { userId } from "../configs/authenticatedUser";
 
 const AddGoal = () => {
-  const auth = getAuth();
-  const userId = auth.currentUser?.uid;
+
+  //Information of an existing goal to update
   const { goalId, goalTitle, goalEmoji, goalAmount, color } = useLocalSearchParams();
 
+  // Modal Variables
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  
+  // Selected Variables
   const [selectedEmoji, setSelectedEmoji] = useState<{ emoji: string }>({
     emoji: "",
   });
@@ -31,17 +34,16 @@ const AddGoal = () => {
   });
   const [ bgColor, setBgColor ] = useState<string>(getRandomColor());
 
-  console.log("goalId:", goalId);
-
+  // Handle save new goal function
   const handleSaveNewGoal = async () => {
     if (selectedEmoji.emoji === "") {
-      return Alert.alert("Validation Error", "Please select an emoji");
+      return Alert.alert("Error", "Please select an emoji");
     }
     if (newGoalProp.title.trim() === "") {
-      return Alert.alert("Validation Error", "Please give it a name");
+      return Alert.alert("Error", "Please give it a name");
     }
     if (newGoalProp.amount.trim() === "" || isNaN(Number(newGoalProp.amount))) {
-      return Alert.alert("Validation Error", "Please give it a goal amount");
+      return Alert.alert("Error", "Please give it a goal amount");
     }
 
     try {
@@ -58,31 +60,32 @@ const AddGoal = () => {
         const updateError = await updateGoalDesc(goalId as string, goalData);
 
         if (updateError instanceof Error) {
-          console.error("Error updating goal:", updateError.message);
-          Alert.alert("Error", "An error occurred while updating the goal.");
+          console.log("Error updating goal:", updateError.message);
+          showAlert("Error", "An error occurred while updating the goal.");
           return;
         }
 
-        Alert.alert("Success", "Goal updated successfully");
+        showAlert("Success", "Goal updated successfully");
         router.back();
       } else {
         const createError = await createNewGoal({...goalData, color: bgColor});
 
         if (createError instanceof Error) {
-          console.error("Error updating goal:", createError.message);
-          Alert.alert("Error", "An error occurred while updating the goal.");
+          console.log("Error creating goal:", createError.message);
+          showAlert("Error", "An error occurred while updating the goal.");
           return;
         }
 
-        Alert.alert("Success", "Goal updated successfully");
+        showAlert("Success", "Goal created successfully");
         router.back();
       }
     } catch (error) {
       console.log("Error saving goal:", error);
-      Alert.alert("Error", "An error occurred while saving the goal.");
+      showAlert("Error", "An error occurred while saving the goal.");
     }
   };
 
+  // Handle to pick emoji
   const handlePick = (emoji: EmojiType) => {
     setSelectedEmoji({
       emoji: emoji.emoji,
@@ -90,6 +93,7 @@ const AddGoal = () => {
     setIsModalOpen((prev) => !prev);
   };
 
+  // Populate screen if existing goal
   useEffect(() => {
     if (goalTitle) {
       setNewGoalProp((prev) => ({ ...prev, title: goalTitle as string }));

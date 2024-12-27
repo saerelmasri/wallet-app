@@ -18,6 +18,7 @@ import { getRandomColor, showAlert } from "../../helpers/common-helper";
 import { getAuth } from "@firebase/auth";
 import { createCategories } from "../../api/database/categoryFunctions";
 import { updateBudgetMetadata } from "../../api/database/userFunctions";
+import { userId } from "../../configs/authenticatedUser";
 
 type BudgetCategory = CategoryTypes & {
   allocatedMoney: number;
@@ -25,19 +26,21 @@ type BudgetCategory = CategoryTypes & {
 };
 
 const BudgetCalculation = () => {
+  // Incoming info
   const { needsCategory, wantsCategory, savingsCategory, userIncome } =
     useLocalSearchParams();
-  const auth = getAuth();
-  const userId = auth.currentUser?.uid;
-  const initialIncome = Number(userIncome);
-
   const selectedCategories = [needsCategory, wantsCategory, savingsCategory];
 
+  // Initial State
+  const initialIncome = Number(userIncome);
+
+  // State Variables
   const [expenses, setExpenses] = useState<BudgetCategory[]>([]);
   const [remainingIncome, setRemainingIncome] = useState<number>(initialIncome);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [newCategoryType, setNewCategoryType] = useState<string>("");
 
+  // Parse and set categories to be displayed
   useEffect(() => {
     const parseCategories = (categoryArray: any[]) =>
       categoryArray
@@ -52,6 +55,7 @@ const BudgetCalculation = () => {
     setExpenses(parseCategories(selectedCategories));
   }, []);
 
+  // Real time update of allocated money
   useEffect(() => {
     const totalAllocated = expenses.reduce(
       (sum, category) => sum + (category.allocatedMoney || 0),
@@ -60,6 +64,7 @@ const BudgetCalculation = () => {
     setRemainingIncome(initialIncome - totalAllocated);
   }, [expenses]);
 
+  // Logic to hide keyboard
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       setKeyboardVisible(true);
@@ -74,6 +79,7 @@ const BudgetCalculation = () => {
     };
   }, []);
 
+  // Function to set new cateogry
   const handleValueChange = (name: string, newValue: number) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
@@ -85,6 +91,7 @@ const BudgetCalculation = () => {
     setExpenses((prev) => updateCategories(prev));
   };
 
+  // Function to set new cateogry name
   const handleNameChange = (name: string, newName: string) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
@@ -94,6 +101,7 @@ const BudgetCalculation = () => {
     setExpenses((prev) => updateCategories(prev));
   };
 
+  // Function to set new cateogry emoji
   const handleEmojiChange = (name: string, newEmoji: string) => {
     const updateCategories = (categories: BudgetCategory[]) =>
       categories.map((category) =>
@@ -103,6 +111,7 @@ const BudgetCalculation = () => {
     setExpenses((prev) => updateCategories(prev));
   };
 
+  // Function to delete category
   const handleDelete = (name: string) => {
     const filterCategories = (categories: BudgetCategory[]) =>
       categories.filter((category) => category.name !== name);
@@ -110,6 +119,7 @@ const BudgetCalculation = () => {
     setExpenses((prev) => filterCategories(prev));
   };
 
+  // Handle new category
   const handleAddNewCategory = () => {
     if (!newCategoryType) {
       showAlert("Select Category Type", "Please select a category type first.");
@@ -132,6 +142,7 @@ const BudgetCalculation = () => {
     setNewCategoryType("");
   };
 
+  // Function check and finish budget building
   const handleFinish = async () => {
     const hasEmptyExpense = expenses.some(
       (category) => !category.allocatedMoney || category.allocatedMoney <= 0

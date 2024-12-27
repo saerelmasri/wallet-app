@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, Text, SafeAreaView, StatusBar, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -15,28 +8,39 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Categories, CategoryTypes } from "../../constants/Category";
 
 const BudgetCategories = () => {
-  const { incomingIncome } =
-    useLocalSearchParams();
+  // Incoming params
+  const { incomingIncome } = useLocalSearchParams();
 
   const [alertShown, setAlertShown] = useState(false);
+
+  // Variable to save categories by type
   const [needsCategory, setNeedsCategory] = useState<CategoryTypes[]>([]);
   const [wantsCategory, setWantsCategory] = useState<CategoryTypes[]>([]);
   const [savingsCategory, setSavingsCategory] = useState<CategoryTypes[]>([]);
 
+  // Variable to save selected category type
   const [selectedNeeds, setselectedNeeds] = useState<CategoryTypes[]>([]);
   const [selectedWants, setselectedWants] = useState<CategoryTypes[]>([]);
   const [selectedSavings, setselectedSavings] = useState<CategoryTypes[]>([]);
 
+  // Function to set categories by type
   useEffect(() => {
-    const needs = Categories.filter((category) => category.categorySection === "Needs");
-    const wants = Categories.filter((category) => category.categorySection === "Wants");
-    const savings = Categories.filter((category) => category.categorySection === "Savings");
+    const needs = Categories.filter(
+      (category) => category.categorySection === "Needs"
+    );
+    const wants = Categories.filter(
+      (category) => category.categorySection === "Wants"
+    );
+    const savings = Categories.filter(
+      (category) => category.categorySection === "Savings"
+    );
 
     setNeedsCategory(needs);
     setWantsCategory(wants);
     setSavingsCategory(savings);
-  }, [])
+  }, []);
 
+  // Logic to toggle Selection
   const toggleSelection = (
     category: CategoryTypes,
     selected: CategoryTypes[],
@@ -51,6 +55,7 @@ const BudgetCategories = () => {
     }
   };
 
+  //
   useEffect(() => {
     if (selectedNeeds.length === 0 && selectedWants.length === 0) {
       setAlertShown(true);
@@ -175,7 +180,7 @@ const BudgetCategories = () => {
                   needsCategory: JSON.stringify(selectedNeeds),
                   wantsCategory: JSON.stringify(selectedWants),
                   savingsCategory: JSON.stringify(selectedSavings),
-                  userIncome: incomingIncome
+                  userIncome: incomingIncome,
                 },
               });
             }}

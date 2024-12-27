@@ -16,14 +16,16 @@ type BreakdownItem = {
   }[];
 };
 const BudgetSummary = () => {
+  // Incoming params
   const { initialIncome, remainingIncome, expenses } = useLocalSearchParams();
 
-  console.log("expenses incominggg:", expenses);
-
-  const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
-
+  // Calculate monthlyBudget
   const monthlyBudget = Number(initialIncome) - Number(remainingIncome);
 
+  // Saved the breakdowned categories
+  const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
+
+  // Function to breakdown, organize and save categories by type
   useEffect(() => {
     let parsedExpenses;
 

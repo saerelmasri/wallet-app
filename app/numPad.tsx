@@ -73,7 +73,7 @@ const NumPad = () => {
       router.push({
         pathname: "/newTransaction",
         params: {
-          amountOfTransaction: formatNumber(input),
+          newAmountIncoming: formatNumber(input),
         },
       });
     }
