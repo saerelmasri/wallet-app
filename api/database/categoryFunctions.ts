@@ -1,4 +1,13 @@
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
 
 export type BudgetData = {
@@ -12,6 +21,7 @@ export type BudgetData = {
   usedMoney: number;
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp (empty if not updated yet)
+  lastTransaction?: string
 };
 
 export const createCategories = async (
@@ -51,13 +61,53 @@ export const createCategories = async (
   }
 };
 
+export const updatedUsedMoneyOnCategory = async (
+  userId: string,
+  categoryId: string,
+  usedMoney: number
+) => {
+  try {
+    const userRef = doc(database, "users", userId);
+    const user = await getDoc(userRef);
+
+    if (!user.exists()) {
+      return new Error("User doesn't exist in the database");
+    }
+
+    const categoryDocRef = doc(database, "categories", categoryId);
+    const categoryDoc = await getDoc(categoryDocRef);
+
+    if (!categoryDoc.exists()) {
+      return new Error("Category doesn't exist in database");
+    }
+    const categoryData = categoryDoc.data();
+    const currentSaved = categoryData?.usedMoney || 0;
+    const updatedCategoryData = {
+      usedMoney: currentSaved + usedMoney,
+      updatedAt: new Date().toISOString(),
+    };
+
+    await setDoc(categoryDocRef, updatedCategoryData, { merge: true });
+    return undefined;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unknown error");
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
 export const getUserCategories = async (
   userId: string
 ): Promise<Error | BudgetData[]> => {
   try {
-    if (!userId) {
-      return new Error("Invalid user ID");
+    const userRef = doc(database, "users", userId);
+    const user = await getDoc(userRef);
+
+    if (!user.exists()) {
+      return new Error("User doesn't exist in the database");
     }
+
     const categoriesCollection = collection(database, "categories");
     const queryCategory = query(
       categoriesCollection,

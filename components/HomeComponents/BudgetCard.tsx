@@ -3,12 +3,14 @@ import React from "react";
 import { displayAmount } from "../../helpers/common-helper";
 
 type BudgetCardType = {
+  userId: string;
+  categoryId: string
   budgetColor: string;
   budgetEmoji: string;
   budgetInitialAmount: number;
   budgetUsedAmount: number;
   budgetCategory: string;
-  // transactionDate?: string;
+  transactionDate?: string;
 };
 
 const BudgetCard = (props: BudgetCardType) => {
@@ -17,7 +19,7 @@ const BudgetCard = (props: BudgetCardType) => {
     <TouchableOpacity
       className="w-full h-20 mb-2.5 bg-white rounded-lg flex-row px-2.5 overflow-hidden"
       onPress={() => {
-        console.log("Budget");
+        console.log("CategoryId:", props.categoryId);
       }}
     >
       <View className="flex-1 flex-row items-center">
@@ -32,7 +34,7 @@ const BudgetCard = (props: BudgetCardType) => {
             {props.budgetCategory}
           </Text>
           <Text className="text-xs font-pextralight text-black">
-            Last Transaction date
+            {props.transactionDate && props.transactionDate ? props.transactionDate.split("T")[0] : "No transactions yet"}
           </Text>
         </View>
       </View>

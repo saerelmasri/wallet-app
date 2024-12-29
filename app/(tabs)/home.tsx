@@ -14,9 +14,13 @@ import {
   BudgetData,
   getUserCategories,
 } from "../../api/database/categoryFunctions";
-import { userId } from "../../configs/authenticatedUser";
+import { getAuth } from "@firebase/auth";
+import { getLastCategoryTransaction } from "../../api/database/transactionFunctions";
 
 const Home = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
   // Clean up the stack by replacing it with only the home screen
   const router = useRouter();
   useFocusEffect(
@@ -32,7 +36,7 @@ const Home = () => {
   // Fetch user budget function
   useEffect(() => {
     const fetchUserBudget = async () => {
-      const result = await getAllocatedBudget(userId as string);
+      const result = await getAllocatedBudget(userId);
       if (result instanceof Error) {
         console.log("Error fetching user:", result.message);
         return;
@@ -40,14 +44,27 @@ const Home = () => {
       setMonthly(result.totalAllocated);
     };
 
-    // Fetch user's category function
     const fetchUserCategories = async () => {
-      const result = await getUserCategories(userId as string);
+      const result = await getUserCategories(userId);
       if (result instanceof Error) {
         console.log("Error fetching user:", result.message);
         return;
       }
-      setCategories(result);
+      
+      const lastTransaction = await Promise.all(
+        result.map(async (item: BudgetData) => {
+          const lastTransaction = await getLastCategoryTransaction(
+            userId as string,
+            item.categoryId
+          );
+          return {
+            ...item,
+            lastTransaction: lastTransaction,
+          };
+        })
+      );
+
+      setCategories(lastTransaction)
     };
 
     fetchUserBudget();
@@ -125,11 +142,14 @@ const Home = () => {
                     {categoryArray.map((category) => (
                       <BudgetCard
                         key={category.categoryName} // Ensure unique key
+                        userId={userId as string}
+                        categoryId={category.categoryId}
                         budgetCategory={category.categoryName}
                         budgetColor={category.categoryColor}
                         budgetEmoji={category.categoryEmoji}
                         budgetInitialAmount={category.allocatedMoney}
                         budgetUsedAmount={category.usedMoney}
+                        transactionDate={category.lastTransaction}
                       />
                     ))}
                   </View>

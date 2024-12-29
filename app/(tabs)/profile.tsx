@@ -10,15 +10,16 @@ import React, { useEffect, useState } from "react";
 import ModalNotification from "../../components/ProfileComponents/NotificationModal";
 
 import OptionButtons from "../../components/ProfileComponents/OptionButtons";
-import { signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import {
   getUserFromDB,
   updateNotificationSettings,
 } from "../../api/database/userFunctions";
-import { userId } from "../../configs/authenticatedUser";
-import { auth } from "../../configs/firebaseConfig";
 
 const Profile = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
   // State Variable
   const [profile, setProfile] = useState({
     name: "",

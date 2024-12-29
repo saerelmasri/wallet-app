@@ -16,20 +16,18 @@ import ModalDatePicker from "../components/NewTransactionComponents/ModalCalenda
 import {
   BudgetData,
   getUserCategories,
+  updatedUsedMoneyOnCategory,
 } from "../api/database/categoryFunctions";
 import { showAlert } from "../helpers/common-helper";
 import { createTransaction } from "../api/database/transactionFunctions";
 import { GoalType, updateSavedAmount } from "../api/database/goalFunctions";
 import ModalGoals from "../components/NewTransactionComponents/ModalGoals";
-import { userId } from "../configs/authenticatedUser";
-
-const goals = [
-  { goalId: "1", goalName: "Save for Car" },
-  { goalId: "2", goalName: "Vacation Fund" },
-  { goalId: "3", goalName: "Emergency Fund" },
-];
+import { getAuth } from "@firebase/auth";
 
 const AddTransaction = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
   //Information from other Routes: Numnpad or existing transaction
   const {
     newAmountIncoming,
@@ -143,6 +141,16 @@ const AddTransaction = () => {
           selectedRepeat === "Never" ? false : true
         );
         if (newTransaction instanceof Error) {
+          console.log("Error saving transaction:", newTransaction.message);
+          showAlert("Error", "An error occured while saving the transaction");
+          return;
+        }
+        const updatedUsedMoney = await updatedUsedMoneyOnCategory(
+          userId as string,
+          selectedCategory,
+          Number(transactionData.amount)
+        );
+        if (updatedUsedMoney instanceof Error) {
           console.log("Error saving transaction:", newTransaction.message);
           showAlert("Error", "An error occured while saving the transaction");
           return;
