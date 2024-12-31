@@ -15,12 +15,22 @@ import Chip from "../../components/Chip";
 import TransactionCard from "../../components/TransactionComponents/TransactionCard";
 import { MockBudgetTransaction } from "../../constants/MockData";
 import { Categories } from "../../constants/Category";
+import { getAuth } from "@firebase/auth";
+import { getAllUsersTransaction } from "../../api/database/transactionFunctions";
 
 const Transactions = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
+  // Modal Variable
   const [modalVisible, setModalVisible] = useState(false);
+
+  // State Variables
+  const [transactions, setTransactions] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
 
-  // Updated filterOptions as an object for wallet, category, and date
+  // Variable to save the filter options
   const [filterOptions, setFilterOptions] = useState({
     transactionType: "",
     category: "",
@@ -28,10 +38,25 @@ const Transactions = () => {
   });
 
   useEffect(() => {
+    const fetchTransactions = async () => {
+      const result = await getAllUsersTransaction(userId as string);
+      if (result instanceof Error) {
+        console.log("Error fetching transactions:", result.message);
+        return;
+      }
+      console.log("Result:", result);
+    };
+
+    fetchTransactions();
+  }, [userId]);
+
+  // Loading
+  useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
 
+  // Filter function
   const toggleFilterOption = (key: string, option: string) => {
     setFilterOptions((prevOptions) => ({
       ...prevOptions,
@@ -70,8 +95,8 @@ const Transactions = () => {
               </View>
               {MockBudgetTransaction.map((item) => (
                 <TransactionCard
-                transactionDate={item.transactionDate}
-                //@ts-ignore
+                  transactionDate={item.transactionDate}
+                  //@ts-ignore
                   transactionType={item.transactionType}
                   transactionTitle={item.transactionTitle}
                   transactionAmount={item.transactionAmount}
@@ -125,9 +150,9 @@ const Transactions = () => {
                 {/* Category Filter */}
                 <Text className="mt-4 text-lg font-pmedium">Category</Text>
                 <View className="w-full mt-3 flex-row flex-wrap space-x-2 space-y-2">
-                  {Categories.map((category) => (
+                  {Categories.map((category, index) => (
                     <Chip
-                      key={category.id}
+                      key={index}
                       title={category.name}
                       selected={filterOptions.category === category.name}
                       onPress={() =>
