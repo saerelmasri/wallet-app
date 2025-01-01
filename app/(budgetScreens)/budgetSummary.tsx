@@ -25,6 +25,8 @@ const BudgetSummary = () => {
   // Saved the breakdowned categories
   const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
 
+  // console.log(expenses);
+
   // Function to breakdown, organize and save categories by type
   useEffect(() => {
     let parsedExpenses;
@@ -54,6 +56,8 @@ const BudgetSummary = () => {
       console.error("Error parsing or organizing expenses:", error);
     }
   }, [expenses, initialIncome]);
+
+  console.log(breakdown);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>

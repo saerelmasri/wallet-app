@@ -15,10 +15,9 @@ import BudgetAllocation from "../../components/BudgetScreenComponents/BudgetAllo
 import { router, useLocalSearchParams } from "expo-router";
 import { CategoryTypes } from "../../constants/Category";
 import { getRandomColor, showAlert } from "../../helpers/common-helper";
-import { getAuth } from "@firebase/auth";
 import { createCategories } from "../../api/database/categoryFunctions";
 import { updateBudgetMetadata } from "../../api/database/userFunctions";
-import { userId } from "../../configs/authenticatedUser";
+import { getAuth } from "@firebase/auth";
 
 type BudgetCategory = CategoryTypes & {
   allocatedMoney: number;
@@ -26,6 +25,9 @@ type BudgetCategory = CategoryTypes & {
 };
 
 const BudgetCalculation = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
   // Incoming info
   const { needsCategory, wantsCategory, savingsCategory, userIncome } =
     useLocalSearchParams();

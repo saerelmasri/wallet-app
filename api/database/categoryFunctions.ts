@@ -21,7 +21,7 @@ export type BudgetData = {
   usedMoney: number;
   createdAt: string; // ISO timestamp
   updatedAt: string; // ISO timestamp (empty if not updated yet)
-  lastTransaction?: string
+  lastTransaction?: string;
 };
 
 export const createCategories = async (
@@ -137,6 +137,42 @@ export const getUserCategories = async (
     });
 
     return data;
+  } catch (error) {
+    console.log("Error:", error);
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const getCategoryInfoByCatId = async (
+  userId: string,
+  categoryId: string
+): Promise<Error | BudgetData> => {
+  try {
+    const userRef = doc(database, "users", userId);
+    const user = await getDoc(userRef);
+
+    if (!user.exists()) {
+      return new Error("User doesn't exist in the database");
+    }
+
+    const categoryRef = doc(database, "categories", categoryId);
+    const categoryDoc = await getDoc(categoryRef);
+    const data = categoryDoc.data() as BudgetData;
+
+    return {
+      categoryId: categoryDoc.id,
+      userId: categoryDoc.userId,
+      categoryName: categoryDoc.categoryName,
+      categoryType: categoryDoc.categoryType,
+      categoryColor: categoryDoc.categoryColor,
+      categoryEmoji: categoryDoc.categoryEmoji,
+      usedMoney: categoryDoc.usedMoney,
+      allocatedMoney: categoryDoc.allocatedMoney,
+      createdAt: categoryDoc.createdAt,
+      updatedAt: categoryDoc.updatedAt || "",
+    };
   } catch (error) {
     console.log("Error:", error);
     return new Error(

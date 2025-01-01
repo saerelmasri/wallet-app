@@ -61,7 +61,7 @@ const Transactions = () => {
     setFilterOptions((prevOptions) => ({
       ...prevOptions,
       //@ts-ignore
-      [key]: prevOptions[key] === option ? "" : option, // Toggle the selected option
+      [key]: prevOptions[key] === option ? "" : option,
     }));
   };
 
