@@ -43,7 +43,6 @@ export const organizeExpenses = (expenses: any[], totalIncome: number) => {
 
     return {
       usedPercentage,
-      title: `${categoryType} category`,
       breakdown,
     };
   });

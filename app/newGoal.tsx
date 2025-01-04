@@ -14,16 +14,19 @@ import CustomButton from "../components/CustomButton";
 import { router, useLocalSearchParams } from "expo-router";
 import { createNewGoal, updateGoalDesc } from "../api/database/goalFunctions";
 import { getRandomColor, showAlert } from "../helpers/common-helper";
-import { userId } from "../configs/authenticatedUser";
+import { getAuth } from "@firebase/auth";
 
 const AddGoal = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
 
   //Information of an existing goal to update
-  const { goalId, goalTitle, goalEmoji, goalAmount, color } = useLocalSearchParams();
+  const { goalId, goalTitle, goalEmoji, goalAmount, color } =
+    useLocalSearchParams();
 
   // Modal Variables
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  
+
   // Selected Variables
   const [selectedEmoji, setSelectedEmoji] = useState<{ emoji: string }>({
     emoji: "",
@@ -32,7 +35,7 @@ const AddGoal = () => {
     title: "",
     amount: "",
   });
-  const [ bgColor, setBgColor ] = useState<string>(getRandomColor());
+  const [bgColor, setBgColor] = useState<string>(getRandomColor());
 
   // Handle save new goal function
   const handleSaveNewGoal = async () => {
@@ -68,7 +71,10 @@ const AddGoal = () => {
         showAlert("Success", "Goal updated successfully");
         router.back();
       } else {
-        const createError = await createNewGoal({...goalData, color: bgColor});
+        const createError = await createNewGoal({
+          ...goalData,
+          color: bgColor,
+        });
 
         if (createError instanceof Error) {
           console.log("Error creating goal:", createError.message);
@@ -105,7 +111,7 @@ const AddGoal = () => {
       setSelectedEmoji({ emoji: goalEmoji as string });
     }
 
-    if(color){
+    if (color) {
       setBgColor(color as string);
     }
   }, [goalTitle, goalAmount, goalEmoji]);
@@ -123,7 +129,7 @@ const AddGoal = () => {
           <TouchableOpacity
             onPress={() => setIsModalOpen(true)}
             className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
-            style={{backgroundColor: bgColor}}
+            style={{ backgroundColor: bgColor }}
           >
             <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
           </TouchableOpacity>

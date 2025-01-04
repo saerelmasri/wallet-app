@@ -10,8 +10,6 @@ import {
   where,
 } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
-import { BudgetData } from "./categoryFunctions";
-import { GoalType } from "./goalFunctions";
 
 export const createTransaction = async (
   userId: string,
@@ -19,7 +17,8 @@ export const createTransaction = async (
   goalId: string,
   amount: number,
   purpose: string,
-  repeat: boolean
+  repeat: boolean,
+  date?: string
 ) => {
   try {
     const transactionCollection = collection(database, "transactions");
@@ -31,7 +30,7 @@ export const createTransaction = async (
       amount: amount,
       purpose: purpose,
       repeat: repeat,
-      createdAt: new Date().toISOString(),
+      createdAt: date && date !== undefined ? date : new Date().toISOString(),
       updatedAt: "",
     };
 
@@ -115,19 +114,62 @@ export const getAllUsersTransaction = async (userId: string) => {
       return []; // Return empty array if no transactions
     }
 
-    const userTransaction = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
+    const transactions = [];
+    for (const docs of querySnapshot.docs) {
+      const data = docs.data();
+      const enrichedTransaction = {
+        id: docs.id,
         categoryId: data.categoryId,
+        goalId: data.goalId,
         amount: data.amount,
         createdAt: data.createdAt,
         purpose: data.purpose,
-        goalId: data.goalId,
+        categoryName: "",
+        categoryEmoji: "",
+        categoryColor: "",
+        goalName: "",
+        goalEmoji: "",
+        goalColor: "",
       };
+
+      if (data.categoryId) {
+        const categoryRef = doc(database, "categories", data.categoryId);
+        const categoryDoc = await getDoc(categoryRef);
+
+        if (categoryDoc.exists()) {
+          const categoryData = categoryDoc.data();
+          enrichedTransaction.categoryName = categoryData.categoryName;
+          enrichedTransaction.categoryEmoji = categoryData.categoryEmoji;
+          enrichedTransaction.categoryColor = categoryData.categoryColor;
+        } else {
+          console.log(`Category ID ${data.categoryId} not found`);
+        }
+      }
+
+      if (data.goalId) {
+        const goalRef = doc(database, "goals", data.goalId);
+        const goalDoc = await getDoc(goalRef);
+
+        if (goalDoc.exists()) {
+          const goalData = goalDoc.data();
+          enrichedTransaction.goalName = goalData.goalName;
+          enrichedTransaction.goalEmoji = goalData.emoji;
+          enrichedTransaction.goalColor = goalData.color;
+        } else {
+          console.log(`Goal ID ${data.goalId} not found`);
+        }
+      }
+
+      transactions.push(enrichedTransaction);
+    }
+
+    transactions.sort((a, b) => {
+      const createdAtA = a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+      const createdAtB = b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+      return createdAtB - createdAtA; // For descending order
     });
 
-    return userTransaction;
+    return transactions;
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error");
     return new Error(

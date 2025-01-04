@@ -16,9 +16,12 @@ import {
   getAllUserGoals,
   getSavingAmount,
 } from "../api/database/goalFunctions";
-import { userId } from "../configs/authenticatedUser";
+import { getAuth } from "@firebase/auth";
 
 const Goals = () => {
+  const auth = getAuth();
+  const userId = auth.currentUser?.uid as string;
+
   // Error variable
   const [error, setError] = useState<string | null>(null);
 

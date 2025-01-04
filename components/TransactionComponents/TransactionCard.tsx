@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
 
 type TransactionCardType = {
   transactionTitle: string;
-  transactionCategory: string;
   transactionAmount: string;
-  transactionType: "Income" | "Expense";
   transactionDate?: string;
+  categoryName?: string;
+  categoryColor?: string;
+  categoryEmoji?: string;
+  goalName?: string;
+  goalColor?: string;
+  goalEmoji?: string;
 };
 
 const TransactionCard = (props: TransactionCardType) => {
@@ -17,9 +20,7 @@ const TransactionCard = (props: TransactionCardType) => {
       pathname: "/newTransaction",
       params: {
         transactionTitle: props.transactionTitle,
-        transactionCategory: props.transactionCategory,
         transactionAmount: props.transactionAmount,
-        transactionType: props.transactionType,
         transactionDate: props.transactionDate,
       },
     });
@@ -28,31 +29,52 @@ const TransactionCard = (props: TransactionCardType) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
       <View style={styles.cardContent}>
-        <View style={styles.iconContainer}>
-          <Text>Logo</Text>
+        <View
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor:
+              props.categoryColor !== "" && props.goalColor === ""
+                ? props.categoryColor
+                : props.categoryColor === "" && props.goalColor !== ""
+                ? props.goalColor
+                : "#F0F0F0",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text className="text-3xl">
+            {props.categoryEmoji !== "" && props.goalEmoji === ""
+              ? props.categoryEmoji
+              : props.categoryEmoji === "" && props.goalEmoji !== ""
+              ? props.goalEmoji
+              : "📈"}
+          </Text>
         </View>
         <View style={styles.details}>
-          <Text style={styles.transactionTitle}>{props.transactionTitle}</Text>
+          <Text style={styles.transactionTitle}>
+            {props.transactionTitle !== "" && props.goalName === ""
+              ? props.transactionTitle
+              : props.transactionTitle === "" && props.goalName !== ""
+              ? props.goalName
+              : "📈"}
+          </Text>
           <View style={styles.row}>
-            <AntDesign name="shoppingcart" size={18} color="black" />
-            <Text style={styles.categoryText}>{props.transactionCategory}</Text>
+            <Text style={styles.categoryText}>
+              {props.categoryName !== "" && props.goalName === ""
+                ? props.categoryName
+                : props.categoryName === "" && props.goalName !== ""
+                ? ""
+                : "📈"}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.amountContainer}>
-        <Text
-          style={[
-            styles.amount,
-            props.transactionType === "Expense"
-              ? styles.expense
-              : styles.income,
-          ]}
-        >
-          {props.transactionType === "Expense"
-            ? `- $${props.transactionAmount}`
-            : `+ $${props.transactionAmount}`}
+        <Text style={[styles.amount, styles.expense]}>
+          {`- $${props.transactionAmount}`}
         </Text>
-        <Text style={styles.leftAmount}>left $200.00</Text>
         {props.transactionDate && (
           <Text style={styles.date}>{props.transactionDate}</Text>
         )}
@@ -76,14 +98,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#F0F0F0",
-    justifyContent: "center",
-    alignItems: "center",
   },
   details: {
     marginLeft: 10,

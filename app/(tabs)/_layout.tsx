@@ -6,6 +6,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import React from "react";
 
 type TabIconTypes = {
   icon: "Home" | "Budget" | "Profile" | "Transactions";

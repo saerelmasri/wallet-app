@@ -54,7 +54,7 @@ const Home = () => {
       const lastTransaction = await Promise.all(
         result.map(async (item: BudgetData) => {
           const lastTransaction = await getLastCategoryTransaction(
-            userId as string,
+            userId,
             item.categoryId
           );
           return {
@@ -142,7 +142,7 @@ const Home = () => {
                     {categoryArray.map((category) => (
                       <BudgetCard
                         key={category.categoryName} // Ensure unique key
-                        userId={userId as string}
+                        userId={userId}
                         categoryId={category.categoryId}
                         budgetCategory={category.categoryName}
                         budgetColor={category.categoryColor}

@@ -22,7 +22,6 @@ const Profile = () => {
 
   // State Variable
   const [profile, setProfile] = useState({
-    name: "",
     email: "",
     notificationSettings: "Off",
   });
@@ -44,7 +43,6 @@ const Profile = () => {
       } else if (result) {
         setProfile({
           email: result.email || "",
-          name: result.name || "",
           notificationSettings: result.notificationSettings || "Off",
         });
       }
@@ -95,12 +93,6 @@ const Profile = () => {
 
           <View className="w-full p-6 space-y-4">
             <Text className="font-pmedium text-sm">Account Settings</Text>
-            <View className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5">
-              <Text className="font-psemibold text-sm w-[50px]">Name</Text>
-              <Text className="w-full font-psemibold text-sm text-[#A9A9A9]">
-                {profile.name}
-              </Text>
-            </View>
             <View className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5">
               <Text className="font-psemibold text-sm w-[50px]">Email</Text>
               <Text className="font-psemibold text-sm w-full text-[#A9A9A9]">

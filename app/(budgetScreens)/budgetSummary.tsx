@@ -7,7 +7,6 @@ import { router, useLocalSearchParams } from "expo-router";
 
 type BreakdownItem = {
   usedPercentage: string;
-  title: string;
   breakdown: {
     name: string;
     emoji: string;
@@ -64,7 +63,7 @@ const BudgetSummary = () => {
       <StatusBar barStyle="dark-content" />
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 20, paddingBottom: 100 }} // Add bottom padding to avoid overlap with the button
+        contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Title Section */}
@@ -83,7 +82,6 @@ const BudgetSummary = () => {
           {breakdown.map((item, index) => (
             <CollapsibleView
               key={index}
-              title={item.title}
               breakdown={item.breakdown}
               usedPercentage={item.usedPercentage}
             />

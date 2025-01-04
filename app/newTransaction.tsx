@@ -28,6 +28,8 @@ const AddTransaction = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid as string;
 
+  const todayDate = new Date().toISOString();
+
   //Information from other Routes: Numnpad or existing transaction
   const {
     newAmountIncoming,
@@ -58,12 +60,12 @@ const AddTransaction = () => {
     amount: newAmountIncoming,
   });
   const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString()
   );
 
   // Handle Date Change
   const handleDateChange = (date: string) => {
-    setSelectedDate(date);
+    setSelectedDate(new Date(date).toISOString());
   };
 
   // Handle Repeat Change
@@ -84,7 +86,7 @@ const AddTransaction = () => {
 
   // Handle Create Transaction
   const handleCreateTransaction = async () => {
-    if (transactionData.title.trim() === "") {
+    if (transactionData.title.trim() === "" && selectedGoal === null) {
       showAlert("No name?", "Please provide a name for this transaction");
       return;
     }
@@ -111,7 +113,8 @@ const AddTransaction = () => {
           selectedGoal.id,
           Number(transactionData.amount),
           transactionData.title,
-          selectedRepeat === "Never" ? false : true
+          selectedRepeat === "Never" ? false : true,
+          selectedDate
         );
         if (newTransaction instanceof Error) {
           console.log("Error saving transaction:", newTransaction.message);
@@ -138,7 +141,8 @@ const AddTransaction = () => {
           "",
           Number(transactionData.amount),
           transactionData.title,
-          selectedRepeat === "Never" ? false : true
+          selectedRepeat === "Never" ? false : true,
+          selectedDate
         );
         if (newTransaction instanceof Error) {
           console.log("Error saving transaction:", newTransaction.message);
@@ -282,12 +286,12 @@ const AddTransaction = () => {
               >
                 <Text
                   className={`${
-                    selectedDate === new Date().toISOString().split("T")[0]
+                    selectedDate.split("T")[0] === new Date().toISOString().split("T")[0]
                       ? "text-[#A9A9A9]"
                       : "text-black"
                   }`}
                 >
-                  {selectedDate === new Date().toISOString().split("T")[0]
+                  {selectedDate.split("T")[0] === new Date().toISOString().split("T")[0]
                     ? "Today"
                     : selectedDate}
                 </Text>

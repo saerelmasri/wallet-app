@@ -21,7 +21,6 @@ export type ValueTypes = {
     color: string;
     allocatedBudget: number;
   }[];
-  title: string;
   usedPercentage: string;
 };
 
@@ -56,9 +55,8 @@ const CollapsibleView = (props: ValueTypes) => {
         }}
       >
         <Text className="text-black font-pmedium text-base">
-          {props.usedPercentage} used
+          {props.usedPercentage} used out all your income
         </Text>
-        <Text className="text-black font-pmedium text-base">{props.title}</Text>
         <Chevron progress={progress} />
       </Pressable>
       <Animated.View style={heightAnimationStyle}>
