@@ -6,6 +6,8 @@ import {
   ScrollView,
   Text,
   TextInput,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -37,24 +39,79 @@ const Transactions = () => {
   const [transactions, setTransactions] = useState<UserTransaction[] | null>(
     null
   );
+  const [groupedTransactions, setGroupedTransactions] = useState<
+    Record<string, UserTransaction[]>
+  >({});
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const result = await getAllUsersTransaction(userId as string);
-      if (result instanceof Error) {
-        console.log("Error fetching transactions:", result.message);
-        setTransactions(null);
-        return;
+      setIsLoading(true);
+      try {
+        const result = await getAllUsersTransaction(userId as string);
+        if (result instanceof Error) {
+          console.log("Error fetching transactions:", result.message);
+          setTransactions(null);
+          return;
+        }
+        setTransactions(result);
+        groupTransactions(result);
+      } finally {
+        setIsLoading(false);
       }
-      setTransactions(result);
-      console.log("res:",result);
-      
     };
 
     fetchTransactions();
   }, [userId]);
+
+  const groupTransactions = (transactions: UserTransaction[]) => {
+    const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 864e5).toISOString().split("T")[0];
+
+    const grouped: Record<string, UserTransaction[]> = {};
+
+    transactions.forEach((item, index) => {
+      const date = item.createdAt.split("T")[0];
+      if (date === today) {
+        grouped["Today"] = [...(grouped["Today"] || []), item];
+      } else if (date === yesterday) {
+        grouped["Yesterday"] = [...(grouped["Yesterday"] || []), item];
+      } else {
+        grouped["Yesterday"] = [...(grouped["Yesterday"] || []), item];
+      }
+    });
+
+    setGroupedTransactions(grouped);
+  };
+
+  const renderTransactionGroup = ({
+    item,
+  }: {
+    item: [string, UserTransaction[]];
+  }) => {
+    const [date, transactions] = item;
+
+    return (
+      <View>
+        <Text className="text-sm font-pregular text-black mb-2">{date}</Text>
+        {transactions.map((transaction) => (
+          <TransactionCard
+            key={transaction.id}
+            transactionDate={transaction.createdAt.split("T")[0]}
+            transactionTitle={transaction.purpose}
+            transactionAmount={displayAmount(transaction.amount)}
+            categoryName={transaction.categoryName}
+            categoryColor={transaction.categoryColor}
+            categoryEmoji={transaction.categoryEmoji}
+            goalName={transaction.goalName}
+            goalColor={transaction.goalColor}
+            goalEmoji={transaction.goalEmoji}
+          />
+        ))}
+      </View>
+    );
+  };
 
   // Loading
   useEffect(() => {
@@ -67,38 +124,21 @@ const Transactions = () => {
       <SafeAreaView className="flex-1 h-full">
         <ScrollView contentContainerStyle={{ alignItems: "center" }}>
           <View className="bg-white w-full h-[100%] rounded-tl-3xl rounded-tr-3xl relative flex">
-            {/* Filter Section */}
-            <View className="w-full flex-row justify-center space-x-2 p-3">
-              <View className="w-[95%] flex-row items-center space-x-2 mt-3 bg-[#F0F0F0] rounded-2xl px-4 py-1">
-                <Fontisto name="search" size={24} color="black" />
-                <TextInput
-                  className="w-full h-10 text-black font-pregular text-sm"
-                  placeholder="Search transaction"
-                  placeholderTextColor="#696969"
-                />
-              </View>
-            </View>
-
             {/* Transactions List */}
-            <View className="w-full p-3">
-              <View className="w-full flex-row justify-between pl-3">
-                <Text className="text-sm font-pregular text-black">Today</Text>
-              </View>
-              {transactions &&
-                transactions.map((item) => (
-                  <TransactionCard
-                    transactionDate={item.createdAt.split("T")[0]}
-                    transactionTitle={item.purpose}
-                    transactionAmount={displayAmount(item.amount)}
-                    categoryName={item.categoryName}
-                    categoryColor={item.categoryColor}
-                    categoryEmoji={item.categoryEmoji}
-                    goalName={item.goalName}
-                    goalColor={item.goalColor}
-                    goalEmoji={item.goalEmoji}
-                  />
-                ))}
-            </View>
+            {isLoading || !transactions ? (
+              <ActivityIndicator
+                className="mt-[30%]"
+                size="large"
+                color="black"
+              />
+            ) : (
+              <FlatList
+                data={Object.entries(groupedTransactions)}
+                keyExtractor={(item) => item[0]}
+                renderItem={renderTransactionGroup}
+                contentContainerStyle={{ padding: 16 }}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

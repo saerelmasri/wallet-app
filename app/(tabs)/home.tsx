@@ -1,4 +1,11 @@
-import { View, Text, SafeAreaView, ScrollView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  ActivityIndicator,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import GoalProgressCircle from "../../components/HomeComponents/GoalProgressCircle";
 import UpcomingPayments from "../../components/HomeComponents/nextPayments";
@@ -16,6 +23,7 @@ import {
 } from "../../api/database/categoryFunctions";
 import { getAuth } from "@firebase/auth";
 import { getLastCategoryTransaction } from "../../api/database/transactionFunctions";
+import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
 
 const Home = () => {
   const auth = getAuth();
@@ -32,6 +40,7 @@ const Home = () => {
   // State Variables
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
 
   // Fetch user budget function
   useEffect(() => {
@@ -45,26 +54,30 @@ const Home = () => {
     };
 
     const fetchUserCategories = async () => {
-      const result = await getUserCategories(userId);
-      if (result instanceof Error) {
-        console.log("Error fetching user:", result.message);
-        return;
-      }
-      
-      const lastTransaction = await Promise.all(
-        result.map(async (item: BudgetData) => {
-          const lastTransaction = await getLastCategoryTransaction(
-            userId,
-            item.categoryId
-          );
-          return {
-            ...item,
-            lastTransaction: lastTransaction,
-          };
-        })
-      );
+      setLoadingCategories(true);
+      try {
+        const result = await getUserCategories(userId);
+        if (result instanceof Error) {
+          console.log("Error fetching user:", result.message);
+          return;
+        }
 
-      setCategories(lastTransaction)
+        const lastTransaction = await Promise.all(
+          result.map(async (item: BudgetData) => {
+            const lastTransaction = await getLastCategoryTransaction(
+              userId,
+              item.categoryId
+            );
+            return {
+              ...item,
+              lastTransaction: lastTransaction,
+            };
+          })
+        );
+        setCategories(lastTransaction);
+      } finally {
+        setLoadingCategories(false);
+      }
     };
 
     fetchUserBudget();
@@ -122,41 +135,46 @@ const Home = () => {
           </View>
 
           <View className="w-full flex-row justify-around p-3">
-            <GoalProgressCircle />
-            <UpcomingPayments />
+            {/* <GoalProgressCircle /> */}
+            <GoalProgressCircleV2 />
+            {/* <UpcomingPayments /> */}
           </View>
 
           {/* Transaction History Widgets */}
-          <View className="p-3 w-full">
-            {
-              //@ts-ignore
-              Object.entries(groupedCategories).map(
-                ([categoryType, categoryArray]) => (
-                  <View key={categoryType}>
-                    {/* Section Title */}
-                    <Text className="text-lg font-pregular p-3">
-                      {categoryType}
-                    </Text>
+          {loadingCategories ? (
+            <ActivityIndicator className="mt-12" size="large" color="#00ff00" />
+          ) : (
+            <View className="p-3 w-full">
+              {
+                //@ts-ignore
+                Object.entries(groupedCategories).map(
+                  ([categoryType, categoryArray]) => (
+                    <View key={categoryType}>
+                      {/* Section Title */}
+                      <Text className="text-lg font-pregular p-3">
+                        {categoryType}
+                      </Text>
 
-                    {/* Categories in this section */}
-                    {categoryArray.map((category) => (
-                      <BudgetCard
-                        key={category.categoryName} // Ensure unique key
-                        userId={userId}
-                        categoryId={category.categoryId}
-                        budgetCategory={category.categoryName}
-                        budgetColor={category.categoryColor}
-                        budgetEmoji={category.categoryEmoji}
-                        budgetInitialAmount={category.allocatedMoney}
-                        budgetUsedAmount={category.usedMoney}
-                        transactionDate={category.lastTransaction}
-                      />
-                    ))}
-                  </View>
+                      {/* Categories in this section */}
+                      {categoryArray.map((category) => (
+                        <BudgetCard
+                          key={category.categoryName} // Ensure unique key
+                          userId={userId}
+                          categoryId={category.categoryId}
+                          budgetCategory={category.categoryName}
+                          budgetColor={category.categoryColor}
+                          budgetEmoji={category.categoryEmoji}
+                          budgetInitialAmount={category.allocatedMoney}
+                          budgetUsedAmount={category.usedMoney}
+                          transactionDate={category.lastTransaction}
+                        />
+                      ))}
+                    </View>
+                  )
                 )
-              )
-            }
-          </View>
+              }
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
 
@@ -22,21 +23,28 @@ const Goals = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid as string;
 
-  // Error variable
-  const [error, setError] = useState<string | null>(null);
-
   // State variables
   const [totalSaved, setTotalSaved] = useState<number>(0);
   const [userGoals, setUserGoals] = useState<any>([]);
 
+  // Loading variables
+  const [isLoadingTotalSaving, setIsLoadingTotalSaving] =
+    useState<boolean>(false);
+  const [isLoadingGoal, setIsLoadingGoal] = useState<boolean>(false);
+
   // Fetch total savings on all goals based on user
   useEffect(() => {
     const fetchTotalSavings = async () => {
-      const result = await getSavingAmount(userId as string);
-      if (result instanceof Error) {
-        setError(result.message);
-      } else {
-        setTotalSaved(result);
+      setIsLoadingTotalSaving(true);
+      try {
+        const result = await getSavingAmount(userId as string);
+        if (result instanceof Error) {
+          console.log("Error:", result);
+        } else {
+          setTotalSaved(result);
+        }
+      } finally {
+        setIsLoadingTotalSaving(false);
       }
     };
 
@@ -46,11 +54,16 @@ const Goals = () => {
   // Fetch all user's goals
   useEffect(() => {
     const fetchUserGoals = async () => {
-      const result = await getAllUserGoals(userId as string);
-      if (result instanceof Error) {
-        setError(result.message);
-      } else {
-        setUserGoals(result);
+      setIsLoadingGoal(true);
+      try {
+        const result = await getAllUserGoals(userId as string);
+        if (result instanceof Error) {
+          console.log("Error:", result);
+        } else {
+          setUserGoals(result);
+        }
+      } finally {
+        setIsLoadingGoal(false);
       }
     };
     fetchUserGoals();
@@ -89,7 +102,13 @@ const Goals = () => {
 
               <View className="w-full h-[1px] mt-4 mb-4 bg-black" />
 
-              {userGoals.length > 0 ? (
+              {isLoadingGoal ? (
+                <ActivityIndicator
+                  size="large"
+                  color="black"
+                  className="m-10"
+                />
+              ) : userGoals.length > 0 ? (
                 userGoals.map(
                   (item: {
                     id: string;

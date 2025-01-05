@@ -28,8 +28,6 @@ const AddTransaction = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid as string;
 
-  const todayDate = new Date().toISOString();
-
   //Information from other Routes: Numnpad or existing transaction
   const {
     newAmountIncoming,
@@ -301,7 +299,7 @@ const AddTransaction = () => {
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           {/* Repeat */}
-          <View
+          {/* <View
             className={`bg-white p-3 flex-row justify-between items-center w-full`}
           >
             <Text
@@ -330,7 +328,7 @@ const AddTransaction = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           <View
@@ -424,7 +422,7 @@ const AddTransaction = () => {
               <CustomButton
                 title="Create"
                 handlePress={handleCreateTransaction}
-                containerStyle="w-[90%] bg-[#05603A]"
+                containerStyle="w-[90%] bg-[#05603A] mt-10"
                 textStyle={"text-[#FCFCFC]"}
               />
             )}

@@ -164,12 +164,91 @@ export const getAllUsersTransaction = async (userId: string) => {
     }
 
     transactions.sort((a, b) => {
-      const createdAtA = a.createdAt.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-      const createdAtB = b.createdAt.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+      const createdAtA = a.createdAt.toDate
+        ? a.createdAt.toDate()
+        : new Date(a.createdAt);
+      const createdAtB = b.createdAt.toDate
+        ? b.createdAt.toDate()
+        : new Date(b.createdAt);
       return createdAtB - createdAtA; // For descending order
     });
 
     return transactions;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unknown error");
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const getCategoryTransactions = async (
+  userId: string,
+  categoryId: string
+) => {
+  try {
+    // Check if the user exists
+    const userRef = doc(database, "users", userId);
+    const user = await getDoc(userRef);
+
+    if (!user.exists()) {
+      return new Error("User doesn't exist in the database");
+    }
+
+    // Query the transactions collection
+    const transactionCollection = collection(database, "transactions");
+    const queryTransaction = query(
+      transactionCollection,
+      where("userId", "==", userId),
+      where("categoryId", "==", categoryId)
+    );
+
+    const querySnapshot = await getDocs(queryTransaction);
+
+    if (querySnapshot.empty) {
+      return []; // Return empty array if no transactions
+    }
+
+    const categoryRef = doc(database, "categories", categoryId);
+    const categoryDoc = await getDoc(categoryRef);
+    let categoryData = {
+      categoryName: "Unknown",
+      categoryEmoji: "",
+      categoryColor: "",
+    };
+
+    if (categoryDoc.exists()) {
+      categoryData = categoryDoc.data() as {
+        categoryName: string;
+        categoryEmoji: string;
+        categoryColor: string;
+      };
+    } else {
+      console.log(`Category ID ${categoryId} not found`);
+    }
+
+    const transactions = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      const createdAt =
+        data.createdAt.toDate?.() ||
+        (typeof data.createdAt === "string"
+          ? new Date(data.createdAt)
+          : data.createdAt);
+
+      return {
+        id: doc.id,
+        amount: data.amount,
+        createdAt,
+        purpose: data.purpose || "No purpose specified",
+        categoryName: categoryData.categoryName,
+        categoryEmoji: categoryData.categoryEmoji,
+        categoryColor: categoryData.categoryColor,
+      };
+    });
+
+    return transactions.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+    );
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error");
     return new Error(

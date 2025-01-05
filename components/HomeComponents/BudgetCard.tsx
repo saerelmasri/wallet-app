@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { displayAmount } from "../../helpers/common-helper";
+import { getCategoryTransactions } from "../../api/database/transactionFunctions";
 
 type BudgetCardType = {
   userId: string;
@@ -15,12 +16,19 @@ type BudgetCardType = {
 
 const BudgetCard = (props: BudgetCardType) => {
   const budgetLeft = props.budgetInitialAmount - props.budgetUsedAmount;
+
+  const fetchTransactions = async () => {
+    const result = await getCategoryTransactions(props.userId, props.categoryId);
+    if(result instanceof Error){
+      console.log(result);
+      return;
+    }
+    
+  }
   return (
     <TouchableOpacity
       className="w-full h-20 mb-2.5 bg-white rounded-lg flex-row px-2.5 overflow-hidden"
-      onPress={() => {
-        console.log("CategoryId:", props.categoryId);
-      }}
+      onPress={fetchTransactions}
     >
       <View className="flex-1 flex-row items-center">
         <View
