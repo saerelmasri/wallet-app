@@ -19,8 +19,8 @@ export type GoalType = {
   emoji: string;
   color: string;
   createdAt: string;
-  updatedAt: string
-}
+  updatedAt: string;
+};
 
 export const createNewGoal = async (goalDesc: {
   goalName: string;
@@ -28,7 +28,7 @@ export const createNewGoal = async (goalDesc: {
   emoji: string;
   saved: number;
   userId: string | undefined;
-  color: string
+  color: string;
 }): Promise<Error | undefined> => {
   try {
     const userCollection = doc(database, "users", goalDesc.userId as string);
@@ -46,7 +46,7 @@ export const createNewGoal = async (goalDesc: {
       userId: goalDesc.userId,
       createdAt: new Date().toISOString(),
       updatedAt: "",
-      color: goalDesc.color
+      color: goalDesc.color,
     };
 
     console.log("Goal Data:", goalData);
@@ -77,7 +77,10 @@ export const updateGoalDesc = async (
       return new Error("User doesn't exists in database");
     }
     const goalDocRef = doc(database, "goals", goalId);
-    const updatedGoalData = { ...goalData, updatedAt: new Date().toISOString() };
+    const updatedGoalData = {
+      ...goalData,
+      updatedAt: new Date().toISOString(),
+    };
     await setDoc(goalDocRef, updatedGoalData, { merge: true });
     return undefined;
   } catch (error) {
@@ -102,14 +105,17 @@ export const updateSavedAmount = async (
     const goalDocRef = doc(database, "goals", goalId);
     const goalDoc = await getDoc(goalDocRef);
 
-    if(!goalDoc.exists()){
+    if (!goalDoc.exists()) {
       return new Error("Goal doesn't exist in database");
     }
 
     const goalData = goalDoc.data();
     const currentSaved = goalData?.saved || 0;
-    const updatedGoalData = { saved: currentSaved + newSaved, updatedAt: new Date().toISOString() };
-    
+    const updatedGoalData = {
+      saved: currentSaved + newSaved,
+      updatedAt: new Date().toISOString(),
+    };
+
     await setDoc(goalDocRef, updatedGoalData, { merge: true });
     return undefined;
   } catch (error) {
@@ -157,6 +163,21 @@ export const getAllUserGoals = async (userId: string) => {
     });
 
     return userGoals;
+  } catch (error) {
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const userGoalsExist = async (
+  userId: string
+): Promise<boolean | Error> => {
+  try {
+    const goalCollection = collection(database, "goals");
+    const queryGoals = query(goalCollection, where("userId", "==", userId));
+    const querySnapshot = await getDocs(queryGoals);
+    return !querySnapshot.empty;
   } catch (error) {
     return new Error(
       error instanceof Error ? error.message : "Something went wrong"

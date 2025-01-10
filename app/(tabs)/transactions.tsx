@@ -78,7 +78,7 @@ const Transactions = () => {
       } else if (date === yesterday) {
         grouped["Yesterday"] = [...(grouped["Yesterday"] || []), item];
       } else {
-        grouped["Yesterday"] = [...(grouped["Yesterday"] || []), item];
+        grouped[date] = [...(grouped[date] || []), item];
       }
     });
 

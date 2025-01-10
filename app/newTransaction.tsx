@@ -8,7 +8,6 @@ import {
 import React, { useEffect, useState } from "react";
 import CustomButton from "../components/CustomButton";
 import FormInputText from "../components/FormInputText";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router, useLocalSearchParams } from "expo-router";
 import ModalRepeat from "../components/ModalRepeat";

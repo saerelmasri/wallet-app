@@ -83,7 +83,6 @@ const Profile = () => {
       }}
     >
       <View className="justify-start w-full h-full">
-        <Text className="text-black font-psemibold text-2xl p-6">Settings</Text>
         <ScrollView>
           <View className="w-full justify-center items-center p-3">
             <View className="w-[70px] h-[70px] rounded-full justify-center items-center bg-[#50C878]">

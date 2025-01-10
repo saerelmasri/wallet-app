@@ -15,7 +15,6 @@ const Budget = () => {
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
         >
           <View className="w-full flex justify-center p-5">
-            <Text className="text-black text-3xl font-psemibold">Planning</Text>
             <Text className="text-black text-sm font-pregular mt-2">
               Plan smarter! Set budgets, track spending, and reach your saving
               goals—all in one place to help you stay on track and achieve more

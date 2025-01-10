@@ -12,23 +12,24 @@ type BudgetCardType = {
   budgetUsedAmount: number;
   budgetCategory: string;
   transactionDate?: string;
+  onPress: (categoryId: string, categoryName: string) => void;
 };
 
 const BudgetCard = (props: BudgetCardType) => {
   const budgetLeft = props.budgetInitialAmount - props.budgetUsedAmount;
 
-  const fetchTransactions = async () => {
-    const result = await getCategoryTransactions(props.userId, props.categoryId);
-    if(result instanceof Error){
-      console.log(result);
-      return;
-    }
+  // const fetchTransactions = async () => {
+  //   const result = await getCategoryTransactions(props.userId, props.categoryId);
+  //   if(result instanceof Error){
+  //     console.log(result);
+  //     return;
+  //   }
     
-  }
+  // }
   return (
     <TouchableOpacity
       className="w-full h-20 mb-2.5 bg-white rounded-lg flex-row px-2.5 overflow-hidden"
-      onPress={fetchTransactions}
+      onPress={() => props.onPress(props.categoryId, props.budgetCategory)}
     >
       <View className="flex-1 flex-row items-center">
         <View

@@ -106,17 +106,43 @@ const TabLayout = () => {
             name="transactions"
             options={{
               title: "Transactions",
-              headerShown: false,
+              headerStyle: {
+                backgroundColor: "white",
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              headerTintColor: "black",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontSize: 30,
+              },
+              headerShown: true,
               tabBarIcon: ({ focused }) => (
-                <TabIcon icon="Transactions" focused={focused} name="Transactions" />
+                <TabIcon
+                  icon="Transactions"
+                  focused={focused}
+                  name="Transactions"
+                />
               ),
             }}
           />
           <Tabs.Screen
             name="budget"
             options={{
-              title: "Budget",
-              headerShown: false,
+              title: "Planning",
+              headerStyle: {
+                backgroundColor: "white",
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              headerTintColor: "black",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontSize: 30,
+              },
+              headerShown: true,
               tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Budget" focused={focused} name="Budget" />
               ),
@@ -126,7 +152,18 @@ const TabLayout = () => {
             name="profile"
             options={{
               title: "Profile",
-              headerShown: false,
+              headerStyle: {
+                backgroundColor: "white",
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              headerTintColor: "black",
+              headerTitleAlign: "left",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontSize: 30,
+              },
+              headerShown: true,
               tabBarIcon: ({ focused }) => (
                 <TabIcon icon="Profile" focused={focused} name="Profile" />
               ),

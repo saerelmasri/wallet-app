@@ -141,69 +141,6 @@ const RootLayout = () => {
           }}
         />
 
-        {/* Wallet Screens
-        <Stack.Screen
-          name="wallet"
-          options={{
-            headerShown: true,
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerTitle: "",
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => router.push("/addWallet")}
-                style={{ marginRight: 10 }}
-              >
-                <Text className="text-black font-pmedium text-base">Edit</Text>
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="addWallet"
-          options={{
-            headerShown: true,
-            title: "New Wallet",
-            headerTitleStyle: {
-              color: "black",
-              fontSize: 22,
-              fontWeight: "bold",
-            },
-            headerBackTitle: "Back",
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <Text className="text-red-600 font-pmedium text-base">
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            ),
-          }}
-        /> */}
-
         {/* Transaction Screens */}
         <Stack.Screen
           name="newTransaction"

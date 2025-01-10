@@ -5,10 +5,10 @@ import {
   ScrollView,
   StatusBar,
   ActivityIndicator,
+  Modal,
+  Button,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import GoalProgressCircle from "../../components/HomeComponents/GoalProgressCircle";
-import UpcomingPayments from "../../components/HomeComponents/nextPayments";
 import { useFocusEffect, useRouter } from "expo-router";
 import BudgetCard from "../../components/HomeComponents/BudgetCard";
 import {
@@ -24,6 +24,7 @@ import {
 import { getAuth } from "@firebase/auth";
 import { getLastCategoryTransaction } from "../../api/database/transactionFunctions";
 import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
+import { userGoalsExist } from "../../api/database/goalFunctions";
 
 const Home = () => {
   const auth = getAuth();
@@ -41,6 +42,17 @@ const Home = () => {
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
+  const [userHasGoals, setUserHasGoals] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const openModal = (categoryId: string, categoryName: string) => {
+    setSelectedCategory({ id: categoryId, name: categoryName });
+    setModalVisible(true);
+  };
 
   // Fetch user budget function
   useEffect(() => {
@@ -80,8 +92,18 @@ const Home = () => {
       }
     };
 
+    const checkUsersGoal = async () => {
+      const result = await userGoalsExist(userId as string);
+      if (result instanceof Error) {
+        console.log("Error fetching user:", result.message);
+        return;
+      }
+      setUserHasGoals(result);
+    };
+
     fetchUserBudget();
     fetchUserCategories();
+    checkUsersGoal();
   }, [userId]);
 
   // Group and organize categories for being displayed
@@ -102,9 +124,9 @@ const Home = () => {
         <ScrollView
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
         >
-          <View className="w-full flex-row p-3 items-center">
+          <View className="w-full flex-row items-center">
             {/* Remaining budget of the month*/}
-            <View className="bg-white p-3 w-full">
+            <View className="bg-white pl-4 pr-4 w-full">
               {monthly ? (
                 <>
                   <View className=" flex-row justify-between">
@@ -134,24 +156,26 @@ const Home = () => {
             </View>
           </View>
 
-          <View className="w-full flex-row justify-around p-3">
-            {/* <GoalProgressCircle /> */}
-            <GoalProgressCircleV2 />
-            {/* <UpcomingPayments /> */}
-          </View>
+          {userHasGoals ? (
+            <View className="w-full flex-row justify-around p-3">
+              {/* <GoalProgressCircle /> */}
+              <GoalProgressCircleV2 />
+              {/* <UpcomingPayments /> */}
+            </View>
+          ) : null}
 
           {/* Transaction History Widgets */}
           {loadingCategories ? (
             <ActivityIndicator className="mt-12" size="large" color="#00ff00" />
           ) : (
-            <View className="p-3 w-full">
+            <View className="w-full p-4">
               {
                 //@ts-ignore
                 Object.entries(groupedCategories).map(
                   ([categoryType, categoryArray]) => (
                     <View key={categoryType}>
                       {/* Section Title */}
-                      <Text className="text-lg font-pregular p-3">
+                      <Text className="text-lg font-pregular">
                         {categoryType}
                       </Text>
 
@@ -167,6 +191,7 @@ const Home = () => {
                           budgetInitialAmount={category.allocatedMoney}
                           budgetUsedAmount={category.usedMoney}
                           transactionDate={category.lastTransaction}
+                          onPress={openModal}
                         />
                       ))}
                     </View>
@@ -177,6 +202,43 @@ const Home = () => {
           )}
         </ScrollView>
       </SafeAreaView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 20,
+              borderRadius: 20,
+              width: "100%",
+              height: "80%",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Modal Content
+            </Text>
+            <Text style={{ marginTop: 10 }}>
+              This is a basic modal. You can customize it further!
+            </Text>
+            <Button
+              title="Close"
+              onPress={() => setModalVisible(false)}
+              color="red"
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
