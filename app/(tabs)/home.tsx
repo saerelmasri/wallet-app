@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Modal,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -26,6 +27,8 @@ import { getLastCategoryTransaction } from "../../api/database/transactionFuncti
 import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
 import { userGoalsExist } from "../../api/database/goalFunctions";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { UserTransaction } from "../../constants/common-types";
+import CategoryModal from "../../components/HomeComponents/CategoryModal";
 
 const Home = () => {
   const auth = getAuth();
@@ -53,6 +56,9 @@ const Home = () => {
     budgetInitialAmount: number;
     budgetUsedAmount: number;
   } | null>(null);
+  const [categoryTransaction, setCategoryTransaction] = useState<
+    UserTransaction[] | null
+  >(null);
 
   const openModal = (
     userId: string,
@@ -221,75 +227,11 @@ const Home = () => {
           )}
         </ScrollView>
       </SafeAreaView>
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <CategoryModal
+        onClose={() => setModalVisible(false)}
+        selectedCategory={selectedCategory}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "flex-end",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            // backgroundColor: "transparent",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "white",
-              padding: 20,
-              borderRadius: 35,
-              width: "100%",
-              height: "90%",
-              alignItems: "center",
-            }}
-          >
-            <View className="w-full flex-row justify-between p-2">
-              <View className="flex-row space-x-2 p-1">
-                <Text className="text-[25px] font-bold">
-                  {selectedCategory?.budgetEmoji}
-                </Text>
-                <Text className="text-[25px] font-bold">
-                  {selectedCategory?.name}
-                </Text>
-              </View>
-              <View className="flex-row space-x-4 p-1">
-                <View className="rounded-full w-7 h-7 bg-black justify-center items-center">
-                  <Ionicons name="close-sharp" size={20} color="white" />{" "}
-                </View>
-                <View className="rounded-full w-7 h-7 bg-black justify-center items-center">
-                  <Ionicons name="pencil" size={14} color="white" />{" "}
-                </View>
-              </View>
-            </View>
-            <View className="w-full flex-row border justify-between">
-              <View className="flex-row space-x-2">
-                <Text className="text-sm font-regular">
-                  Initial Budget:
-                  <Text className="font-bold">
-                    ${displayAmount(selectedCategory?.budgetInitialAmount ?? 0)}
-                  </Text>
-                </Text>
-                <Text className="text-sm font-regular">
-                  Used Budget:
-                  <Text className="font-bold">
-                    ${displayAmount(selectedCategory?.budgetUsedAmount ?? 0)}
-                  </Text>
-                </Text>
-              </View>
-            </View>
-            <Text style={{ marginTop: 10 }}>
-              This is a basic modal. You can customize it further!
-            </Text>
-            <Button
-              title="Close"
-              onPress={() => setModalVisible(false)}
-              color="red"
-            />
-          </View>
-        </View>
-      </Modal>
+      />
     </View>
   );
 };

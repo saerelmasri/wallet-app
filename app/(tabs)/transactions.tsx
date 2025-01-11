@@ -1,35 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  TouchableOpacity,
   SafeAreaView,
   ScrollView,
   Text,
-  TextInput,
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import Fontisto from "@expo/vector-icons/Fontisto";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import TransactionCard from "../../components/TransactionComponents/TransactionCard";
 import { getAuth } from "@firebase/auth";
 import { getAllUsersTransaction } from "../../api/database/transactionFunctions";
 import { displayAmount } from "../../helpers/common-helper";
-
-type UserTransaction = {
-  id: string;
-  purpose: string;
-  amount: number;
-  categoryColor: string;
-  categoryId: string;
-  categoryName: string;
-  categoryEmoji: string;
-  goalId: string;
-  goalName: string;
-  goalColor: string;
-  goalEmoji: string;
-  createdAt: string;
-};
+import { UserTransaction } from "../../constants/common-types";
 
 const Transactions = () => {
   const auth = getAuth();

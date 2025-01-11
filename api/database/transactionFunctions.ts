@@ -5,11 +5,11 @@ import {
   getDoc,
   getDocs,
   limit,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
 import { database } from "../../configs/firebaseConfig";
+import { Transaction } from "../../constants/common-types";
 
 export const createTransaction = async (
   userId: string,
@@ -185,7 +185,7 @@ export const getAllUsersTransaction = async (userId: string) => {
 export const getCategoryTransactions = async (
   userId: string,
   categoryId: string
-) => {
+): Promise<Transaction[] | Error> => {
   try {
     // Check if the user exists
     const userRef = doc(database, "users", userId);
@@ -209,24 +209,6 @@ export const getCategoryTransactions = async (
       return []; // Return empty array if no transactions
     }
 
-    const categoryRef = doc(database, "categories", categoryId);
-    const categoryDoc = await getDoc(categoryRef);
-    let categoryData = {
-      categoryName: "Unknown",
-      categoryEmoji: "",
-      categoryColor: "",
-    };
-
-    if (categoryDoc.exists()) {
-      categoryData = categoryDoc.data() as {
-        categoryName: string;
-        categoryEmoji: string;
-        categoryColor: string;
-      };
-    } else {
-      console.log(`Category ID ${categoryId} not found`);
-    }
-
     const transactions = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       const createdAt =
@@ -240,9 +222,6 @@ export const getCategoryTransactions = async (
         amount: data.amount,
         createdAt,
         purpose: data.purpose || "No purpose specified",
-        categoryName: categoryData.categoryName,
-        categoryEmoji: categoryData.categoryEmoji,
-        categoryColor: categoryData.categoryColor,
       };
     });
 

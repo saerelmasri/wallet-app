@@ -6,12 +6,12 @@ export const currencySigns = {
 };
 
 export const displayAmount = (balance: number): string => {
-  if (balance == null) { // Checks for both null and undefined
+  if (balance == null) {
+    // Checks for both null and undefined
     return "$0.00"; // Provide a default value if the balance is null or undefined
   }
   return balance.toLocaleString("en-US", { minimumFractionDigits: 2 });
 };
-
 
 export const getRandomColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215).toString(16);
@@ -67,4 +67,9 @@ export const daysLeftInMonth = daysLeft < 10 ? "0" + daysLeft : daysLeft;
 
 export const showAlert = (title: string, message: string) => {
   Alert.alert(title, message);
+};
+
+export const formatDate = (date: Date) => {
+  // Convert to "YYYY-MM-DD"
+  return date.toLocaleDateString("en-CA"); // "en-CA" locale formats as YYYY-MM-DD
 };

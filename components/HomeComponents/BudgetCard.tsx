@@ -18,21 +18,13 @@ type BudgetCardType = {
     budgetEmoji: string,
     budgetInitialAmount: number,
     budgetUsedAmount: number,
-    budgetCategory: string,
+    budgetCategory: string
   ) => void;
 };
 
 const BudgetCard = (props: BudgetCardType) => {
   const budgetLeft = props.budgetInitialAmount - props.budgetUsedAmount;
 
-  // const fetchTransactions = async () => {
-  //   const result = await getCategoryTransactions(props.userId, props.categoryId);
-  //   if(result instanceof Error){
-  //     console.log(result);
-  //     return;
-  //   }
-
-  // }
   return (
     <TouchableOpacity
       className="w-full h-20 mb-2.5 bg-white rounded-lg flex-row px-2.5 overflow-hidden"
@@ -43,7 +35,7 @@ const BudgetCard = (props: BudgetCardType) => {
           props.budgetEmoji,
           props.budgetInitialAmount,
           props.budgetUsedAmount,
-          props.budgetCategory,
+          props.budgetCategory
         )
       }
     >
