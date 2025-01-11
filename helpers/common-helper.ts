@@ -6,8 +6,12 @@ export const currencySigns = {
 };
 
 export const displayAmount = (balance: number): string => {
+  if (balance == null) { // Checks for both null and undefined
+    return "$0.00"; // Provide a default value if the balance is null or undefined
+  }
   return balance.toLocaleString("en-US", { minimumFractionDigits: 2 });
 };
+
 
 export const getRandomColor = () => {
   const randomColor = Math.floor(Math.random() * 16777215).toString(16);

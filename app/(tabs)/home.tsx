@@ -25,6 +25,7 @@ import { getAuth } from "@firebase/auth";
 import { getLastCategoryTransaction } from "../../api/database/transactionFunctions";
 import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
 import { userGoalsExist } from "../../api/database/goalFunctions";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Home = () => {
   const auth = getAuth();
@@ -47,10 +48,28 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState<{
     id: string;
     name: string;
+    userId: string;
+    budgetEmoji: string;
+    budgetInitialAmount: number;
+    budgetUsedAmount: number;
   } | null>(null);
 
-  const openModal = (categoryId: string, categoryName: string) => {
-    setSelectedCategory({ id: categoryId, name: categoryName });
+  const openModal = (
+    userId: string,
+    categoryId: string,
+    budgetEmoji: string,
+    budgetInitialAmount: number,
+    budgetUsedAmount: number,
+    budgetCategory: string
+  ) => {
+    setSelectedCategory({
+      id: categoryId,
+      userId: userId,
+      name: budgetCategory,
+      budgetEmoji: budgetEmoji,
+      budgetInitialAmount: budgetInitialAmount,
+      budgetUsedAmount: budgetUsedAmount,
+    });
     setModalVisible(true);
   };
 
@@ -212,22 +231,54 @@ const Home = () => {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            // backgroundColor: "transparent",
           }}
         >
           <View
             style={{
               backgroundColor: "white",
               padding: 20,
-              borderRadius: 20,
+              borderRadius: 35,
               width: "100%",
-              height: "80%",
+              height: "90%",
               alignItems: "center",
             }}
           >
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-              Modal Content
-            </Text>
+            <View className="w-full flex-row justify-between p-2">
+              <View className="flex-row space-x-2 p-1">
+                <Text className="text-[25px] font-bold">
+                  {selectedCategory?.budgetEmoji}
+                </Text>
+                <Text className="text-[25px] font-bold">
+                  {selectedCategory?.name}
+                </Text>
+              </View>
+              <View className="flex-row space-x-4 p-1">
+                <View className="rounded-full w-7 h-7 bg-black justify-center items-center">
+                  <Ionicons name="close-sharp" size={20} color="white" />{" "}
+                </View>
+                <View className="rounded-full w-7 h-7 bg-black justify-center items-center">
+                  <Ionicons name="pencil" size={14} color="white" />{" "}
+                </View>
+              </View>
+            </View>
+            <View className="w-full flex-row border justify-between">
+              <View className="flex-row space-x-2">
+                <Text className="text-sm font-regular">
+                  Initial Budget:
+                  <Text className="font-bold">
+                    ${displayAmount(selectedCategory?.budgetInitialAmount ?? 0)}
+                  </Text>
+                </Text>
+                <Text className="text-sm font-regular">
+                  Used Budget:
+                  <Text className="font-bold">
+                    ${displayAmount(selectedCategory?.budgetUsedAmount ?? 0)}
+                  </Text>
+                </Text>
+              </View>
+            </View>
             <Text style={{ marginTop: 10 }}>
               This is a basic modal. You can customize it further!
             </Text>

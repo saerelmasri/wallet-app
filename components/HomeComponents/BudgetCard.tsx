@@ -5,14 +5,21 @@ import { getCategoryTransactions } from "../../api/database/transactionFunctions
 
 type BudgetCardType = {
   userId: string;
-  categoryId: string
+  categoryId: string;
   budgetColor: string;
   budgetEmoji: string;
   budgetInitialAmount: number;
   budgetUsedAmount: number;
   budgetCategory: string;
   transactionDate?: string;
-  onPress: (categoryId: string, categoryName: string) => void;
+  onPress: (
+    userId: string,
+    categoryId: string,
+    budgetEmoji: string,
+    budgetInitialAmount: number,
+    budgetUsedAmount: number,
+    budgetCategory: string,
+  ) => void;
 };
 
 const BudgetCard = (props: BudgetCardType) => {
@@ -24,12 +31,21 @@ const BudgetCard = (props: BudgetCardType) => {
   //     console.log(result);
   //     return;
   //   }
-    
+
   // }
   return (
     <TouchableOpacity
       className="w-full h-20 mb-2.5 bg-white rounded-lg flex-row px-2.5 overflow-hidden"
-      onPress={() => props.onPress(props.categoryId, props.budgetCategory)}
+      onPress={() =>
+        props.onPress(
+          props.userId,
+          props.categoryId,
+          props.budgetEmoji,
+          props.budgetInitialAmount,
+          props.budgetUsedAmount,
+          props.budgetCategory,
+        )
+      }
     >
       <View className="flex-1 flex-row items-center">
         <View
@@ -43,7 +59,9 @@ const BudgetCard = (props: BudgetCardType) => {
             {props.budgetCategory}
           </Text>
           <Text className="text-xs font-pextralight text-black">
-            {props.transactionDate && props.transactionDate ? props.transactionDate.split("T")[0] : "No transactions yet"}
+            {props.transactionDate && props.transactionDate
+              ? props.transactionDate.split("T")[0]
+              : "No transactions yet"}
           </Text>
         </View>
       </View>
