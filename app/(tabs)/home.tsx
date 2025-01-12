@@ -131,7 +131,6 @@ const Home = () => {
     checkUsersGoal();
   }, [userId]);
 
-  // Group and organize categories for being displayed
   const groupedCategories = categories
     ? categories.reduce((acc, category) => {
         if (!acc[category.categoryType]) {

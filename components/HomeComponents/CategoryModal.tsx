@@ -6,6 +6,7 @@ import { Transaction } from "../../constants/common-types";
 import { getCategoryTransactions } from "../../api/database/transactionFunctions";
 import TransactionCardModel from "./TransactionCardModal";
 import { FlatList } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 
 interface CategoryModalProps {
   visible: boolean;
@@ -25,6 +26,7 @@ const CategoryModal = ({
   selectedCategory,
   onClose,
 }: CategoryModalProps) => {
+  const router = useRouter();
   const categoryId = selectedCategory?.id as string;
   const userId = selectedCategory?.userId as string;
 
@@ -88,7 +90,15 @@ const CategoryModal = ({
               </Text>
             </View>
             <View className="flex-row space-x-4 p-1">
-              <TouchableOpacity className="rounded-full w-7 h-7 bg-black justify-center items-center">
+              <TouchableOpacity
+                onPress={() => {
+                  onClose();
+                  setTimeout(() => {
+                    router.push("/categoryEditor");
+                  }, 100)
+                }}
+                className="rounded-full w-7 h-7 bg-black justify-center items-center"
+              >
                 <Ionicons name="pencil" size={14} color="white" />
               </TouchableOpacity>
               <TouchableOpacity

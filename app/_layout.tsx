@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  router,
   useSegments,
   SplashScreen,
   Stack,
@@ -133,6 +132,38 @@ const RootLayout = () => {
             headerShadowVisible: false,
             headerRight: () => (
               <TouchableOpacity onPress={() => router.back()}>
+                <Text className="text-red-600 font-pmedium text-base">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+
+        {/* Category Editor Screen*/}
+        <Stack.Screen
+          name="categoryEditor"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerLeft: () => (
+              <Ionicons
+                name="arrow-back-sharp"
+                size={24}
+                color="black"
+                onPress={() => router.back()}
+              />
+            ),
+            headerTitleStyle: {
+              color: "black",
+            },
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTintColor: "#fff",
+            headerShadowVisible: false,
+            headerRight: () => (
+              <TouchableOpacity onPress={() => router.replace("/(tabs)/home")}>
                 <Text className="text-red-600 font-pmedium text-base">
                   Cancel
                 </Text>
