@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  useSegments,
-  SplashScreen,
-  Stack,
-  useRouter,
-} from "expo-router";
+import { useSegments, SplashScreen, Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Text, TouchableOpacity } from "react-native";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
@@ -144,31 +139,11 @@ const RootLayout = () => {
         <Stack.Screen
           name="categoryEditor"
           options={{
-            headerShown: true,
-            headerTitle: "",
-            headerLeft: () => (
-              <Ionicons
-                name="arrow-back-sharp"
-                size={24}
-                color="black"
-                onPress={() => router.back()}
-              />
-            ),
-            headerTitleStyle: {
-              color: "black",
-            },
-            headerStyle: {
-              backgroundColor: "white",
-            },
-            headerTintColor: "#fff",
-            headerShadowVisible: false,
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.replace("/(tabs)/home")}>
-                <Text className="text-red-600 font-pmedium text-base">
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            ),
+            presentation: "modal",
+            gestureEnabled: true,
+            animationTypeForReplace: "pop",
+            headerShown: false,
+            gestureDirection: "vertical",
           }}
         />
 

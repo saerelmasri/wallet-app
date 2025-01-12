@@ -50,15 +50,13 @@ const AddTransaction = () => {
 
   // Selected Variables
   const [selectedGoal, setselectedGoal] = useState<GoalType | null>(null);
-  const [selectedRepeat, setSelectedRepeat] = useState("Never");
+  const [selectedRepeat, setSelectedRepeat] = useState<string>("Never");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [transactionData, setTransactionData] = useState({
     title: "",
     amount: newAmountIncoming,
   });
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString()
-  );
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString());
 
   // Handle Date Change
   const handleDateChange = (date: string) => {
@@ -283,12 +281,14 @@ const AddTransaction = () => {
               >
                 <Text
                   className={`${
-                    selectedDate.split("T")[0] === new Date().toISOString().split("T")[0]
+                    selectedDate.split("T")[0] ===
+                    new Date().toISOString().split("T")[0]
                       ? "text-[#A9A9A9]"
                       : "text-black"
                   }`}
                 >
-                  {selectedDate.split("T")[0] === new Date().toISOString().split("T")[0]
+                  {selectedDate.split("T")[0] ===
+                  new Date().toISOString().split("T")[0]
                     ? "Today"
                     : selectedDate}
                 </Text>

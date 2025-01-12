@@ -26,8 +26,6 @@ import { getAuth } from "@firebase/auth";
 import { getLastCategoryTransaction } from "../../api/database/transactionFunctions";
 import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
 import { userGoalsExist } from "../../api/database/goalFunctions";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { UserTransaction } from "../../constants/common-types";
 import CategoryModal from "../../components/HomeComponents/CategoryModal";
 
 const Home = () => {
@@ -56,10 +54,8 @@ const Home = () => {
     budgetInitialAmount: number;
     budgetUsedAmount: number;
     categoryColor: string;
+    categoryType: string;
   } | null>(null);
-  const [categoryTransaction, setCategoryTransaction] = useState<
-    UserTransaction[] | null
-  >(null);
 
   const openModal = (
     userId: string,
@@ -68,7 +64,8 @@ const Home = () => {
     budgetInitialAmount: number,
     budgetUsedAmount: number,
     budgetCategory: string,
-    categoryColor: string
+    categoryColor: string,
+    categoryType: string
   ) => {
     setSelectedCategory({
       id: categoryId,
@@ -78,6 +75,7 @@ const Home = () => {
       budgetInitialAmount: budgetInitialAmount,
       budgetUsedAmount: budgetUsedAmount,
       categoryColor: categoryColor,
+      categoryType: categoryType,
     });
     setModalVisible(true);
   };
@@ -148,49 +146,49 @@ const Home = () => {
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar barStyle={"dark-content"} />
       <SafeAreaView className="flex-1 h-full">
+        <View className="w-full flex-row items-center">
+          {/* Remaining budget of the month*/}
+          <View className="bg-white pl-4 pr-4 w-full">
+            {monthly ? (
+              <>
+                <View className=" flex-row justify-between">
+                  <View>
+                    <Text className="font-pregular text-xs text-black text-left">
+                      My budget for {currentMonth}
+                    </Text>
+                    <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
+                      $ {displayAmount(Number(monthly))}
+                      <Text className="font-pmedium text-xs text-black text-left">
+                        {" "}
+                        left
+                      </Text>
+                    </Text>
+                    <Text className="font-pregular text-xs text-black tracking-tighter text-left">
+                      {daysLeftInMonth} days left in {currentMonth}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            ) : (
+              <Text className="font-psemibold text-sm text-black tracking-tighter text-left">
+                Your monthly budget has not been set up yet. Please build your
+                budget
+              </Text>
+            )}
+          </View>
+        </View>
+
+        {userHasGoals ? (
+          <View className="w-full flex-row justify-around p-3">
+            {/* <GoalProgressCircle /> */}
+            <GoalProgressCircleV2 />
+            {/* <UpcomingPayments /> */}
+          </View>
+        ) : null}
+
         <ScrollView
           contentContainerStyle={{ paddingBottom: 20, alignItems: "center" }}
         >
-          <View className="w-full flex-row items-center">
-            {/* Remaining budget of the month*/}
-            <View className="bg-white pl-4 pr-4 w-full">
-              {monthly ? (
-                <>
-                  <View className=" flex-row justify-between">
-                    <View>
-                      <Text className="font-pregular text-xs text-black text-left">
-                        My budget for {currentMonth}
-                      </Text>
-                      <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
-                        $ {displayAmount(Number(monthly))}
-                        <Text className="font-pmedium text-xs text-black text-left">
-                          {" "}
-                          left
-                        </Text>
-                      </Text>
-                      <Text className="font-pregular text-xs text-black tracking-tighter text-left">
-                        {daysLeftInMonth} days left in {currentMonth}
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              ) : (
-                <Text className="font-psemibold text-sm text-black tracking-tighter text-left">
-                  Your monthly budget has not been set up yet. Please build your
-                  budget
-                </Text>
-              )}
-            </View>
-          </View>
-
-          {userHasGoals ? (
-            <View className="w-full flex-row justify-around p-3">
-              {/* <GoalProgressCircle /> */}
-              <GoalProgressCircleV2 />
-              {/* <UpcomingPayments /> */}
-            </View>
-          ) : null}
-
           {/* Transaction History Widgets */}
           {loadingCategories ? (
             <ActivityIndicator className="mt-12" size="large" color="#00ff00" />
@@ -202,9 +200,9 @@ const Home = () => {
                   ([categoryType, categoryArray]) => (
                     <View key={categoryType}>
                       {/* Section Title */}
-                      <Text className="text-lg font-pregular">
+                      {/* <Text className="text-lg font-pregular">
                         {categoryType}
-                      </Text>
+                      </Text> */}
 
                       {/* Categories in this section */}
                       {categoryArray.map((category) => (
@@ -225,6 +223,20 @@ const Home = () => {
                   )
                 )
               }
+              <View className="w-full justify-center items-center">
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push({
+                      pathname: "/categoryEditor",
+                    })
+                  }
+                  className="border border-black-200 border-dashed w-[95%] h-[50px] rounded-lg flex-row justify-center items-center mb-3"
+                >
+                  <Text className="text-gray-400 font-plight text-xs">
+                    Add a new category
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </ScrollView>

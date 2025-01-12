@@ -113,6 +113,10 @@ const CategoryModal = ({
             </View>
           </View>
 
+          <View className="w-full p-2">
+            <Text className="text-sm font-pregular">Category: Needs</Text>
+          </View>
+
           {/* Budget Information */}
           <View className="w-full flex-row justify-between p-2 m-4">
             <View className="flex-row">

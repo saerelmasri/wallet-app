@@ -30,12 +30,15 @@ const CategoryEditor = () => {
   const parsedCategoryParam =
     typeof stringifyCategoryParam === "string"
       ? JSON.parse(stringifyCategoryParam)
-      : stringifyCategoryParam;
+      : {};
 
   const { name, budgetEmoji, budgetInitialAmount, categoryColor } =
-    parsedCategoryParam;
+    parsedCategoryParam || {};
   const incomingUserId = parsedCategoryParam.userId;
   const incomingCategoryId = parsedCategoryParam.id;
+  const incomingCategoryType = parsedCategoryParam.categoryType;
+
+  console.log("parsedCategoryParam:", parsedCategoryParam);
 
   // Modal Variables
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -44,12 +47,24 @@ const CategoryEditor = () => {
   const [selectedEmoji, setSelectedEmoji] = useState<{ emoji: string }>({
     emoji: "",
   });
-  const [newCategoryProp, setNewCategoryProp] = useState({
+  const [newCategoryProp, setNewCategoryProp] = useState<{
+    categoryName: string;
+    amountAllocated: number;
+    categoryType: "Savings" | "Needs" | "Wants";
+  }>({
     categoryName: "",
     amountAllocated: 0,
-    categoryType: "Expenses",
+    categoryType: "Needs",
   });
   const [bgColor, setBgColor] = useState<string>(getRandomColor());
+
+  // Handle type change
+  const handleTypeChange = (option: "Savings" | "Needs" | "Wants") => {
+    setNewCategoryProp((prevState) => ({
+      ...prevState,
+      categoryType: option, // Update the categoryType
+    }));
+  };
 
   // Handle save new category function
   const handleSaveNewCategory = async () => {
@@ -72,7 +87,7 @@ const CategoryEditor = () => {
         allocatedMoney: Number(newCategoryProp.amountAllocated),
       };
 
-      // Exisiting category
+      // Existing category
       if (incomingCategoryId) {
         const updateCategoryData = await updateExistingCategory(
           incomingUserId,
@@ -93,10 +108,10 @@ const CategoryEditor = () => {
           userId,
           categoryData.categoryName,
           selectedEmoji.emoji,
-          "Expenses",
+          "Expenses", // Category type
           bgColor,
           categoryData.allocatedMoney,
-          0
+          0 // Used money
         );
 
         if (createNewCategory instanceof Error) {
@@ -136,18 +151,27 @@ const CategoryEditor = () => {
         amountAllocated: budgetInitialAmount as number,
       }));
     }
+    if (incomingCategoryType) {
+      setNewCategoryProp((prev) => ({
+        ...prev,
+        categoryType: incomingCategoryType,
+      }));
+    }
     if (budgetEmoji) {
       setSelectedEmoji({ emoji: budgetEmoji as string });
     }
     if (categoryColor) {
       setBgColor(categoryColor as string);
     }
+  }, [
+    name,
+    budgetInitialAmount,
+    budgetEmoji,
+    categoryColor,
+    incomingCategoryType,
+  ]);
 
-    setNewCategoryProp((prev) => ({
-      ...prev,
-      categoryType: "Expenses",
-    }));
-  }, [name, budgetInitialAmount, budgetEmoji, categoryColor]);
+  console.log("Selected:", newCategoryProp);
 
   return (
     <SafeAreaView
@@ -188,7 +212,8 @@ const CategoryEditor = () => {
           />
 
           <CategorySwitch
-            locked={newCategoryProp.categoryType === "Expenses" ? true : false}
+            locked={false}
+            handleCategoryType={handleTypeChange}
           />
         </View>
       </ScrollView>
@@ -196,8 +221,8 @@ const CategoryEditor = () => {
         className={`flex justify-center items-center w-full absolute bottom-14 `}
       >
         <CustomButton
-          title="Save Goal"
-          handlePress={() => {}}
+          title="Save Category"
+          handlePress={handleSaveNewCategory} // Save function
           containerStyle="w-[90%] bg-[#2F7E79] p-3"
           textStyle="text-white"
         />

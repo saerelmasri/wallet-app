@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { displayAmount } from "../../helpers/common-helper";
-import { getCategoryTransactions } from "../../api/database/transactionFunctions";
 
 type BudgetCardType = {
   userId: string;
@@ -12,6 +11,7 @@ type BudgetCardType = {
   budgetUsedAmount: number;
   budgetCategory: string;
   transactionDate?: string;
+  categoryType: string;
   onPress: (
     userId: string,
     categoryId: string,
@@ -19,7 +19,8 @@ type BudgetCardType = {
     budgetInitialAmount: number,
     budgetUsedAmount: number,
     budgetCategory: string,
-    categoryColor: string
+    categoryColor: string,
+    categoryType: string
   ) => void;
 };
 
@@ -37,7 +38,8 @@ const BudgetCard = (props: BudgetCardType) => {
           props.budgetInitialAmount,
           props.budgetUsedAmount,
           props.budgetCategory,
-          props.budgetColor
+          props.budgetColor,
+          props.categoryType
         )
       }
     >
