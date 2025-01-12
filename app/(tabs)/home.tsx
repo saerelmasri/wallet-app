@@ -55,6 +55,7 @@ const Home = () => {
     budgetEmoji: string;
     budgetInitialAmount: number;
     budgetUsedAmount: number;
+    categoryColor: string;
   } | null>(null);
   const [categoryTransaction, setCategoryTransaction] = useState<
     UserTransaction[] | null
@@ -66,7 +67,8 @@ const Home = () => {
     budgetEmoji: string,
     budgetInitialAmount: number,
     budgetUsedAmount: number,
-    budgetCategory: string
+    budgetCategory: string,
+    categoryColor: string
   ) => {
     setSelectedCategory({
       id: categoryId,
@@ -75,6 +77,7 @@ const Home = () => {
       budgetEmoji: budgetEmoji,
       budgetInitialAmount: budgetInitialAmount,
       budgetUsedAmount: budgetUsedAmount,
+      categoryColor: categoryColor,
     });
     setModalVisible(true);
   };

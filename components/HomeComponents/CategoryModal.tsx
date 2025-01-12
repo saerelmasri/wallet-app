@@ -6,7 +6,7 @@ import { Transaction } from "../../constants/common-types";
 import { getCategoryTransactions } from "../../api/database/transactionFunctions";
 import TransactionCardModel from "./TransactionCardModal";
 import { FlatList } from "react-native-gesture-handler";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 
 interface CategoryModalProps {
   visible: boolean;
@@ -26,9 +26,9 @@ const CategoryModal = ({
   selectedCategory,
   onClose,
 }: CategoryModalProps) => {
-  const router = useRouter();
   const categoryId = selectedCategory?.id as string;
   const userId = selectedCategory?.userId as string;
+  const stringifyCategoryParam = JSON.stringify(selectedCategory);
 
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
   //   const [loading, setLoading] = useState<boolean>(false);
@@ -94,8 +94,11 @@ const CategoryModal = ({
                 onPress={() => {
                   onClose();
                   setTimeout(() => {
-                    router.push("/categoryEditor");
-                  }, 100)
+                    router.push({
+                      pathname: "/categoryEditor",
+                      params: { stringifyCategoryParam },
+                    });
+                  }, 100);
                 }}
                 className="rounded-full w-7 h-7 bg-black justify-center items-center"
               >

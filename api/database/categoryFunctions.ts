@@ -97,6 +97,35 @@ export const updatedUsedMoneyOnCategory = async (
   }
 };
 
+export const updateExistingCategory = async (
+  userId: string,
+  categoryId: string,
+  categoryData: { categoryName: string; allocatedMoney: number }
+) => {
+  try {
+    const userRef = doc(database, "users", userId);
+    const user = await getDoc(userRef);
+
+    if (!user.exists()) {
+      return new Error("User doesn't exist in the database");
+    }
+
+    const categoryDocRef = doc(database, "categories", categoryId);
+    const updatedCategoryData = {
+      ...categoryData,
+      updatedAt: new Date().toISOString(),
+    };
+
+    await setDoc(categoryDocRef, updatedCategoryData, { merge: true });
+    return undefined;
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : "Unknown error");
+    return new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
 export const getUserCategories = async (
   userId: string
 ): Promise<Error | BudgetData[]> => {

@@ -18,7 +18,8 @@ type BudgetCardType = {
     budgetEmoji: string,
     budgetInitialAmount: number,
     budgetUsedAmount: number,
-    budgetCategory: string
+    budgetCategory: string,
+    categoryColor: string
   ) => void;
 };
 
@@ -35,7 +36,8 @@ const BudgetCard = (props: BudgetCardType) => {
           props.budgetEmoji,
           props.budgetInitialAmount,
           props.budgetUsedAmount,
-          props.budgetCategory
+          props.budgetCategory,
+          props.budgetColor
         )
       }
     >

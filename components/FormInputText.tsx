@@ -19,9 +19,7 @@ const FormInputText = ({
   return (
     <View className={`p-3 flex w-[90%] space-y-3`}>
       {/* Title above the form field */}
-      <Text
-        className="text-base w-[150px] text-black font-psemibold"
-      >
+      <Text className="text-base w-[150px] text-black font-psemibold">
         {title}
       </Text>
 
