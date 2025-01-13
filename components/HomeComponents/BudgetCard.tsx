@@ -71,7 +71,7 @@ const BudgetCard = (props: BudgetCardType) => {
             Left ${displayAmount(budgetLeft)}
           </Text>
         )}
-        <Text className="text-xs text-black opacity-100 mt-1">
+        <Text className="text-xs text-black opacity-100 mt-1 font-plight">
           Initial budget ${displayAmount(props.budgetInitialAmount)}
         </Text>
       </View>

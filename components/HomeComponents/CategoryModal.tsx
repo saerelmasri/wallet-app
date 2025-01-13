@@ -17,6 +17,7 @@ interface CategoryModalProps {
     budgetEmoji: string;
     budgetInitialAmount: number;
     budgetUsedAmount: number;
+    categoryType: string;
   } | null;
   onClose: () => void;
 }
@@ -114,7 +115,7 @@ const CategoryModal = ({
           </View>
 
           <View className="w-full p-2">
-            <Text className="text-sm font-pregular">Category: Needs</Text>
+            <Text className="text-sm font-pregular">Category: {selectedCategory?.categoryType}</Text>
           </View>
 
           {/* Budget Information */}

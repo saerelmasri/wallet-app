@@ -75,8 +75,8 @@ const Transactions = () => {
     const [date, transactions] = item;
 
     return (
-      <View>
-        <Text className="text-sm font-pregular text-black mb-2">{date}</Text>
+      <View className="pl-3 pr-3">
+        <Text className="text-xs font-pmedium text-black ">{date}</Text>
         {transactions.map((transaction) => (
           <TransactionCard
             key={transaction.id}

@@ -29,13 +29,8 @@ const ModalNotification = (props: ModalNotification) => {
       visible={props.modalNotificationVisible}
       onRequestClose={() => props.setModalNotificationVisible(false)}
     >
-      <View
-        style={{
-          backgroundColor: "transparent",
-        }}
-        className="flex-1 justify-end"
-      >
-        <View className="h-[90%] bg-white rounded-tl-3xl rounded-tr-3xl border-black">
+      <View className="flex-1 justify-end">
+        <View className="h-[80%] bg-white rounded-tl-3xl rounded-tr-3xl border-black">
           <View className="w-full flex-row justify-end items-center p-5">
             <TouchableOpacity
               onPress={() => props.setModalNotificationVisible(false)}

@@ -22,6 +22,7 @@ import { createTransaction } from "../api/database/transactionFunctions";
 import { GoalType, updateSavedAmount } from "../api/database/goalFunctions";
 import ModalGoals from "../components/NewTransactionComponents/ModalGoals";
 import { getAuth } from "@firebase/auth";
+import FormInputTextVertical from "../components/FormInputTextVertical";
 
 const AddTransaction = () => {
   const auth = getAuth();
@@ -251,14 +252,24 @@ const AddTransaction = () => {
 
           {/* Transaction Title */}
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
-          <FormInputText
-            title="For"
-            value={transactionTitle as string}
-            placeHolder="Rent"
-            handleTextChange={(e: any) =>
-              setTransactionData({ ...transactionData, title: e })
-            }
-          />
+          <View
+            className={`bg-white p-3 flex-row justify-between items-center w-full`}
+          >
+            <Text
+              className="text-base text-black font-psemibold "
+              style={{ width: 100, paddingLeft: 20 }}
+            >
+              For
+            </Text>
+            <FormInputTextVertical
+              title="For"
+              value={transactionTitle as string}
+              placeHolder="Rent"
+              handleTextChange={(e: any) =>
+                setTransactionData({ ...transactionData, title: e })
+              }
+            />
+          </View>
           <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           {/* Date Picker */}
@@ -340,10 +351,10 @@ const AddTransaction = () => {
               Goal
             </Text>
             <View className="w-full h-12 flex-row items-center">
-              <View className="p-2 rounded-md bg-[#FF000F]">
+              <View className="rounded-md">
                 {" "}
                 <TouchableOpacity onPress={() => setModalGoalVisible(true)}>
-                  <Text className="text-white font-pmedium text-sm">
+                  <Text className="text-black font-pmedium text-sm">
                     {selectedGoal !== null
                       ? `${selectedGoal.goalName}`
                       : "Select a Goal"}
@@ -354,8 +365,12 @@ const AddTransaction = () => {
           </View>
 
           {/* Categories List */}
-          <View className="m-3 w-full flex-col">
-            <Text className="text-black font-pregular text-xs p-5">
+          <View
+            className={`p-3 w-full flex-col ${
+              transactionTitle !== "" ? "h-[35vh]" : "h-[30vh]"
+            }`}
+          >
+            <Text className="text-black font-pregular text-xs pl-5">
               Based on your preference
             </Text>
             <FlatList
@@ -399,29 +414,33 @@ const AddTransaction = () => {
           {/* Create Button */}
           <View className="w-full justify-end flex items-center">
             {transactionAmount ? (
-              <>
-                <CustomButton
-                  title="Update"
-                  handlePress={() => {
-                    console.log("Update");
-                  }}
-                  containerStyle="mt-7 w-[90%] bg-[#FF000F]"
-                  textStyle={"text-[#FCFCFC]"}
-                />
-                <CustomButton
-                  title="Delete"
-                  handlePress={() => {
-                    console.log("Delete");
-                  }}
-                  containerStyle="mt-7 w-[90%] bg-[#FF000F]"
-                  textStyle={"text-[#FCFCFC]"}
-                />
-              </>
+              <View className="w-full flex-row justify-around p-3">
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => {}}
+                  className={`w-[45%] h-[70px] rounded-[16px] justify-center items-center bg-blue-600 ${
+                    isLoading ? "opacity-50" : ""
+                  }`}
+                  disabled={isLoading}
+                >
+                  <Text className={`font-psemibold text-lg text-white`}>Update</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => {}}
+                  className={`w-[45%] h-[70px] rounded-[16px] justify-center items-center bg-red-700 ${
+                    isLoading ? "opacity-50" : ""
+                  }`}
+                  disabled={isLoading}
+                >
+                  <Text className={`font-psemibold text-lg text-white`}>Delete</Text>
+                </TouchableOpacity>
+              </View>
             ) : (
               <CustomButton
                 title="Create"
                 handlePress={handleCreateTransaction}
-                containerStyle="w-[90%] bg-[#05603A] mt-10"
+                containerStyle="w-[90%] bg-[#05603A]"
                 textStyle={"text-[#FCFCFC]"}
               />
             )}

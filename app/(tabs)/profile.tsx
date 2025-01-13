@@ -77,9 +77,7 @@ const Profile = () => {
         display: "flex",
         justifyContent: "center",
         alignContent: "center",
-        backgroundColor: modalNotificationVisible
-          ? "rgba(0, 0, 0, 0.5)"
-          : "white",
+        backgroundColor: "white"
       }}
     >
       <View className="justify-start w-full h-full">

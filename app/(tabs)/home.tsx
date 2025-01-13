@@ -148,10 +148,10 @@ const Home = () => {
       <SafeAreaView className="flex-1 h-full">
         <View className="w-full flex-row items-center">
           {/* Remaining budget of the month*/}
-          <View className="bg-white pl-4 pr-4 w-full">
+          <View className="bg-white w-full">
             {monthly ? (
               <>
-                <View className=" flex-row justify-between">
+                <View className=" flex-row justify-between p-5">
                   <View>
                     <Text className="font-pregular text-xs text-black text-left">
                       My budget for {currentMonth}
@@ -179,7 +179,7 @@ const Home = () => {
         </View>
 
         {userHasGoals ? (
-          <View className="w-full flex-row justify-around p-3">
+          <View className="w-full flex-row justify-around pl-5 pr-5">
             {/* <GoalProgressCircle /> */}
             <GoalProgressCircleV2 />
             {/* <UpcomingPayments /> */}
@@ -216,6 +216,7 @@ const Home = () => {
                           budgetInitialAmount={category.allocatedMoney}
                           budgetUsedAmount={category.usedMoney}
                           transactionDate={category.lastTransaction}
+                          categoryType={category.categoryType}
                           onPress={openModal}
                         />
                       ))}

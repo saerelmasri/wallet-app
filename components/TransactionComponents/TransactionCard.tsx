@@ -53,7 +53,7 @@ const TransactionCard = (props: TransactionCardType) => {
           </Text>
         </View>
         <View style={styles.details}>
-          <Text style={styles.transactionTitle}>
+          <Text className="text-sm font-pmedium text-black">
             {props.transactionTitle !== "" && props.goalName === ""
               ? props.transactionTitle
               : props.transactionTitle === "" && props.goalName !== ""
@@ -61,7 +61,7 @@ const TransactionCard = (props: TransactionCardType) => {
               : "📈"}
           </Text>
           <View style={styles.row}>
-            <Text style={styles.categoryText}>
+            <Text className="text-xs text-black font-pregular opacity-70">
               {props.categoryName !== "" && props.goalName === ""
                 ? props.categoryName
                 : props.categoryName === "" && props.goalName !== ""
@@ -72,11 +72,11 @@ const TransactionCard = (props: TransactionCardType) => {
         </View>
       </View>
       <View style={styles.amountContainer}>
-        <Text style={[styles.amount, styles.expense]}>
+        <Text className="text-base font-psemibold text-[#FF000F]">
           {`- $${props.transactionAmount}`}
         </Text>
         {props.transactionDate && (
-          <Text style={styles.date}>{props.transactionDate}</Text>
+          <Text className="text-xs text-black opacity-70">{props.transactionDate}</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     flexDirection: "row",
-    paddingHorizontal: 10,
     overflow: "hidden",
   },
   cardContent: {
@@ -102,41 +101,18 @@ const styles = StyleSheet.create({
   details: {
     marginLeft: 10,
   },
-  transactionTitle: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "black",
-  },
   row: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 2,
-  },
-  categoryText: {
-    fontSize: 12,
-    color: "black",
-    opacity: 0.7,
-    marginLeft: 4,
   },
   amountContainer: {
     justifyContent: "center",
     alignItems: "flex-end",
     paddingHorizontal: 10,
   },
-  amount: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  expense: {
-    color: "#FF000F",
-  },
   income: {
     color: "#04EE7E",
-  },
-  date: {
-    fontSize: 10,
-    color: "black",
-    opacity: 0.7,
   },
   leftAmount: {
     fontSize: 13,
