@@ -19,6 +19,7 @@ import {
   updateExistingCategory,
 } from "../api/database/categoryFunctions";
 import { getAuth } from "@firebase/auth";
+import { StatusBar } from "expo-status-bar";
 
 const CategoryEditor = () => {
   const auth = getAuth();
@@ -181,8 +182,11 @@ const CategoryEditor = () => {
       style={{
         flex: 1,
         backgroundColor: "white",
+        borderTopLeftRadius: 60,
+        borderTopRightRadius: 60,
       }}
     >
+      <StatusBar style="light" backgroundColor="white" />
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
         <View className="w-full justify-center items-center flex">
           <TouchableOpacity
@@ -223,7 +227,11 @@ const CategoryEditor = () => {
         className={`flex justify-center items-center w-full absolute bottom-14 p-3`}
       >
         <CustomButton
-          title={incomingCategoryId !== undefined ? "Update Category" : "Save Category"}
+          title={
+            incomingCategoryId !== undefined
+              ? "Update Category"
+              : "Save Category"
+          }
           handlePress={handleSaveNewCategory}
           containerStyle="w-[90%] bg-[#2F7E79] p-3"
           textStyle="text-white"

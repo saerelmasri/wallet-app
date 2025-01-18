@@ -176,10 +176,9 @@ const TabLayout = () => {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => router.push("/numPad")}
-            hitSlop={{ bottom: 120, left: 50, right: 50 }}
             style={{
               position: "absolute",
-              bottom: 100,
+              bottom: 120,
               right: 40,
               alignSelf: "center",
               width: 60,
@@ -193,6 +192,7 @@ const TabLayout = () => {
               shadowOpacity: 0.25,
               shadowRadius: 3.84,
               elevation: 5,
+              zIndex: 10,
             }}
           >
             <Ionicons name="add-outline" size={36} color="white" />

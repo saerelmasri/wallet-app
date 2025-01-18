@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSegments, SplashScreen, Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Text, TouchableOpacity } from "react-native";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { auth } from "../configs/firebaseConfig";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -62,6 +63,7 @@ const RootLayout = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="dark" backgroundColor="white" />
       <Stack
         screenOptions={{
           gestureEnabled: false,
@@ -144,6 +146,24 @@ const RootLayout = () => {
             animationTypeForReplace: "pop",
             headerShown: false,
             gestureDirection: "vertical",
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+        />
+
+        {/* About Screen*/}
+        <Stack.Screen
+          name="about"
+          options={{
+            presentation: "modal",
+            gestureEnabled: true,
+            animationTypeForReplace: "pop",
+            headerShown: false,
+            gestureDirection: "vertical",
+            contentStyle: {
+              backgroundColor: "transparent",
+            },
           }}
         />
 

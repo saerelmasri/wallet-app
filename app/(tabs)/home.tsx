@@ -4,9 +4,6 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
-  Modal,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
@@ -16,6 +13,7 @@ import {
   currentMonth,
   daysLeftInMonth,
   displayAmount,
+  showAlert,
 } from "../../helpers/common-helper";
 import { getAllocatedBudget } from "../../api/database/userFunctions";
 import {
@@ -42,6 +40,7 @@ const Home = () => {
   );
 
   // State Variables
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
@@ -84,12 +83,23 @@ const Home = () => {
   // Fetch user budget function
   useEffect(() => {
     const fetchUserBudget = async () => {
-      const result = await getAllocatedBudget(userId);
-      if (result instanceof Error) {
-        console.log("Error fetching user:", result.message);
-        return;
+      setIsLoading(true);
+      try {
+        const result = await getAllocatedBudget(userId);
+        if (result instanceof Error) {
+          console.log("Error: ", result.message);
+          setMonthly(null);
+          return;
+        }
+        setMonthly(result.totalAllocated);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
+      } finally {
+        setIsLoading(false);
       }
-      setMonthly(result.totalAllocated);
     };
 
     const fetchUserCategories = async () => {
@@ -97,7 +107,7 @@ const Home = () => {
       try {
         const result = await getUserCategories(userId);
         if (result instanceof Error) {
-          console.log("Error fetching user:", result.message);
+          console.log("Error:", result.message);
           return;
         }
 
@@ -114,18 +124,30 @@ const Home = () => {
           })
         );
         setCategories(lastTransaction);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
       } finally {
         setLoadingCategories(false);
       }
     };
 
     const checkUsersGoal = async () => {
-      const result = await userGoalsExist(userId as string);
-      if (result instanceof Error) {
-        console.log("Error fetching user:", result.message);
-        return;
+      try {
+        const result = await userGoalsExist(userId as string);
+        if (result instanceof Error) {
+          console.log("Error fetching user:", result.message);
+          return;
+        }
+        setUserHasGoals(result);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
       }
-      setUserHasGoals(result);
     };
 
     fetchUserBudget();
@@ -149,34 +171,30 @@ const Home = () => {
       <SafeAreaView className="flex-1 h-full">
         <View className="w-full flex-row items-center">
           {/* Remaining budget of the month*/}
-          <View className="bg-white w-full">
-            {monthly ? (
-              <>
-                <View className=" flex-row justify-between p-5">
-                  <View>
-                    <Text className="font-pregular text-xs text-black text-left">
-                      My budget for {currentMonth}
-                    </Text>
-                    <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
-                      $ {displayAmount(Number(monthly))}
-                      <Text className="font-pmedium text-xs text-black text-left">
-                        {" "}
-                        left
-                      </Text>
-                    </Text>
-                    <Text className="font-pregular text-xs text-black tracking-tighter text-left">
-                      {daysLeftInMonth} days left in {currentMonth}
-                    </Text>
-                  </View>
-                </View>
-              </>
-            ) : (
-              <Text className="font-psemibold text-sm text-black tracking-tighter text-left">
-                Your monthly budget has not been set up yet. Please build your
-                budget
-              </Text>
-            )}
-          </View>
+          {isLoading ? (
+            <View className="bg-white w-full justify-center items-center">
+              {" "}
+              <Skeleton height={60} width="90%" style={{ marginBottom: 10 }} />
+            </View>
+          ) : (
+            <View className=" flex-row justify-between p-5">
+              <View>
+                <Text className="font-pregular text-xs text-black text-left">
+                  My budget for {currentMonth}
+                </Text>
+                <Text className="font-psemibold text-xl text-black tracking-tighter text-left">
+                  $ {displayAmount(Number(monthly))}
+                  <Text className="font-pmedium text-xs text-black text-left">
+                    {" "}
+                    left
+                  </Text>
+                </Text>
+                <Text className="font-pregular text-xs text-black tracking-tighter text-left">
+                  {daysLeftInMonth} days left in {currentMonth}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
 
         {loadingCategories ? (

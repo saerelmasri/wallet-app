@@ -12,7 +12,7 @@ type OptionButtonType = {
 const OptionButtons = (props: OptionButtonType) => {
   return (
     <TouchableOpacity
-      onPress={() => {}}
+      onPress={props.onPress}
       className="border flex-row justify-between items-center p-2 rounded-md space-x-5 h-16 mb-3"
     >
       <View className="flex-row space-x-2">

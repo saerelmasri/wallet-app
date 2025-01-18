@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ModalNotification from "../../components/ProfileComponents/NotificationModal";
@@ -16,10 +17,30 @@ import {
   updateNotificationSettings,
 } from "../../api/database/userFunctions";
 import Skeleton from "../../components/SkeletonLoader";
+import { showAlert } from "../../helpers/common-helper";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const Profile = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid as string;
+
+  const openEmailDraft = () => {
+    const email = "saer1890@example.com";
+    const subject = "Feedback/bug report";
+    const body = "";
+    const mailtoURL = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+
+    Linking.openURL(mailtoURL).catch((err) => {
+      Alert.alert(
+        "Error",
+        "Unable to open email app. Please check if you have an email app installed."
+      );
+      console.error("Error opening email app: ", err);
+    });
+  };
 
   // State Variable
   const [profile, setProfile] = useState({
@@ -40,15 +61,15 @@ const Profile = () => {
       setIsLoading(true);
       try {
         const result = await getUserFromDB(userId as string);
-
         if (result instanceof Error) {
-          console.log("Error:", result.message);
-        } else if (result) {
-          setProfile({
-            email: result.email || "",
-            notificationSettings: result.notificationSettings || "Off",
-          });
+          return result;
         }
+        setProfile({
+          email: result?.email || "",
+          notificationSettings: result?.notificationSettings || "Off",
+        });
+      } catch (error) {
+        showAlert("Error", "Unable to fetch user profile. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -86,6 +107,8 @@ const Profile = () => {
         backgroundColor: "white",
       }}
     >
+      <StatusBar style="dark" backgroundColor="white" />
+
       <View className="justify-start w-full h-full">
         <ScrollView>
           <View className="w-full justify-center items-center p-3">
@@ -116,7 +139,9 @@ const Profile = () => {
               }}
               className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5"
             >
-              <Text className="font-psemibold text-sm w-[100px]">Notifications</Text>
+              <Text className="font-psemibold text-sm w-[100px]">
+                Notifications
+              </Text>
               {isLoading ? (
                 <Skeleton height={30} width="60%" />
               ) : (
@@ -129,9 +154,26 @@ const Profile = () => {
 
           <View className="w-full p-6 space-y-4">
             <Text className="font-pmedium text-sm mb-3">Help & Support</Text>
-            <OptionButtons emoji="" icon={true} title="Contact Support" />
-            <OptionButtons emoji="❤️‍🔥" title="About" />
-            <OptionButtons emoji="🗑️" title="Delete all" />
+            <OptionButtons
+              emoji=""
+              icon={true}
+              title="Contact Support"
+              onPress={openEmailDraft}
+            />
+            <OptionButtons
+              emoji="❤️‍🔥"
+              title="About"
+              onPress={() => {
+                router.push("/about");
+              }}
+            />
+            <OptionButtons
+              emoji="🗑️"
+              title="Delete all"
+              onPress={() => {
+                showAlert("Careful!", "You are about to delete everything!");
+              }}
+            />
             <OptionButtons
               emoji="👋"
               title="Log out"

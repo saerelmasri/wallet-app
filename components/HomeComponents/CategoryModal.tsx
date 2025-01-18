@@ -8,6 +8,11 @@ import TransactionCardModel from "./TransactionCardModal";
 import { FlatList } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import Skeleton from "../SkeletonLoader";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 interface CategoryModalProps {
   visible: boolean;
@@ -35,6 +40,9 @@ const CategoryModal = ({
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // State for modal animation (shadow fade-in)
+  const fadeAnim = useSharedValue(0); // Initial opacity set to 0
+
   useEffect(() => {
     if (!userId || !categoryId) {
       return;
@@ -51,7 +59,8 @@ const CategoryModal = ({
           setTransactions(null);
           return;
         }
-        setTransactions(result);
+        // setTransactions(result);
+        setTransactions(null);
       } finally {
         setIsLoading(false);
       }
@@ -59,6 +68,21 @@ const CategoryModal = ({
 
     fetchCategoryTransactions();
   }, [categoryId, userId, visible]);
+
+  useEffect(() => {
+    if (visible) {
+      fadeAnim.value = withTiming(1, { duration: 300 }); // Fade in
+    } else {
+      fadeAnim.value = withTiming(0, { duration: 300 }); // Fade out
+    }
+  }, [visible, fadeAnim]);
+
+  // Animated style for modal background opacity
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: fadeAnim.value,
+    };
+  });
 
   const renderTransaction = ({ item }: { item: Transaction }) => {
     const transactionDate = item.createdAt
@@ -83,7 +107,16 @@ const CategoryModal = ({
       onRequestClose={onClose}
       key={categoryId}
     >
-      <View className="flex-1 justify-end bg-black/10">
+      <Animated.View
+        style={[
+          {
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          },
+          animatedStyle, // Apply animated style
+        ]}
+      >
         <View className="bg-white p-5 rounded-t-[35px] w-full h-[90%] items-center">
           {/* Header: Emoji, Name, and Actions */}
           <View className="w-full flex-row justify-between p-2">
@@ -148,8 +181,8 @@ const CategoryModal = ({
           {/* Modal Content */}
 
           {isLoading ? (
-            <View className=" w-full">
-              {[1, 2, 3 ].map((_, index) => (
+            <View className="w-full">
+              {[1, 2, 3].map((_, index) => (
                 <Skeleton
                   key={index}
                   height={60}
@@ -158,17 +191,19 @@ const CategoryModal = ({
                 />
               ))}
             </View>
-          ) : (
-            <View className="w-full">
-              <FlatList
-                data={transactions || []} // Directly pass transactions here
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderTransaction}
-              />
+          ) : transactions === null || transactions.length === 0 ? (
+            <View className="w-full items-center justify-center mt-5">
+              <Text className="text-gray-500">No transactions available</Text>
             </View>
+          ) : (
+            <FlatList
+              data={transactions}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderTransaction}
+            />
           )}
         </View>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

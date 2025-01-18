@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { router } from "expo-router";
-import { displayAmount } from "../../helpers/common-helper";
+import { displayAmount, showAlert } from "../../helpers/common-helper";
 import {
   getAllUserGoals,
   getSavingAmount,
@@ -13,26 +13,37 @@ const GoalProgressCircleV2 = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid;
 
-  const [error, setError] = useState<string | null>(null);
   const [totalSaved, setTotalSaved] = useState<number>(0);
   const [userGoals, setUserGoals] = useState<any>([]);
 
   useEffect(() => {
     const fetchTotalSavings = async () => {
-      const result = await getSavingAmount(userId as string);
-      if (result instanceof Error) {
-        setError(result.message);
-      } else {
-        setTotalSaved(result);
+      try {
+        const result = await getSavingAmount(userId as string);
+        if (result instanceof Error) {
+          showAlert("Error", result.message);
+        }
+        setTotalSaved(result as number);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
       }
     };
 
     const fetchUserGoals = async () => {
-      const result = await getAllUserGoals(userId as string);
-      if (result instanceof Error) {
-        setError(result.message);
-      } else {
+      try {
+        const result = await getAllUserGoals(userId as string);
+        if (result instanceof Error) {
+          showAlert("Error", result.message);
+        }
         setUserGoals(result);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
       }
     };
 
