@@ -43,7 +43,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
-  const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
   const [userHasGoals, setUserHasGoals] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<{

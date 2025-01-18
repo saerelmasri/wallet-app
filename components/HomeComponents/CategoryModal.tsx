@@ -59,8 +59,8 @@ const CategoryModal = ({
           setTransactions(null);
           return;
         }
-        // setTransactions(result);
-        setTransactions(null);
+        setTransactions(result);
+        // setTransactions(null);
       } finally {
         setIsLoading(false);
       }
@@ -196,11 +196,13 @@ const CategoryModal = ({
               <Text className="text-gray-500">No transactions available</Text>
             </View>
           ) : (
-            <FlatList
-              data={transactions}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderTransaction}
-            />
+            <View className="w-full">
+              <FlatList
+                data={transactions}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderTransaction}
+              />
+            </View>
           )}
         </View>
       </Animated.View>

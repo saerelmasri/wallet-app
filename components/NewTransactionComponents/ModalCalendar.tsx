@@ -1,7 +1,8 @@
 import { View, Text, Modal, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Calendar } from "react-native-calendars";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 type ModalDatePickerTypes = {
   modalDatePickerVisible: boolean;
@@ -14,24 +15,45 @@ const ModalDatePicker = (props: ModalDatePickerTypes) => {
   const todayDate = new Date().toISOString().split("T")[0];
   const [selected, setSelected] = useState(props.initialDate || todayDate);
 
+    const fadeAnim = useSharedValue(0); // Initial opacity set to 0
+  
   const handleDayPress = (day: any) => {
     setSelected(day.dateString);
     props.onDateChange(day.dateString);
     props.setModalDatePickerVisible(false);
   };
 
+  useEffect(() => {
+      if (props.modalDatePickerVisible) {
+        fadeAnim.value = withTiming(1, { duration: 300 }); // Fade in
+      } else {
+        fadeAnim.value = withTiming(0, { duration: 300 }); // Fade out
+      }
+    }, [props.modalDatePickerVisible, fadeAnim]);
+  
+    // Animated style for modal background opacity
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        opacity: fadeAnim.value,
+      };
+    });
+
   return (
     <Modal
-      animationType="none"
+      animationType="slide"
       transparent={true}
       visible={props.modalDatePickerVisible}
       onRequestClose={() => props.setModalDatePickerVisible(false)}
     >
-      <View
-        style={{
-          backgroundColor: "transparent",
-        }}
-        className="flex-1 justify-end items-center"
+      <Animated.View
+        style={[
+          {
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          },
+          animatedStyle, // Apply animated style
+        ]}
       >
         <View className="h-[50%] w-full bg-white rounded-2xl p-6 border border-black flex space-y-6">
           <View className="w-full flex-row justify-between items-center">
@@ -63,7 +85,7 @@ const ModalDatePicker = (props: ModalDatePickerTypes) => {
             />
           </View>
         </View>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

@@ -2,6 +2,8 @@ import { View, Text, Modal, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { getAllUserGoals, GoalType } from "../../api/database/goalFunctions";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Skeleton from "../SkeletonLoader";
 
 type ModalGoalTypes = {
   modalGoalVisible: boolean;
@@ -13,37 +15,68 @@ type ModalGoalTypes = {
 
 const ModalGoals = (props: ModalGoalTypes) => {
   const [usersGoal, setUsersGoal] = useState<GoalType[] | null>(null);
+  const [ isLoading, setIsLoading] = useState<boolean>(false);
 
+    const fadeAnim = useSharedValue(0); // Initial opacity set to 0
+  
   // Fetch user's category from db
   useEffect(() => {
     const usersGoal = async () => {
-      const result = await getAllUserGoals(props.userId as string);
+      setIsLoading(true)
+      try {
+        const result = await getAllUserGoals(props.userId as string);
       if (result instanceof Error) {
         console.log("Error fetching user:", result.message);
         return;
       }
       setUsersGoal(result as any);
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return new Error(
+          error instanceof Error ? error.message : "Something went wrong"
+        );
+      } finally {
+        setIsLoading(false);
+      }
     };
     usersGoal();
   }, [props.userId]);
 
+  useEffect(() => {
+      if (props.modalGoalVisible) {
+        fadeAnim.value = withTiming(1, { duration: 300 }); // Fade in
+      } else {
+        fadeAnim.value = withTiming(0, { duration: 300 }); // Fade out
+      }
+    }, [props.modalGoalVisible, fadeAnim]);
+  
+    // Animated style for modal background opacity
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        opacity: fadeAnim.value,
+      };
+    });
+
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={props.modalGoalVisible}
       onRequestClose={() => props.setModalGoalVisible(false)}
     >
-      <View
-        style={{
-          backgroundColor: "transparent",
-        }}
-        className="flex-1 justify-end"
+      <Animated.View
+        style={[
+          {
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          },
+          animatedStyle, // Apply animated style
+        ]}
       >
         <View className="h-[50%] bg-white rounded-tl-3xl rounded-tr-3xl p-4 border border-black">
-          <View className="w-full flex-row justify-between items-center">
-            <View />
-            <Text className="font-pmedium text-lg">Repeats</Text>
+          <View className="w-full flex-row justify-between items-center p-3">
+            <Text className="font-pmedium text-lg">Your goals</Text>
             <TouchableOpacity onPress={() => props.setModalGoalVisible(false)}>
               <MaterialCommunityIcons
                 name="window-close"
@@ -52,8 +85,24 @@ const ModalGoals = (props: ModalGoalTypes) => {
               />
             </TouchableOpacity>
           </View>
-          <View className="mt-5 flex items-center">
-            {usersGoal?.map((item, index) => (
+          <View className="flex items-center">
+          {isLoading ? (
+            <View className="w-full">
+              {[1, 2].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  height={60}
+                  width="100%"
+                  style={{ marginBottom: 10, borderRadius: 8 }}
+                />
+              ))}
+            </View>
+          ) : usersGoal === null || usersGoal.length === 0 ? (
+            <View className="w-full items-center justify-center mt-5">
+              <Text className="text-gray-500">No goals</Text>
+            </View>
+          ) : (
+            usersGoal?.map((item, index) => (
               <TouchableOpacity
                 key={item.id || index}
                 className={`w-full flex-row items-center p-4 space-x-3`}
@@ -77,10 +126,11 @@ const ModalGoals = (props: ModalGoalTypes) => {
                 </View>
                 <Text className="text-base font-pmedium">{item.goalName}</Text>
               </TouchableOpacity>
-            ))}
+            ))
+          )}
           </View>
         </View>
-      </View>
+      </Animated.View>
     </Modal>
   );
 };

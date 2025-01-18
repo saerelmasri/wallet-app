@@ -306,7 +306,6 @@ const AddTransaction = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
 
           {/* Repeat */}
           {/* <View
@@ -364,9 +363,11 @@ const AddTransaction = () => {
             </View>
           </View>
 
+          <View className="border-[0.3px] border-black opacity-20 w-[90%]" />
+
           {/* Categories List */}
           <View
-            className={`p-3 w-full flex-col ${
+            className={`p-3 mt-2 w-full flex-col ${
               transactionTitle !== "" ? "h-[35vh]" : "h-[30vh]"
             }`}
           >
