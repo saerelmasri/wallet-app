@@ -38,8 +38,6 @@ const CategoryEditor = () => {
   const incomingCategoryId = parsedCategoryParam.id;
   const incomingCategoryType = parsedCategoryParam.categoryType;
 
-  console.log("parsedCategoryParam:", parsedCategoryParam);
-
   // Modal Variables
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -57,6 +55,9 @@ const CategoryEditor = () => {
     categoryType: "Needs",
   });
   const [bgColor, setBgColor] = useState<string>(getRandomColor());
+
+  // Loading State
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Handle type change
   const handleTypeChange = (option: "Savings" | "Needs" | "Wants") => {
@@ -82,6 +83,7 @@ const CategoryEditor = () => {
     }
 
     try {
+      setIsLoading(true);
       const categoryData = {
         categoryName: newCategoryProp.categoryName,
         allocatedMoney: Number(newCategoryProp.amountAllocated),
@@ -126,6 +128,8 @@ const CategoryEditor = () => {
     } catch (error) {
       console.log("Error saving category:", error);
       showAlert("Error", "An error occurred while saving the category.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -170,8 +174,6 @@ const CategoryEditor = () => {
     categoryColor,
     incomingCategoryType,
   ]);
-
-  console.log("Selected:", newCategoryProp);
 
   return (
     <SafeAreaView
@@ -218,13 +220,14 @@ const CategoryEditor = () => {
         </View>
       </ScrollView>
       <View
-        className={`flex justify-center items-center w-full absolute bottom-14 `}
+        className={`flex justify-center items-center w-full absolute bottom-14 p-3`}
       >
         <CustomButton
-          title="Save Category"
-          handlePress={handleSaveNewCategory} // Save function
+          title={incomingCategoryId !== undefined ? "Update Category" : "Save Category"}
+          handlePress={handleSaveNewCategory}
           containerStyle="w-[90%] bg-[#2F7E79] p-3"
           textStyle="text-white"
+          isLoading={isLoading}
         />
       </View>
       <EmojiPicker

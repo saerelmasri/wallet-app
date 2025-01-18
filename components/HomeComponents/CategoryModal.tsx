@@ -7,6 +7,7 @@ import { getCategoryTransactions } from "../../api/database/transactionFunctions
 import TransactionCardModel from "./TransactionCardModal";
 import { FlatList } from "react-native-gesture-handler";
 import { router } from "expo-router";
+import Skeleton from "../SkeletonLoader";
 
 interface CategoryModalProps {
   visible: boolean;
@@ -32,7 +33,7 @@ const CategoryModal = ({
   const stringifyCategoryParam = JSON.stringify(selectedCategory);
 
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
-  //   const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!userId || !categoryId) {
@@ -40,16 +41,20 @@ const CategoryModal = ({
     }
 
     setTransactions(null);
-    // setLoading(true);
 
     const fetchCategoryTransactions = async () => {
-      const result = await getCategoryTransactions(userId, categoryId);
-      if (result instanceof Error) {
-        console.log("Error fetching transactions:", result.message);
-        setTransactions(null);
-        return;
+      setIsLoading(true);
+      try {
+        const result = await getCategoryTransactions(userId, categoryId);
+        if (result instanceof Error) {
+          console.log("Error fetching transactions:", result.message);
+          setTransactions(null);
+          return;
+        }
+        setTransactions(result);
+      } finally {
+        setIsLoading(false);
       }
-      setTransactions(result);
     };
 
     fetchCategoryTransactions();
@@ -115,7 +120,9 @@ const CategoryModal = ({
           </View>
 
           <View className="w-full p-2">
-            <Text className="text-sm font-pregular">Category: {selectedCategory?.categoryType}</Text>
+            <Text className="text-sm font-pregular">
+              Category: {selectedCategory?.categoryType}
+            </Text>
           </View>
 
           {/* Budget Information */}
@@ -139,13 +146,27 @@ const CategoryModal = ({
           </View>
 
           {/* Modal Content */}
-          <View className="w-full">
-            <FlatList
-              data={transactions || []} // Directly pass transactions here
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderTransaction}
-            />
-          </View>
+
+          {isLoading ? (
+            <View className=" w-full">
+              {[1, 2, 3 ].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  height={60}
+                  width="100%"
+                  style={{ marginBottom: 10, borderRadius: 8 }}
+                />
+              ))}
+            </View>
+          ) : (
+            <View className="w-full">
+              <FlatList
+                data={transactions || []} // Directly pass transactions here
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderTransaction}
+              />
+            </View>
+          )}
         </View>
       </View>
     </Modal>

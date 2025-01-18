@@ -6,7 +6,6 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
 
@@ -18,41 +17,30 @@ import {
   getSavingAmount,
 } from "../api/database/goalFunctions";
 import { getAuth } from "@firebase/auth";
+import Skeleton from "../components/SkeletonLoader";
 
 const Goals = () => {
   const auth = getAuth();
   const userId = auth.currentUser?.uid as string;
 
   // State variables
-  const [totalSaved, setTotalSaved] = useState<number>(0);
+  const [totalSaved, setTotalSaved] = useState<number | null>(null);
   const [userGoals, setUserGoals] = useState<any>([]);
 
   // Loading variables
-  const [isLoadingTotalSaving, setIsLoadingTotalSaving] =
-    useState<boolean>(false);
   const [isLoadingGoal, setIsLoadingGoal] = useState<boolean>(false);
 
   // Fetch total savings on all goals based on user
   useEffect(() => {
     const fetchTotalSavings = async () => {
-      setIsLoadingTotalSaving(true);
-      try {
         const result = await getSavingAmount(userId as string);
         if (result instanceof Error) {
+        setTotalSaved(null);
           console.log("Error:", result);
         } else {
           setTotalSaved(result);
         }
-      } finally {
-        setIsLoadingTotalSaving(false);
-      }
     };
-
-    fetchTotalSavings();
-  }, []);
-
-  // Fetch all user's goals
-  useEffect(() => {
     const fetchUserGoals = async () => {
       setIsLoadingGoal(true);
       try {
@@ -66,8 +54,13 @@ const Goals = () => {
         setIsLoadingGoal(false);
       }
     };
+
+    fetchTotalSavings()
     fetchUserGoals();
   }, []);
+
+  console.log(totalSaved);
+  
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -103,10 +96,10 @@ const Goals = () => {
               <View className="w-full h-[1px] mt-4 mb-4 bg-black" />
 
               {isLoadingGoal ? (
-                <ActivityIndicator
-                  size="large"
-                  color="black"
-                  className="m-10"
+                <Skeleton
+                  height={60}
+                  width="100%"
+                  style={{ marginBottom: 10, borderRadius: 8 }}
                 />
               ) : userGoals.length > 0 ? (
                 userGoals.map(

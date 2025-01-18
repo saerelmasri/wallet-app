@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { router } from "expo-router";
 import { displayAmount } from "../../helpers/common-helper";
-import { getAllUserGoals, getSavingAmount } from "../../api/database/goalFunctions";
+import {
+  getAllUserGoals,
+  getSavingAmount,
+} from "../../api/database/goalFunctions";
 import { getAuth } from "firebase/auth";
 
 const GoalProgressCircleV2 = () => {
@@ -24,10 +27,6 @@ const GoalProgressCircleV2 = () => {
       }
     };
 
-    fetchTotalSavings();
-  }, []);
-
-  useEffect(() => {
     const fetchUserGoals = async () => {
       const result = await getAllUserGoals(userId as string);
       if (result instanceof Error) {
@@ -37,8 +36,9 @@ const GoalProgressCircleV2 = () => {
       }
     };
 
+    fetchTotalSavings();
     fetchUserGoals();
-  }, []);
+  }, [userId]);
 
   return (
     <TouchableOpacity

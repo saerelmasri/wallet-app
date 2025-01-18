@@ -37,6 +37,9 @@ const AddGoal = () => {
   });
   const [bgColor, setBgColor] = useState<string>(getRandomColor());
 
+  // Loading State
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   // Handle save new goal function
   const handleSaveNewGoal = async () => {
     if (selectedEmoji.emoji === "") {
@@ -50,6 +53,7 @@ const AddGoal = () => {
     }
 
     try {
+      setIsLoading(true);
       const goalData = {
         goalName: newGoalProp.title,
         target: Number(newGoalProp.amount),
@@ -88,6 +92,8 @@ const AddGoal = () => {
     } catch (error) {
       console.log("Error saving goal:", error);
       showAlert("Error", "An error occurred while saving the goal.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,57 +130,50 @@ const AddGoal = () => {
         backgroundColor: "white",
       }}
     >
-      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <View className="w-full p-3justify-center items-center flex">
-          <TouchableOpacity
-            onPress={() => setIsModalOpen(true)}
-            className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
-            style={{ backgroundColor: bgColor }}
-          >
-            <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
-          </TouchableOpacity>
-          <Text className="text-black text-sm font-pregular m-5">
-            Select an emoji to describe your goal
-          </Text>
-          <View className="border-[0.5px] border-black w-full" />
-          <FormInputText
-            handleTextChange={(e: any) =>
-              setNewGoalProp({ ...newGoalProp, title: e })
-            }
-            title="Name"
-            value={newGoalProp.title}
-            placeHolder="Madrid Trip"
-          />
-          <View className="border-[0.5px] border-black w-full" />
-          <FormInputText
-            handleTextChange={(e: any) =>
-              setNewGoalProp({ ...newGoalProp, amount: e })
-            }
-            title="Amount"
-            value={newGoalProp.amount}
-            placeHolder="$1,300.00"
-            isNumber
-          />
-          <View className="border-[0.5px] border-black w-full" />
+      <View className="w-full h-full p-3 items-center flex">
+        <TouchableOpacity
+          onPress={() => setIsModalOpen(true)}
+          className="w-[80px] h-[80px] rounded-full justify-center items-center mt-6"
+          style={{ backgroundColor: bgColor }}
+        >
+          <Text className="text-4xl">{selectedEmoji.emoji || "🏆"}</Text>
+        </TouchableOpacity>
+        <Text className="text-black text-sm font-pregular m-5">
+          Select an emoji to describe your goal
+        </Text>
+        <FormInputText
+          handleTextChange={(e: any) =>
+            setNewGoalProp({ ...newGoalProp, title: e })
+          }
+          title="Name"
+          value={newGoalProp.title}
+          placeHolder="Madrid Trip"
+        />
+        <FormInputText
+          handleTextChange={(e: any) =>
+            setNewGoalProp({ ...newGoalProp, amount: e })
+          }
+          title="Amount"
+          value={newGoalProp.amount}
+          placeHolder="$1,300.00"
+          isNumber
+        />
 
-          <View className="border-[0.5px] border-black w-full" />
-          <View className="w-full h-[25vh] justify-end flex p-3">
-            <View className="border hidden"></View>
-            <CustomButton
-              title="Save Goal"
-              handlePress={handleSaveNewGoal}
-              containerStyle="w-full bg-[#2F7E79]"
-              textStyle="text-white"
-            />
-          </View>
-
-          <EmojiPicker
-            onEmojiSelected={handlePick}
-            open={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+        <View className="w-full flex justify-center items-center p-3 absolute bottom-10">
+          <CustomButton
+            title={goalId !== undefined ? "Update Goal" : "Save Goal"}
+            handlePress={handleSaveNewGoal}
+            containerStyle="w-[90%] bg-[#2F7E79]"
+            textStyle="text-white"
+            isLoading={isLoading}
           />
         </View>
-      </ScrollView>
+      </View>
+      <EmojiPicker
+        onEmojiSelected={handlePick}
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </SafeAreaView>
   );
 };

@@ -12,6 +12,7 @@ import { getAuth } from "@firebase/auth";
 import { getAllUsersTransaction } from "../../api/database/transactionFunctions";
 import { displayAmount } from "../../helpers/common-helper";
 import { UserTransaction } from "../../constants/common-types";
+import Skeleton from "../../components/SkeletonLoader";
 
 const Transactions = () => {
   const auth = getAuth();
@@ -108,11 +109,16 @@ const Transactions = () => {
           <View className="bg-white w-full h-[100%] rounded-tl-3xl rounded-tr-3xl relative flex">
             {/* Transactions List */}
             {isLoading || !transactions ? (
-              <ActivityIndicator
-                className="mt-[30%]"
-                size="large"
-                color="black"
-              />
+              <View className=" w-full p-5">
+                {[1, 2, 3, 4, 5, 6].map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    height={80}
+                    width="100%"
+                    style={{ marginBottom: 10, borderRadius: 8 }}
+                  />
+                ))}
+              </View>
             ) : (
               <FlatList
                 data={Object.entries(groupedTransactions)}

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React from "react";
 import { isLoaded } from "expo-font";
 
@@ -26,7 +26,11 @@ const CustomButton = ({
       }`}
       disabled={isLoading}
     >
-      <Text className={`font-pmedium text-base ${textStyle}`}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color="white" />
+      ) : (
+        <Text className={`font-pmedium text-base ${textStyle}`}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 };

@@ -27,6 +27,7 @@ import { getLastCategoryTransaction } from "../../api/database/transactionFuncti
 import GoalProgressCircleV2 from "../../components/HomeComponents/GoalProgressCircleV2";
 import { userGoalsExist } from "../../api/database/goalFunctions";
 import CategoryModal from "../../components/HomeComponents/CategoryModal";
+import Skeleton from "../../components/SkeletonLoader";
 
 const Home = () => {
   const auth = getAuth();
@@ -43,7 +44,7 @@ const Home = () => {
   // State Variables
   const [monthly, setMonthly] = useState<number | null>(null);
   const [categories, setCategories] = useState<BudgetData[] | null>(null);
-  const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [userHasGoals, setUserHasGoals] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<{
@@ -178,11 +179,18 @@ const Home = () => {
           </View>
         </View>
 
-        {userHasGoals ? (
+        {loadingCategories ? (
           <View className="w-full flex-row justify-around pl-5 pr-5">
-            {/* <GoalProgressCircle /> */}
+            {/* Skeleton for GoalProgressCircle */}
+            <Skeleton
+              height={100}
+              width="100%"
+              style={{ marginBottom: 10, borderRadius: 8 }}
+            />
+          </View>
+        ) : userHasGoals ? (
+          <View className="w-full flex-row justify-around pl-5 pr-5">
             <GoalProgressCircleV2 />
-            {/* <UpcomingPayments /> */}
           </View>
         ) : null}
 
@@ -191,7 +199,16 @@ const Home = () => {
         >
           {/* Transaction History Widgets */}
           {loadingCategories ? (
-            <ActivityIndicator className="mt-12" size="large" color="#00ff00" />
+            <View className=" w-full p-5">
+              {[1, 2, 3].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  height={80}
+                  width="100%"
+                  style={{ marginBottom: 10, borderRadius: 8 }}
+                />
+              ))}
+            </View>
           ) : (
             <View className="w-full p-4">
               {

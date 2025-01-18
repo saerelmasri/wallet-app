@@ -15,6 +15,7 @@ import {
   getUserFromDB,
   updateNotificationSettings,
 } from "../../api/database/userFunctions";
+import Skeleton from "../../components/SkeletonLoader";
 
 const Profile = () => {
   const auth = getAuth();
@@ -31,20 +32,25 @@ const Profile = () => {
     useState(false);
 
   // Error Variables
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch user's info
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const result = await getUserFromDB(userId as string);
+      setIsLoading(true);
+      try {
+        const result = await getUserFromDB(userId as string);
 
-      if (result instanceof Error) {
-        setError(result.message);
-      } else if (result) {
-        setProfile({
-          email: result.email || "",
-          notificationSettings: result.notificationSettings || "Off",
-        });
+        if (result instanceof Error) {
+          console.log("Error:", result.message);
+        } else if (result) {
+          setProfile({
+            email: result.email || "",
+            notificationSettings: result.notificationSettings || "Off",
+          });
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -77,7 +83,7 @@ const Profile = () => {
         display: "flex",
         justifyContent: "center",
         alignContent: "center",
-        backgroundColor: "white"
+        backgroundColor: "white",
       }}
     >
       <View className="justify-start w-full h-full">
@@ -91,10 +97,14 @@ const Profile = () => {
           <View className="w-full p-6 space-y-4">
             <Text className="font-pmedium text-sm">Account Settings</Text>
             <View className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5">
-              <Text className="font-psemibold text-sm w-[50px]">Email</Text>
-              <Text className="font-psemibold text-sm w-full text-[#A9A9A9]">
-                {profile.email}
-              </Text>
+              <Text className="font-psemibold text-sm w-[100px]">Email</Text>
+              {isLoading ? (
+                <Skeleton height={30} width="60%" />
+              ) : (
+                <Text className="font-pmedium text-sm w-full text-[#A9A9A9]">
+                  {profile.email}
+                </Text>
+              )}
             </View>
           </View>
 
@@ -104,12 +114,16 @@ const Profile = () => {
               onPress={() => {
                 setModalNotificationVisible(true);
               }}
-              className="border flex-row justify-between items-center p-2 rounded-md space-x-5 h-16"
+              className="h-[60px] border flex-row items-center p-2 rounded-md space-x-5"
             >
-              <Text className="font-psemibold text-sm">Notifications</Text>
-              <Text className="font-pregular text-base text-gray-400 mr-4">
-                {profile.notificationSettings}
-              </Text>
+              <Text className="font-psemibold text-sm w-[100px]">Notifications</Text>
+              {isLoading ? (
+                <Skeleton height={30} width="60%" />
+              ) : (
+                <Text className="font-pmedium text-base text-gray-400 mr-4">
+                  {profile.notificationSettings}
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
 
