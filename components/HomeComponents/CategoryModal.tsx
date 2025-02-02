@@ -95,9 +95,13 @@ const CategoryModal = ({
         transactionDate={transactionDate}
         transactionTitle={item.purpose}
         transactionAmount={displayAmount(item.amount)}
+        transactionId={item.id}
       />
     );
   };
+
+  console.log("Transactions:", transactions);
+  
 
   return (
     <Modal

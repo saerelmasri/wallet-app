@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
+import { router } from "expo-router";
 // import { router } from "expo-router";
 
 type TransactionCardModelType = {
+  transactionId: string,
   transactionTitle: string;
   transactionAmount: string;
   transactionDate?: string;
@@ -12,19 +14,20 @@ type TransactionCardModelType = {
 };
 
 const TransactionCardModel = (props: TransactionCardModelType) => {
-  // const handlePress = () => {
-  //   router.push({
-  //     pathname: "/newTransaction",
-  //     params: {
-  //       transactionTitle: props.transactionTitle,
-  //       transactionAmount: props.transactionAmount,
-  //       transactionDate: props.transactionDate,
-  //     },
-  //   });
-  // };
+  const handlePress = () => {
+    router.push({
+      pathname: "/newTransaction",
+      params: {
+        transactionId: props.transactionId,
+        transactionTitle: props.transactionTitle,
+        transactionAmount: props.transactionAmount,
+        transactionDate: props.transactionDate,
+      },
+    });
+  };
 
   return (
-    <TouchableOpacity style={styles.container} className="border">
+    <TouchableOpacity style={styles.container}>
       <View style={styles.cardContent}>
         <View style={styles.details}>
           <Text style={styles.transactionTitle}>
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 10,
     overflow: "hidden",
+    borderWidth: 1
   },
   cardContent: {
     flexDirection: "row",

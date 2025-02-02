@@ -31,6 +31,7 @@ const AddTransaction = () => {
   //Information from other Routes: Numnpad or existing transaction
   const {
     newAmountIncoming,
+    transactionId,
     transactionTitle,
     transactionCategory,
     transactionAmount,
